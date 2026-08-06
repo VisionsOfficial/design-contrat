@@ -1,0 +1,101 @@
+/* VisionsTrust — Basket · PII step 3, structure v2 (p2- namespace).
+   Monochrome-first: slate ink, hairlines, generous rhythm. Teal appears ONLY on the
+   selected candidate and the primary action. No filled status chips, no gradients. */
+
+/* neutralise the loud bits inherited from basket-pii.css on this page */
+.pii-topflag { background: var(--bg-2); color: var(--text-muted); border-color: var(--border-2); font-weight: 700; }
+
+.p2 { max-width: 860px; }
+
+/* ─── PAGE HEADER ─────────────────────────────────────────────────────────── */
+.p2-head { padding: 4px 0 0; }
+.p2-eyebrow { font-size: 10.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-faint); }
+.p2-h1 { margin: 9px 0 0; font-size: 24px; font-weight: 800; letter-spacing: -0.015em; color: var(--vui-color-secondary); }
+.p2-lede { margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-muted); max-width: 62ch; text-wrap: pretty; }
+.p2-rule { margin: 20px 0 0; padding-left: 15px; border-left: 2px solid var(--border-2); font-size: 13px; line-height: 1.65; color: var(--text-muted); max-width: 68ch; text-wrap: pretty; }
+.p2-rule strong { color: var(--vui-color-secondary); font-weight: 700; }
+
+/* ─── CONTEXT STRIP ───────────────────────────────────────────────────────── */
+.p2-context { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 32px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+@media (max-width: 720px) { .p2-context { grid-template-columns: 1fr; } }
+.p2-cx { background: var(--surface); padding: 15px 18px; min-width: 0; }
+.p2-cx-k { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-faint); }
+.p2-cx-v { display: flex; align-items: center; gap: 9px; margin-top: 8px; min-width: 0; }
+.p2-ini { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; flex-shrink: 0; background: var(--bg-2); border: 1px solid var(--border-2); font-size: 10.5px; font-weight: 800; color: var(--text-muted); }
+.p2-cx-t { min-width: 0; display: flex; flex-direction: column; }
+.p2-cx-name { font-size: 13px; font-weight: 700; color: var(--vui-color-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p2-cx-sub { font-size: 11.5px; color: var(--text-faint); margin-top: 1px; }
+.p2-cx.pending .p2-cx-name { color: var(--text-faint); font-weight: 600; }
+
+/* ─── SECTIONS ────────────────────────────────────────────────────────────── */
+.p2-sec { margin-top: 44px; }
+.p2-sec-head { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.p2-sec-n { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.p2-sec-t { margin: 0; font-size: 16px; font-weight: 800; color: var(--vui-color-secondary); letter-spacing: -0.01em; }
+.p2-sec-meta { margin-left: auto; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+/* text tabs */
+.p2-tabs { display: flex; gap: 26px; margin: 18px 0 4px; }
+.p2-tab { border: none; background: none; padding: 0 0 9px; font: inherit; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; gap: 8px; }
+.p2-tab:hover { color: var(--vui-color-secondary); }
+.p2-tab.on { color: var(--vui-color-secondary); border-bottom-color: var(--vui-color-primary); }
+.p2-tab span { font-size: 11.5px; font-weight: 700; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+
+/* ─── CANDIDATE LIST (one container, hairline dividers) ───────────────────── */
+.p2-list { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+.p2-cand { display: flex; gap: 16px; width: 100%; text-align: left; padding: 20px 22px; background: var(--surface); border: none; border-left: 2px solid transparent; font: inherit; cursor: pointer; transition: background .12s, border-color .12s; }
+.p2-cand + .p2-cand { border-top: 1px solid var(--border); }
+.p2-cand:hover:not(.off) { background: var(--bg); }
+.p2-cand.on { border-left-color: var(--vui-color-primary); background: var(--bg); }
+.p2-cand.off { cursor: not-allowed; background: var(--surface); }
+.p2-radio { width: 18px; height: 18px; margin-top: 2px; border-radius: 50%; border: 1.5px solid var(--border-2); background: var(--surface); flex-shrink: 0; display: grid; place-items: center; }
+.p2-cand.on .p2-radio { border-color: var(--vui-color-primary); border-width: 5px; }
+.p2-cand.off .p2-radio { border-style: dashed; background: transparent; }
+.p2-cand-body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.p2-cand-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.p2-cand-name { font-size: 14.5px; font-weight: 700; color: var(--vui-color-secondary); font-family: var(--font-mono); letter-spacing: -0.01em; }
+.p2-cand.off .p2-cand-name { color: var(--text-muted); }
+.p2-cand-by { font-size: 12.5px; color: var(--text-muted); }
+.p2-cand-by::before { content: "·"; margin-right: 8px; color: var(--border-2); }
+.p2-cand-purpose { display: block; margin-top: 6px; font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.p2-facts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 12px; }
+.p2-fact { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-muted); }
+.p2-fact svg { color: var(--text-faint); flex-shrink: 0; }
+.p2-fact b { font-weight: 700; color: var(--vui-color-secondary); }
+.p2-why { display: block; margin-top: 12px; padding-left: 13px; border-left: 2px solid var(--border-2); font-size: 12.5px; line-height: 1.55; color: var(--text-muted); max-width: 60ch; }
+.p2-why b { color: var(--vui-color-secondary); font-weight: 700; }
+.p2-cand-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.p2-state { font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--text-faint); white-space: nowrap; }
+.p2-state.ready { color: var(--vui-color-primary-dark); }
+.p2-src { font-size: 11.5px; color: var(--text-faint); white-space: nowrap; }
+@media (max-width: 620px) { .p2-cand-side { display: none; } .p2-cand { padding: 16px 16px; } }
+
+/* ─── TERMS PANEL ─────────────────────────────────────────────────────────── */
+.p2-panel { margin-top: 18px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+.p2-panel-head { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.p2-panel-t { font-size: 13.5px; font-weight: 700; color: var(--vui-color-secondary); }
+.p2-panel-s { font-size: 12px; color: var(--text-muted); margin-top: 3px; max-width: 60ch; }
+.p2-lock { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--text-faint); white-space: nowrap; }
+.p2-defs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--border); }
+@media (max-width: 640px) { .p2-defs { grid-template-columns: 1fr; } }
+.p2-def { background: var(--surface); padding: 15px 20px; min-width: 0; }
+.p2-def.full { grid-column: 1 / -1; }
+.p2-def-k { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-faint); }
+.p2-def-v { margin-top: 6px; font-size: 13px; font-weight: 600; color: var(--vui-color-secondary); line-height: 1.55; text-wrap: pretty; }
+.p2-more { width: 100%; border: none; border-top: 1px solid var(--border); background: var(--surface); padding: 13px; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--vui-color-primary-dark); cursor: pointer; }
+.p2-more:hover { background: var(--bg); }
+
+/* ─── EMPTY STATE ─────────────────────────────────────────────────────────── */
+.p2-empty { margin-top: 18px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); padding: 40px 32px; text-align: center; }
+.p2-empty h3 { margin: 0; font-size: 15px; font-weight: 800; color: var(--vui-color-secondary); }
+.p2-empty p { margin: 10px auto 0; max-width: 52ch; font-size: 13px; line-height: 1.6; color: var(--text-muted); text-wrap: pretty; }
+.p2-empty-actions { display: flex; justify-content: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+
+/* ─── FOOTER ──────────────────────────────────────────────────────────────── */
+.p2-foot { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--border); }
+.p2-back { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-decoration: none; }
+.p2-back:hover { color: var(--vui-color-secondary); }
+.p2-foot-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.p2-hint { font-size: 12.5px; color: var(--text-faint); }
+.p2-note { margin-top: 18px; font-size: 12.5px; line-height: 1.6; color: var(--text-muted); padding-left: 15px; border-left: 2px solid var(--border-2); max-width: 68ch; }
+.p2-note b { color: var(--vui-color-secondary); font-weight: 700; }

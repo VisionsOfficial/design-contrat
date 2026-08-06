@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VisionsTrust — Layout v3 (assistant sans sidebar droite)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="layout2.css"/>
+<link rel="stylesheet" href="layout3.css"/>
+<style>html,body{margin:0;background:#fafbfc}.v3-app{--v3-bottom:64px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" data-presets="react" src="layout2.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout2-agents.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout2-pages.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout3.jsx"></script>
+<script type="text/babel" data-presets="react">
+const { useState } = React;
+const { Icon } = window.V2;
+const { AppLayout3 } = window.V3;
+const { MatchDrawer } = window.V2Agents;
+const { Home, Catalogue, CreateOffer, Contract, Project, OffersList } = window.V2Pages;
+
+const SCENARIOS = {
+  home: { label:"Home", crumbs:["Home"], activeId:"home", page:"home",
+    actions:<button type="button" className="v2-cta"><Icon name="plus" size={15}/>Créer</button> },
+  catalogue: { label:"Catalogue", crumbs:["Catalogue"], activeId:"catalogue", page:"catalogue",
+    tabs:[{label:"All",count:842},{label:"Data",count:517},{label:"Services",count:214},{label:"Infrastructure",count:111},{label:"Trafic IDF",count:14,custom:true}], activeTab:"Trafic IDF",
+    filters:[{k:"type",v:"données"},{k:"thème",v:"mobilité"},{k:"zone",v:"Île-de-France"},{k:"fraîcheur",v:"< 1 h",agent:true}], filterHint:"14 résultats",
+    subRight:<><button type="button" className="v2-mini"><Icon name="filter" size={13}/>Filtres</button><button type="button" className="v2-mini">Trier : pertinence</button></> },
+  offers: { label:"My Offers", crumbs:["My Offers"], activeId:"offers", page:"offers",
+    tabs:[{label:"All",count:12},{label:"Data",count:6},{label:"Services",count:4},{label:"À compléter",count:3,custom:true},{label:"Archived",count:9}], activeTab:"All",
+    filters:[{k:"statut",v:"tous"},{k:"MAJ",v:"90 derniers jours"}], filterHint:"7 offres",
+    subRight:<><button type="button" className="v2-mini"><Icon name="filter" size={13}/>Filtres</button><button type="button" className="v2-mini">Colonnes</button></>,
+    actions:<button type="button" className="v2-cta"><Icon name="plus" size={15}/>Nouvelle offre</button> },
+  create: { label:"Create offer", crumbs:["My Offers",{label:"Air quality feed",siblings:["Fleet telemetry — raw","Air quality feed","Traffic anomaly detection","Geocoding API — FR"]}], activeId:"offers", page:"create",
+    tabs:["Détails","Données","Conditions","Publication"], activeTab:"Détails",
+    scope:{ label:"Offre · Air quality feed (brouillon)" },
+    subRight:<span className="v2-pill warn">Brouillon · 4 champs manquants</span>,
+    actions:<><button type="button" className="v2-cta ghost">Enregistrer</button><button type="button" className="v2-cta">Publier</button></> },
+  contract: { label:"Contract", crumbs:["My Contracts",{label:"DPA · Kuzzle ↔ Visions",siblings:["DPA · Kuzzle ↔ Visions","DPA · AirLab ↔ Visions","Licence · DiRIF"]}], activeId:"contracts", page:"contract",
+    tabs:["Clauses","Parties","Historique"], activeTab:"Clauses", defaultPanel:"legal",
+    scope:{ label:"DPA · Kuzzle ↔ Visions" },
+    actions:<><button type="button" className="v2-cta ghost">Exporter</button><button type="button" className="v2-cta">Signer</button></> },
+  project: { label:"Project", crumbs:["My Projects",{label:"Mobility insights 2026",siblings:["Mobility insights 2026","Air quality cross-analysis","Parking demand study"]}], activeId:"projects", page:"project",
+    tabs:["Overview","Ressources","Participants","Échanges"], activeTab:"Overview",
+    scope:{ label:"Projet · Mobility insights 2026" },
+    actions:<button type="button" className="v2-cta ghost">Paramètres</button> },
+};
+
+const SURFACES = [
+  { id:"bar", label:"A · Barre compagnon" },
+  { id:"spot", label:"B · Spotlight" },
+  { id:"win", label:"C · Fenêtre flottante" },
+];
+
+const NOTES = {
+  bar: { h:"A · Barre compagnon (recommandé)",
+    lead:"L'assistant est une barre permanente en bas de l'écran, identique sur tous les écrans. Elle se déplie vers le haut en feuille de conversation, et peut passer en plein écran pour les travaux longs.",
+    items:[
+      ["Toujours visible","Contrairement au dock, elle n'attend pas d'être ouverte : elle est vue 100 % du temps, ce qui règle le problème de découverte de l'assistant."],
+      ["Le contenu ne rétrécit jamais","La page garde toute sa largeur — important pour les tableaux d'offres, les contrats et le catalogue, qui souffraient du panneau de 404 px."],
+      ["Trois profondeurs","Barre (repos) → feuille 74 % (converser en gardant la page lisible) → plein écran (matching, relecture legal, comparaisons)."],
+      ["Les tâches d'agent y vivent","La pastille « n tâches » remplace le tray flottant : un seul endroit pour le travail en fond, ses résultats et l'historique."],
+      ["Une remarque par écran","Le compagnon peut prendre la parole au-dessus de la barre — une seule fois par écran, effaçable, jamais modale."],
+    ] },
+  spot: { h:"B · Spotlight ⌘K",
+    lead:"Aucune surface persistante : l'assistant est un calque centré appelé au clavier ou depuis les points d'appel. Une pastille discrète en bas à droite reste le seul rappel.",
+    items:[
+      ["Le plus léger visuellement","Zéro pixel volé à l'interface au repos ; l'app reste exactement comme aujourd'hui."],
+      ["Le plus « clavier »","Idéal pour les utilisateurs experts qui vivent dans ⌘K et enchaînent demande → résultat → fermeture."],
+      ["Limite : le calque cache la page","On ne peut pas lire un contrat et dialoguer en même temps — mauvais pour Legal et Completion."],
+      ["Limite : découverte faible","Un assistant qu'on ne voit pas est un assistant qu'on n'essaie pas ; c'est le défaut du dock, en pire."],
+    ] },
+  win: { h:"C · Fenêtre flottante",
+    lead:"L'assistant est une fenêtre déplaçable et réductible, posée par-dessus l'app — l'utilisateur choisit où elle vit et ce qu'elle recouvre.",
+    items:[
+      ["Cohabitation totale","On place la fenêtre à côté de la clause qu'on lit, on la réduit en pastille, elle garde sa position d'un écran à l'autre."],
+      ["Utile en multi-écran","Sur grand écran, la fenêtre à droite reproduit le confort du dock sans contraindre la mise en page."],
+      ["Limite : coût d'interaction","Déplacer, redimensionner, réduire = du travail pour l'utilisateur ; beaucoup ne le feront jamais."],
+      ["Limite : masquage imprévisible","Elle peut recouvrir une action clé ; il faut la gérer, alors que la barre basse est prévisible."],
+    ] },
+};
+const POINTS = [
+  ["Sidebar gauche","Bloc bas permanent : bouton Assistant (⌘K) + bouton « ? » pour l'agent Help, puis la liste des cinq agents (Help, Completion, Matching, Legal, Search) avec leur raccourci."],
+  ["Entrées de navigation","Au survol d'une entrée (My Offers, Catalogue, Contracts…), un bouton ✨ appelle l'agent naturel de cette section, déjà cadré dessus : Completion sur les offres, Legal sur les contrats, Matching sur les projets, Search sur le catalogue."],
+  ["Épinglés","Le même bouton ✨ sur un élément épinglé ouvre l'assistant avec cet objet en contexte."],
+  ["Barre compagnon","Cinq icônes d'agent à droite du champ : appel direct sans passer par le fil."],
+  ["Dans la page","Rien ne change : bouton par champ (Completion), par clause (Legal), barre de recherche NL (Search), barre de sélection multiple pour le travail en lot."],
+  ["Clavier","⌘K = assistant, ? = Help, @c / @m / @l / @s = agent ciblé, ] = ouvrir/fermer, Esc = fermer."],
+];
+
+const Demo = () => {
+  const [key, setKey] = useState("home");
+  const [surface, setSurface] = useState("bar");
+  const [notes, setNotes] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+  const s = SCENARIOS[key];
+  const [tab, setTab] = useState(s.activeTab || null);
+  const pick = (k) => { setKey(k); setTab(SCENARIOS[k].activeTab || null); setDrawer(false); };
+  const openMatches = () => setDrawer(true);
+  const body = key === "home" ? <Home/>
+    : key === "catalogue" ? <Catalogue onOpenMatches={openMatches}/>
+    : key === "offers" ? <OffersList/>
+    : key === "create" ? <CreateOffer/>
+    : key === "contract" ? <Contract/>
+    : <Project onOpenMatches={openMatches}/>;
+  const n = NOTES[surface];
+  return (
+    <>
+      <AppLayout3 key={key + surface} surface={surface} crumbs={s.crumbs} activeId={s.activeId} page={s.page}
+        tabs={s.tabs} activeTab={tab} onTab={setTab} actions={s.actions} subRight={s.subRight} scope={s.scope}
+        defaultPanel={s.defaultPanel || null} filters={s.filters || null} filterHint={s.filterHint}
+        onOpenMatches={openMatches} onNav={(id, t) => { const k = Object.keys(SCENARIOS).find(k2 => SCENARIOS[k2].activeId === id); if (k) { pick(k); if (t) setTab(t); } }}>
+        {body}
+      </AppLayout3>
+      {drawer && <MatchDrawer onClose={() => setDrawer(false)} subject={s.scope ? s.scope.label.replace(/^.*· /, "") : "vos offres"}/>}
+      {notes && (
+        <div className="v3-notes">
+          <h3>{n.h}</h3>
+          <p className="v3-lead">{n.lead}</p>
+          {n.items.map(([t, d]) => <React.Fragment key={t}><h4>{t}</h4><p>{d}</p></React.Fragment>)}
+          <div className="v3-reco">Recommandation : garder la <b>barre compagnon</b> comme surface unique de l'assistant, et supprimer la sidebar droite. Elle est la seule des trois à être visible en permanence, à ne rien voler à la page, et à absorber le fil, les tâches, Legal et l'activité au même endroit.</div>
+          <h3 style={{ marginTop:22 }}>Où appelle-t-on un agent précis ?</h3>
+          <p className="v3-lead">Un seul geste partout : l'appel ouvre la surface déjà cadrée sur le bon agent et le bon objet.</p>
+          {POINTS.map(([t, d]) => <React.Fragment key={t}><h4><span className="v3-tag">APPEL</span>{t}</h4><p>{d}</p></React.Fragment>)}
+        </div>
+      )}
+      <div className="v2-demo">
+        <span>Surface</span>
+        {SURFACES.map(x => <button key={x.id} type="button" className={x.id === surface ? "on" : ""} onClick={() => setSurface(x.id)}>{x.label}</button>)}
+        <span className="v2-demo-sep"/>
+        <span>Contexte</span>
+        {Object.entries(SCENARIOS).map(([k, v]) => <button key={k} type="button" className={k === key ? "on" : ""} onClick={() => pick(k)}>{v.label}</button>)}
+        <span className="v2-demo-sep"/>
+        <button type="button" className={notes ? "on" : ""} onClick={() => setNotes(x => !x)}>Notes</button>
+      </div>
+    </>
+  );
+};
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

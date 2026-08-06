@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VisionsTrust — Layout v2 (navigation & agents)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="layout2.css"/>
+<style>html,body{margin:0;background:#fafbfc}</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" data-presets="react" src="layout2.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout2-agents.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout2-companion.jsx"></script>
+<script type="text/babel" data-presets="react" src="layout2-pages.jsx"></script>
+<script type="text/babel" data-presets="react">
+const { useState } = React;
+const { AppLayout2, Icon, AgentChip } = window.V2;
+const { MatchDrawer } = window.V2Agents;
+const { Home, Catalogue, CreateOffer, Contract, Project, OffersList } = window.V2Pages;
+
+const SCENARIOS = {
+  home: { label:"Home", crumbs:["Home"], activeId:"home", page:"home",
+    actions:<button type="button" className="v2-cta"><Icon name="plus" size={15}/>Créer</button> },
+  catalogue: { label:"Catalogue", crumbs:["Catalogue"], activeId:"catalogue", page:"catalogue",
+    tabs:[{label:"All",count:842},{label:"Data",count:517},{label:"Services",count:214},{label:"Infrastructure",count:111},{label:"Trafic IDF",count:14,custom:true},{label:"Nouveautés 30j",count:37,custom:true}], activeTab:"Trafic IDF",
+    filters:[{k:"type",v:"données"},{k:"thème",v:"mobilité"},{k:"zone",v:"Île-de-France"},{k:"fraîcheur",v:"< 1 h",agent:true}], filterHint:"14 résultats",
+    subRight:<><button type="button" className="v2-mini"><Icon name="filter" size={13}/>Filtres</button><button type="button" className="v2-mini">Trier : pertinence</button></> },
+  offers: { label:"My Offers", crumbs:["My Offers"], activeId:"offers", page:"offers",
+    tabs:[{label:"All",count:12},{label:"Data",count:6},{label:"Services",count:4},{label:"Infrastructure",count:2},{label:"À compléter",count:3,custom:true},{label:"Sans contrat",count:4,custom:true},{label:"Archived",count:9}], activeTab:"All",
+    filters:[{k:"statut",v:"tous"},{k:"MAJ",v:"90 derniers jours"}], filterHint:"7 offres",
+    subRight:<><button type="button" className="v2-mini"><Icon name="filter" size={13}/>Filtres</button><button type="button" className="v2-mini">Colonnes</button></>,
+    actions:<button type="button" className="v2-cta"><Icon name="plus" size={15}/>Nouvelle offre</button> },
+  create: { label:"Create offer", crumbs:["My Offers",{label:"Air quality feed",siblings:["Fleet telemetry — raw","Air quality feed","Traffic anomaly detection","Geocoding API — FR"]}], activeId:"offers", page:"create",
+    tabs:["Détails","Données","Conditions","Publication"], activeTab:"Détails",
+    scope:{ label:"Offre · Air quality feed (brouillon)" },
+    subRight:<span className="v2-pill warn">Brouillon · 4 champs manquants</span>,
+    actions:<><button type="button" className="v2-cta ghost">Enregistrer</button><button type="button" className="v2-cta">Publier</button></> },
+  contract: { label:"Contract", crumbs:["My Contracts",{label:"DPA · Kuzzle ↔ Visions",siblings:["DPA · Kuzzle ↔ Visions","DPA · AirLab ↔ Visions","Licence · DiRIF"]}], activeId:"contracts", page:"contract",
+    tabs:["Clauses","Parties","Historique"], activeTab:"Clauses", defaultDock:"legal",
+    scope:{ label:"DPA · Kuzzle ↔ Visions" },
+    actions:<><button type="button" className="v2-cta ghost">Exporter</button><button type="button" className="v2-cta">Signer</button></> },
+  project: { label:"Project", crumbs:["My Projects",{label:"Mobility insights 2026",siblings:["Mobility insights 2026","Air quality cross-analysis","Parking demand study"]}], activeId:"projects", page:"project",
+    tabs:["Overview","Ressources","Participants","Échanges"], activeTab:"Overview",
+    scope:{ label:"Projet · Mobility insights 2026" },
+    actions:<button type="button" className="v2-cta ghost">Paramètres</button> },
+};
+
+const NOTES = [
+  { h:"1 · Navigation à 3 niveaux au lieu de sous-menus imbriqués",
+    p:"Sidebar = sections stables (Workspace / Mon organisation / Pilotage) + éléments épinglés. Le niveau 2 (All, Data, Services, Initiated…) passe en onglets sous le header : la sidebar ne grandit plus quand l'app grandit, et l'utilisateur garde son repère de section." },
+  { h:"2 · Fil d'Ariane + actions de page dans le header",
+    p:"Le titre devient un chemin cliquable (My Offers › Air quality feed) et les actions primaires vivent à droite du header. Un écran de plus = une entrée dans le fil d'Ariane, pas une entrée de menu." },
+  { h:"3 · Omnibox ⌘K : le vrai point d'entrée du master agent",
+    p:"Une seule barre pour chercher, naviguer, agir et demander. Le master lit l'intention et affiche l'agent choisi avant d'exécuter — c'est là que se branchent les futurs agents, sans nouveau bouton." },
+  { h:"4 · Chaque sous-agent vit là où se fait le travail",
+    p:"Search = la barre du catalogue. Completion = un bouton par champ, avec proposition insérable. Legal = ancré au contrat ouvert. Matching = une tâche qui rend un tableau de résultats. Help = ⌘K + le fil de l'assistant." },
+  { h:"5 · Le dock droit devient multi-usages",
+    p:"Le rail garde 4 entrées : Assistant (un seul fil, avec passages de main visibles), Tâches des agents (travaux en fond + résultats), Legal companion, Activité de l'élément. Le panneau n'est plus réservé au chat." },
+  { h:"6 · Identité d'agent explicite",
+    p:"Une puce colorée par compétence (Help, Completion, Matching, Legal, Search) réutilisée partout : fil, notifications, tâches, boutons inline. L'utilisateur sait toujours qui parle et pourquoi." },
+  { h:"7 · Vues enregistrées au lieu d'onglets figés (voir My Offers)",
+    p:"Les onglets deviennent des vues : filtres + tri + colonnes sauvegardés, avec un point vert pour les vues perso et un menu « +N » dès qu'il y en a trop. La barre de filtres au-dessus de la liste est enregistrable en un clic — l'app absorbe 50 segments sans toucher au menu." },
+  { h:"8 · Aperçu (peek) plutôt que navigation",
+    p:"Un clic sur Aperçu ouvre la fiche en panneau latéral, avec J/K pour passer à l'élément suivant : on traite 20 offres sans jamais perdre la liste, et les agents s'y branchent avec le bon contexte." },
+  { h:"9 · Les agents travaillent en lot",
+    p:"Sélection multiple → « Compléter avec Completion », « Faire relire par Legal », « Chercher des matchs ». Le gain d'échelle vient de là : une action pour N éléments, pas une conversation par élément." },
+  { h:"10 · Tâches en fond + tray, dock redimensionnable",
+    p:"Les tâches longues s'exécutent hors du panneau : pastilles en bas à droite, résultat consultable plus tard dans « Tâches des agents ». Le dock se redimensionne à la souris et se ferme avec ]." },
+  { h:"11 · Clavier et densité",
+    p:"⌘K, @ pour cibler une compétence, > pour les actions, ? pour la liste des raccourcis, [ et ] pour les panneaux, J/K/X dans les listes. Mode compact dans le menu compte pour les écrans de travail denses." },
+  { h:"12 · Sections de sidebar repliables + fil d'Ariane sauteur",
+    p:"Chaque section de navigation se replie, les épinglés restent en bas. Le dernier segment du fil d'Ariane ouvre la liste de ses frères : on passe d'une offre à l'autre sans revenir à la liste." },
+  { h:"13 · Le compagnon : la seule surface qui parle en premier",
+    p:"⌘K et le dock sont réactifs — on les ouvre. La capsule en bas à droite est permanente et identique sur tous les écrans : elle affiche l'étape en cours de votre fil rouge, lit la page, et propose une remarque (une seule par écran). Elle porte trois choses que le dock ne porte pas : un objectif suivi d'écran en écran, une mémoire de parcours (« reprendre ailleurs »), et un niveau d'attention réglable — Calme, Attentif, Proactif. Elle ne duplique pas la conversation : « Ouvrir le fil complet » passe la main au dock." },
+];
+
+const Demo = () => {
+  const [key, setKey] = useState("home");
+  const [notes, setNotes] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+  const s = SCENARIOS[key];
+  const [tab, setTab] = useState(s.activeTab || null);
+  React.useEffect(() => {
+    const onEsc = (e) => { if (e.key === "Escape") { setDrawer(false); setNotes(false); } };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, []);
+  const pick = (k) => { setKey(k); setTab(SCENARIOS[k].activeTab || null); setDrawer(false); };
+  const openMatches = () => setDrawer(true);
+  const body = key === "home" ? <Home/>
+    : key === "catalogue" ? <Catalogue onOpenMatches={openMatches}/>
+    : key === "offers" ? <OffersList/>
+    : key === "create" ? <CreateOffer/>
+    : key === "contract" ? <Contract/>
+    : <Project onOpenMatches={openMatches}/>;
+  return (
+    <>
+      <AppLayout2 key={key} crumbs={s.crumbs} activeId={s.activeId} page={s.page} tabs={s.tabs} activeTab={tab} onTab={setTab}
+        actions={s.actions} subRight={s.subRight} scope={s.scope} defaultDock={s.defaultDock || null}
+        filters={s.filters || null} filterHint={s.filterHint}
+        onOpenMatches={openMatches} onNav={(id, t) => { const k = Object.keys(SCENARIOS).find(k2 => SCENARIOS[k2].activeId === id); if (k) { pick(k); if (t) setTab(t); } }}>
+        {body}
+      </AppLayout2>
+      {drawer && <MatchDrawer onClose={() => setDrawer(false)} subject={s.scope ? s.scope.label.replace(/^.*· /, "") : "vos offres"}/>}
+      {notes && (
+        <div className="v2-notes">
+          <h3>Ce qui change par rapport au layout actuel</h3>
+          {NOTES.map(n => <div key={n.h}><h4>{n.h}</h4><p>{n.p}</p></div>)}
+        </div>
+      )}
+      <div className="v2-demo">
+        <span>Contexte</span>
+        {Object.entries(SCENARIOS).map(([k, v]) => (
+          <button key={k} type="button" className={k === key ? "on" : ""} onClick={() => pick(k)}>{v.label}</button>
+        ))}
+        <span className="v2-demo-sep"/>
+        <button type="button" className={notes ? "on" : ""} onClick={() => setNotes(n => !n)}>Notes</button>
+      </div>
+    </>
+  );
+};
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

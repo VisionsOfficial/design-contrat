@@ -1,0 +1,46 @@
+/* ─── NEGOTIATION v4 · packages + baseline/fixed markers (loaded after negotiation3.css) ─── */
+.n3-op .n3-pen{margin-top:24px}
+.n3-tag.pkg{gap:5px;background:#eef1f8;color:var(--vui-color-secondary)}
+.n3-tally-row.fixed{background:var(--bg-2)}
+.n3-tally-row.fixed .n3-tally-n{color:var(--text-faint)}
+.n3-legend-dot.fixed{background:#c2c9d6}
+
+.n4-negtag,.n4-fixtag{display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:2px 7px;border-radius:99px;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;vertical-align:middle}
+.n4-negtag{color:var(--vui-color-primary-dark);background:var(--vui-color-primary-soft)}
+.n4-fixtag{color:var(--text-faint);background:var(--bg-2)}
+
+.n4-fixnote{display:flex;align-items:flex-start;gap:9px;margin:0 18px 16px;padding:11px 13px;border:1px dashed var(--border-2);border-radius:11px;background:var(--bg-2);font-size:12px;line-height:1.5;color:var(--text-muted)}
+.n4-fixnote svg{flex:none;margin-top:1px;color:var(--text-faint)}
+.n4-fixnote b{color:var(--vui-color-secondary)}
+
+.n4-pkgs-wrap{margin:0 18px 16px;border:1px solid var(--border);border-radius:13px;background:var(--surface);overflow:hidden}
+.n4-pkgs-hd{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;background:#f6f8fb;border-bottom:1px solid var(--border)}
+.n4-pkgs-hd svg{flex:none;margin-top:2px;color:var(--vui-color-primary)}
+.n4-pkgs-t{font-size:13px;font-weight:700;color:var(--vui-color-secondary)}
+.n4-pkgs-t b{font-weight:800}
+.n4-pkgs-s{margin:3px 0 0;font-size:11.5px;line-height:1.5;color:var(--text-muted);text-wrap:pretty}
+.n4-pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;padding:14px 15px}
+.n4-pkg{display:flex;flex-direction:column;gap:6px;padding:13px;border:1px solid var(--border-2);border-radius:11px;background:var(--surface)}
+.n4-pkg.chosen{border-color:var(--vui-color-primary);background:var(--vui-color-primary-softer)}
+.n4-pkg.alt{border-color:#e5a43b;background:var(--warn-soft)}
+.n4-pkg-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.n4-pkg-name{font-size:13.5px;font-weight:800;color:var(--vui-color-secondary)}
+.n4-pkg-flag{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:99px;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff}
+.n4-pkg-flag.req{background:var(--vui-color-primary)}
+.n4-pkg-flag.cnt{background:#b0761a}
+.n4-pkg-price{font-size:19px;font-weight:800;line-height:1.1;color:var(--vui-color-secondary)}
+.n4-pkg-price span{font-size:11px;font-weight:600;color:var(--text-muted)}
+.n4-pkg-calls{font-family:var(--font-mono);font-size:10.5px;color:var(--vui-color-primary-dark);background:rgba(0,162,174,.08);border-radius:6px;padding:4px 7px}
+.n4-pkg-setup{font-size:11px;color:var(--text-faint)}
+.n4-pkg-neg,.n4-pkg-fix{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:99px;font-size:9.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.n4-pkg-negline{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.n4-pkg-negrange{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--text-muted);white-space:nowrap}
+.n4-pkg-neg{color:var(--vui-color-primary-dark);background:var(--vui-color-primary-soft)}
+.n4-pkg-fix{color:var(--text-faint);background:var(--bg-2)}
+.n4-pkg-pols{display:flex;flex-wrap:wrap;gap:4px}
+.n4-pkg-pol{font-size:9.5px;font-weight:700;color:var(--text-muted);background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:99px;padding:2px 7px}
+.n4-pkg-note{margin-top:auto;padding-top:4px;font-size:10.5px;font-weight:700;color:var(--vui-color-primary-dark)}
+.n4-pkg-btn{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;font:inherit;font-size:11.5px;font-weight:700;color:var(--vui-color-secondary);background:var(--surface);border:1px solid var(--border-2);border-radius:9px;padding:8px 10px;cursor:pointer}
+.n4-pkg-btn:hover{border-color:#e5a43b;color:#8a5a00}
+.n4-pkg-btn.on{background:#b0761a;border-color:#b0761a;color:#fff}
+@media (max-width:700px){.n4-pkgs-wrap,.n4-fixnote{margin-left:12px;margin-right:12px}}

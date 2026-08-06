@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VisionsTrust — Layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="layout.css"/>
+<style>
+html,body{margin:0;background:#fafbfc}
+.ld-wrap{display:flex;flex-direction:column;gap:14px}
+.ld-card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07),0 1px 2px rgba(23,36,63,.05);padding:22px 24px}
+.ld-card h2{margin:0 0 4px;font:800 16px/1.3 "Inter",sans-serif;color:#17243f}
+.ld-card p{margin:0;color:#5d6b85;font:400 13.5px/1.6 "Inter",sans-serif;text-wrap:pretty}
+.ld-code{margin:14px 0 0;background:#17243f;color:#dfe7f3;border-radius:10px;padding:16px 18px;font:400 12.5px/1.7 "JetBrains Mono",monospace;white-space:pre;overflow-x:auto}
+.ld-code b{color:#08ffad;font-weight:400}
+.ld-list{margin:12px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ld-list li{display:flex;gap:10px;font:500 13px/1.5 "Inter",sans-serif;color:#17243f;background:#f7f9fc;border-radius:9px;padding:11px 13px}
+.ld-list li b{display:block;font-weight:700}
+.ld-list li span{color:#5d6b85;font-weight:400}
+.ld-dot{width:7px;height:7px;border-radius:50%;background:#00a2ae;flex:none;margin-top:6px}
+.ld-props{margin:12px 0 0;width:100%;border-collapse:collapse;font:400 13px/1.5 "Inter",sans-serif}
+.ld-props th{text-align:left;font-weight:700;color:#17243f;padding:8px 10px;border-bottom:1px solid #e3e7ee;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.ld-props td{padding:9px 10px;border-bottom:1px solid #eef1f6;color:#5d6b85;vertical-align:top}
+.ld-props td:first-child{color:#17243f;font-family:"JetBrains Mono",monospace;font-size:12.5px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" data-presets="react" src="layout.jsx"></script>
+<script type="text/babel" data-presets="react">
+const { AppLayout } = window.VTLayout;
+
+const Demo = () => (
+  <AppLayout title="Welcome" activeId="home">
+    <div className="ld-wrap">
+      <div className="ld-card">
+        <h2>Base layout</h2>
+        <p>Coquille applicable à tous les écrans : navigation gauche (avec sous-menus repliables), barre du haut à droite (panier, langue, aide, notifications, compte) et panneau d'aide / agent IA rétractable à droite.</p>
+        <ul className="ld-list">
+          <li><span className="ld-dot"/><span><b>Navigation gauche</b>Repliable en icônes via le bouton de la barre du haut</span></li>
+          <li><span className="ld-dot"/><span><b>Menus déroulants</b>Langue, notifications, compte — fermeture au clic extérieur / Échap</span></li>
+          <li><span className="ld-dot"/><span><b>Panneau droit</b>Helper home et Assistant AI, rail toujours visible</span></li>
+          <li><span className="ld-dot"/><span><b>Responsive</b>Icônes &lt; 1240px, panneau en overlay &lt; 980px</span></li>
+        </ul>
+      </div>
+
+      <div className="ld-card">
+        <h2>Appliquer à un écran existant</h2>
+        <p>Ajouter la feuille de style et le module, puis envelopper le contenu de la page. Aucun autre CSS du projet n'est requis.</p>
+        <div className="ld-code">{`<link rel="stylesheet" href="layout.css"/>
+<script type="text/babel" src="layout.jsx"><\/script>
+
+const { AppLayout } = window.VTLayout;
+
+<`}<b>AppLayout</b>{` title="My Offers" activeId="offers-all">
+  {/* le contenu existant de l'écran */}
+<\/`}<b>AppLayout</b>{`>`}</div>
+      </div>
+
+      <div className="ld-card">
+        <h2>Props</h2>
+        <table className="ld-props">
+          <thead><tr><th>Prop</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td>title</td><td>Titre affiché dans la barre du haut</td></tr>
+            <tr><td>activeId</td><td>Élément de navigation actif (le parent s'ouvre automatiquement)</td></tr>
+            <tr><td>nav</td><td>Arborescence de navigation — défaut <em>VT_NAV</em></td></tr>
+            <tr><td>defaultPanel</td><td><em>"helper"</em>, <em>"ai"</em> ou <em>null</em> (panneau droit fermé)</td></tr>
+            <tr><td>defaultSideCollapsed</td><td>Démarrer avec la navigation en icônes</td></tr>
+            <tr><td>cartCount / notifications</td><td>Compteur du panier, liste des notifications</td></tr>
+            <tr><td>actions</td><td>Boutons de page ajoutés à gauche de la barre d'actions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </AppLayout>
+);
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

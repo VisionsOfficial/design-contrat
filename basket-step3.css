@@ -1,0 +1,93 @@
+/* VisionsTrust — Basket · assign the negotiation to a project (create project).
+   Reuses the Project settings vocabulary (os-panel / os-rail / ps-* controls);
+   only the step-specific pieces live here. */
+
+/* context strip: what is being assigned */
+.s3-ctx { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px 16px; }
+.s3-ctx-k { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; color: var(--text-faint); }
+.s3-chip { display: inline-flex; align-items: center; gap: 9px; height: 38px; padding: 0 13px 0 6px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); }
+.s3-chip-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.s3-chip-name { font-size: 12px; font-weight: 800; color: var(--vui-color-secondary); }
+.s3-chip-by { font-size: 10.5px; color: var(--text-muted); }
+.s3-ctx-sp { flex: 1 1 12px; }
+
+/* two-column shell: rail + stacked sections */
+.s3-wrap { display: grid; grid-template-columns: 272px minmax(0, 1fr); gap: 20px; align-items: start; margin-top: 16px; }
+@media (max-width: 980px) { .s3-wrap { grid-template-columns: 1fr; } }
+.s3-form { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.s3-rail-ok { color: var(--success); display: inline-flex; margin-left: auto; }
+.s3-rail-miss { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+
+/* form grid */
+.s3-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .s3-grid { grid-template-columns: 1fr; } }
+.s3-grid > .full { grid-column: 1 / -1; }
+.s3-grid .os-flabel em { color: var(--danger); font-style: normal; margin-left: 2px; }
+.s3-sub { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 800; color: var(--vui-color-secondary); margin: 22px 0 10px; }
+.s3-sub svg { color: var(--vui-color-primary); }
+.s3-sub .opt { color: var(--text-faint); font-weight: 600; font-size: 11.5px; }
+.s3-hint { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.5; }
+
+/* cover placeholder */
+.s3-cover { height: 108px; border: 1.5px dashed var(--border-2); border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 14px; background-image: repeating-linear-gradient(135deg, var(--bg-2) 0 8px, transparent 8px 16px); }
+.s3-cover span { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+
+/* offers coming from the negotiation */
+.s3-offer { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 14px; border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; background: var(--surface); text-align: left; width: 100%; }
+.s3-offer + .s3-offer { margin-top: 10px; }
+.s3-offer.on { border-color: var(--vui-color-primary); background: var(--vui-color-primary-softer); }
+.s3-offer-name { font-size: 13px; font-weight: 800; color: var(--vui-color-secondary); }
+.s3-offer-by { font-size: 11.5px; color: var(--text-muted); }
+.s3-offer-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+.s3-tag { display: inline-flex; align-items: center; gap: 5px; height: 21px; padding: 0 8px; border-radius: 6px; background: var(--bg-2); color: var(--text-muted); font-size: 10.5px; font-weight: 700; }
+.s3-tag.ok { background: var(--success-soft); color: var(--success); }
+.s3-tag.neg { background: var(--vui-color-primary-soft); color: var(--vui-color-primary-dark); }
+.s3-tag.warn { background: var(--warn-soft); color: var(--warn); }
+.s3-offer-side { text-align: right; font-size: 11.5px; color: var(--text-muted); white-space: nowrap; }
+
+/* participants */
+.s3-part { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 300px) auto; align-items: start; gap: 14px; border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px; }
+.s3-part + .s3-part { margin-top: 10px; }
+.s3-part.me { background: var(--bg-2); }
+@media (max-width: 760px) { .s3-part { grid-template-columns: auto minmax(0, 1fr); } .s3-part-roles { grid-column: 1 / -1; } }
+.s3-part-name { font-size: 13px; font-weight: 800; color: var(--vui-color-secondary); }
+.s3-part-org { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+.s3-part-roles { display: flex; flex-direction: column; gap: 8px; }
+.s3-part-addrole { align-self: flex-start; background: none; border: none; padding: 0; font-size: 11.5px; font-weight: 700; color: var(--vui-color-primary-text); display: inline-flex; align-items: center; gap: 5px; }
+.s3-part-del { background: none; border: none; color: var(--text-faint); padding: 6px; border-radius: 8px; }
+.s3-part-del:hover { color: var(--danger); background: var(--danger-soft); }
+.s3-invite { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 230px) auto; gap: 10px; align-items: end; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border-2); }
+@media (max-width: 700px) { .s3-invite { grid-template-columns: 1fr; } }
+
+/* clauses */
+.s3-clause { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 18px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.s3-clause:last-child { border-bottom: none; }
+.s3-clause.stack { grid-template-columns: 1fr; }
+.s3-clause-k { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--vui-color-secondary); }
+.s3-clause-k .s3-tag { font-weight: 700; }
+.s3-clause-c { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.s3-clause.stack .s3-clause-c { justify-content: flex-start; }
+
+/* sticky action bar */
+.s3-bar { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: 0 -8px 24px rgba(15, 23, 42, .07); padding: 12px 16px; margin-top: 4px; z-index: 4; }
+.s3-bar-txt { font-size: 12.5px; color: var(--text-muted); }
+.s3-bar-txt b { color: var(--vui-color-secondary); }
+.s3-bar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* missing-fields banner */
+.s3-err { display: flex; gap: 10px; align-items: flex-start; background: var(--warn-soft); border: 1px solid var(--warn); border-radius: 12px; padding: 12px 14px; color: var(--vui-color-secondary); font-size: 12.5px; line-height: 1.55; }
+.s3-err svg { color: var(--warn); flex-shrink: 0; margin-top: 1px; }
+.s3-err-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.s3-err-links button { background: var(--surface); border: 1px solid var(--border-2); border-radius: 999px; height: 26px; padding: 0 11px; font-size: 11.5px; font-weight: 700; color: var(--vui-color-secondary); }
+.s3-err-links button:hover { border-color: var(--vui-color-primary); color: var(--vui-color-primary-text); }
+
+/* created recap */
+.s3-created { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 26px; margin-top: 16px; }
+.s3-created-ic { width: 46px; height: 46px; border-radius: 12px; background: var(--success-soft); color: var(--success); display: grid; place-items: center; }
+.s3-created h2 { margin: 14px 0 4px; font-size: 20px; color: var(--vui-color-secondary); }
+.s3-created p { margin: 0 0 18px; font-size: 13px; color: var(--text-muted); }
+.s3-recap { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.s3-recap-cell { border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; }
+.s3-recap-k { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-faint); }
+.s3-recap-v { font-size: 13px; font-weight: 700; color: var(--vui-color-secondary); margin-top: 4px; line-height: 1.35; }
+.s3-created-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }

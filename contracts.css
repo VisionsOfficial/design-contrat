@@ -1,0 +1,213 @@
+/* ════════════════════════════════════════════════════════════════════════
+   VisionsTrust — My Contracts (V2 UX)
+   Builds on styles.css tokens + .app.ui-v2 shell + catalogue.css (drawer)
+   + myoffers.css (rows, panels, stat cards, dropdown menu — all reused).
+   This file adds only what's contract-specific: signature progress,
+   participant chips, status meta, priority panel, contract-id copy.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ct-content { padding: 0; max-width: none; width: 100%; }
+.ct-inner { padding: 24px 36px 120px; max-width: 1180px; margin: 0 auto; }
+
+/* ─── PAGE HEADER / TOOLBAR (reuses .mo-* patterns) ──────────────────────── */
+.ct-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.ct-toolbar-left { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.ct-heading { font-size: 19px; font-weight: 700; color: var(--vui-color-secondary); letter-spacing: -0.01em; margin: 0; }
+.ct-count { font-size: 13px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+
+/* segmented status switch that sits in the toolbar on list views */
+.ct-statusbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.ct-chip {
+  display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px;
+  border: 1px solid var(--border-2); border-radius: 999px; background: var(--surface);
+  color: var(--text-muted); font: inherit; font-size: 12.5px; font-weight: 600;
+}
+.ct-chip:hover { border-color: var(--vui-color-primary); color: var(--vui-color-primary-dark); }
+.ct-chip .ct-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ct-chip .ct-chip-n { font-size: 11px; font-weight: 700; color: var(--text-faint); background: var(--bg); border-radius: 999px; padding: 1px 7px; }
+.ct-chip.active { background: var(--vui-color-secondary); border-color: var(--vui-color-secondary); color: #fff; }
+.ct-chip.active .ct-chip-n { background: rgba(255,255,255,.18); color: #fff; }
+
+/* ─── OVERVIEW ───────────────────────────────────────────────────────────── */
+.ct-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+.ct-header .ct-title { font-size: 22px; font-weight: 800; color: var(--vui-color-secondary); letter-spacing: -0.015em; margin: 0 0 3px; }
+.ct-header .ct-sub { font-size: 13.5px; color: var(--text-muted); margin: 0; max-width: 640px; text-wrap: pretty; }
+
+/* stat cards — reuse .dash-stats + .stat-card from myoffers.css, add a clickable variant */
+.ct-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+@media (max-width: 1080px) { .ct-stats { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .ct-stats { grid-template-columns: 1fr; } }
+.ct-stat {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; min-height: 118px;
+  text-align: left; position: relative; transition: border-color .14s, box-shadow .14s, transform .14s;
+}
+button.ct-stat:hover { border-color: var(--vui-color-primary); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.ct-stat-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ct-stat-label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
+.ct-stat-ic { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--vui-color-primary-soft); color: var(--vui-color-primary-dark); flex-shrink: 0; }
+.ct-stat-value { font-size: 30px; font-weight: 800; color: var(--vui-color-secondary); letter-spacing: -0.02em; line-height: 1; }
+.ct-stat-foot { font-size: 11.5px; color: var(--text-faint); margin-top: auto; }
+/* action-required accent (To sign) */
+.ct-stat.alert { background: var(--vui-color-primary-soft); border-color: var(--vui-color-primary); }
+.ct-stat.alert .ct-stat-ic { background: #fff; color: var(--vui-color-primary-dark); }
+.ct-stat.alert .ct-stat-value { color: var(--vui-color-secondary); }
+.ct-stat.alert .ct-stat-foot { color: var(--vui-color-primary-dark); font-weight: 600; }
+
+/* ─── PRIORITY PANEL (awaiting your signature) ───────────────────────────── */
+.ct-priority {
+  border: 1px solid var(--border-2); background: linear-gradient(180deg, var(--bg), var(--surface) 60%);
+  border-radius: 16px; padding: 4px; margin-bottom: 18px; overflow: hidden;
+}
+.ct-priority-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px 10px; }
+.ct-priority-head .pri-ic { width: 40px; height: 40px; border-radius: 11px; background: var(--vui-color-primary-soft); color: var(--vui-color-primary-dark); display: grid; place-items: center; flex-shrink: 0; }
+.ct-priority-head .pri-tx { flex: 1; min-width: 0; }
+.ct-priority-head h3 { margin: 0 0 2px; font-size: 15px; font-weight: 800; color: var(--vui-color-secondary); }
+.ct-priority-head p { margin: 0; font-size: 12.5px; color: var(--text-muted); }
+.ct-priority-head .pri-count { font-size: 26px; font-weight: 800; color: var(--vui-color-secondary); letter-spacing: -0.02em; }
+.ct-priority-list { display: flex; flex-direction: column; gap: 6px; padding: 4px; }
+.ct-pri-row {
+  display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 14px;
+  padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 11px;
+}
+.ct-pri-row:hover { border-color: var(--border-2); box-shadow: var(--shadow-sm); }
+.ct-pri-mono { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 13px; }
+.ct-pri-main { min-width: 0; }
+.ct-pri-name { font-size: 13.5px; font-weight: 700; color: var(--vui-color-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-pri-meta { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 7px; margin-top: 1px; }
+.ct-pri-meta .mdot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-2); }
+
+/* ─── CONTRACT ROW (list) ────────────────────────────────────────────────── */
+.ct-list { display: flex; flex-direction: column; gap: 8px; }
+.ct-row {
+  display: grid; grid-template-columns: 46px minmax(0, 1fr) auto;
+  align-items: center; gap: 16px;
+  padding: 12px 14px 12px 12px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  transition: border-color .14s, box-shadow .14s; position: relative; text-align: left; width: 100%;
+  font: inherit; cursor: pointer;
+}
+.ct-row:hover { border-color: var(--vui-color-primary); box-shadow: var(--shadow-sm); }
+.ct-row.needs { border-left: 3px solid var(--vui-color-primary); }
+.ct-mono {
+  width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0;
+  display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.02em;
+}
+.ct-main { min-width: 0; }
+.ct-name-row { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; min-width: 0; }
+.ct-name { font-size: 14.5px; font-weight: 700; color: var(--vui-color-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ct-name-row .pill { flex-shrink: 0; white-space: nowrap; }
+.ct-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-muted); }
+.ct-meta .mdot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-2); }
+.ct-meta .mi { display: inline-flex; align-items: center; gap: 4px; }
+.ct-meta .mi svg { color: var(--text-faint); }
+.ct-meta .role-tag { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; color: var(--vui-color-primary-dark); }
+.ct-meta .role-tag svg { color: var(--vui-color-primary); }
+
+/* signature strip (inline, under meta) */
+.ct-sigline { display: flex; align-items: center; gap: 10px; margin-top: 9px; }
+.ct-sig-count { font-size: 11.5px; font-weight: 700; color: var(--vui-color-secondary); white-space: nowrap; }
+.ct-sig-count.done { color: var(--success); }
+.ct-progress { height: 6px; border-radius: 4px; background: var(--bg-2); overflow: hidden; flex: 1; min-width: 54px; max-width: 150px; }
+.ct-progress > i { display: block; height: 100%; border-radius: 4px; background: var(--vui-color-primary); transition: width .4s; }
+.ct-progress.full > i { background: var(--success); }
+.ct-progress.stalled > i { background: var(--border-2); }
+
+/* participant signature avatars */
+.sig-avatars { display: flex; align-items: center; }
+.sig-avatars .sig-av {
+  width: 24px; height: 24px; border-radius: 50%; margin-left: -6px;
+  display: grid; place-items: center; font-size: 10px; font-weight: 700;
+  border: 2px solid var(--surface); position: relative; flex-shrink: 0;
+}
+.sig-avatars .sig-av:first-child { margin-left: 0; }
+.sig-av.signed { background: var(--success-soft); color: var(--success); }
+.sig-av.missing { background: var(--danger-soft); color: var(--danger); }
+.sig-av.you { box-shadow: 0 0 0 2px var(--vui-color-primary); }
+.sig-av .sig-badge { position: absolute; right: -3px; bottom: -3px; width: 12px; height: 12px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--surface); }
+.sig-av .sig-badge.ok { background: var(--success); color: #fff; }
+.sig-av .sig-badge.no { background: var(--danger); color: #fff; }
+.sig-av-more { width: 24px; height: 24px; border-radius: 50%; margin-left: -6px; background: var(--bg-2); color: var(--text-muted); display: grid; place-items: center; font-size: 9.5px; font-weight: 700; border: 2px solid var(--surface); }
+
+/* actions column */
+.ct-actions { display: flex; align-items: center; gap: 6px; }
+.ct-cta {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px;
+  border-radius: 8px; border: none; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+.ct-cta.sign { background: var(--vui-color-primary); color: #fff; }
+.ct-cta.sign:hover { background: var(--vui-color-primary-dark); }
+.ct-cta.view { background: var(--surface); border: 1px solid var(--border-2); color: var(--vui-color-secondary); }
+.ct-cta.view:hover { border-color: var(--vui-color-primary); color: var(--vui-color-primary-dark); }
+
+/* ─── GROUP SECTION ──────────────────────────────────────────────────────── */
+.ct-section { margin-bottom: 28px; }
+.ct-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.ct-section-title { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: var(--vui-color-secondary); margin: 0; }
+.ct-section-title .sec-dot { width: 9px; height: 9px; border-radius: 50%; }
+.ct-section-title .sec-n { font-size: 11.5px; font-weight: 700; color: var(--text-faint); background: var(--bg); border-radius: 999px; padding: 1px 9px; }
+
+/* ─── EMPTY ──────────────────────────────────────────────────────────────── */
+.ct-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 40px 20px; text-align: center;
+  border: 1.5px dashed var(--border-2); border-radius: 14px; background: var(--vui-color-primary-softer);
+}
+.ct-empty .ce-icon { width: 48px; height: 48px; border-radius: 13px; background: var(--surface); border: 1px solid var(--border); display: grid; place-items: center; color: var(--vui-color-primary); }
+.ct-empty h4 { margin: 4px 0 0; font-size: 14.5px; color: var(--vui-color-secondary); }
+.ct-empty p { margin: 0; font-size: 12.5px; color: var(--text-muted); max-width: 360px; }
+
+/* ─── DRAWER (contract detail) — reuses .drawer from catalogue.css ───────── */
+.ct-drawer-head { padding: 20px 22px 4px; }
+.ct-drawer-status { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.ct-drawer-title { font-size: 22px; font-weight: 800; color: var(--vui-color-secondary); margin: 0 0 6px; letter-spacing: -0.01em; }
+.ct-drawer-sub { font-size: 13px; color: var(--text-muted); margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ct-drawer-sub .mdot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-2); }
+.ct-fullpage { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding: 11px 13px; border: 1px solid var(--vui-color-primary); border-radius: 10px; background: var(--vui-color-primary-softer); color: var(--vui-color-primary-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
+.ct-fullpage:hover { background: var(--vui-color-primary-soft); }
+.ct-fullpage span { margin-left: auto; font-size: 11.5px; font-weight: 600; color: var(--text-muted); }
+@media (max-width: 520px) { .ct-fullpage span { display: none; } }
+a.di-btn { text-decoration: none; }
+a.use-btn { text-decoration: none; justify-content: center; }
+
+/* big progress in drawer */
+.ct-sig-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+.ct-sig-ring { position: relative; width: 66px; height: 66px; flex-shrink: 0; }
+.ct-sig-ring .rc { position: absolute; inset: 0; display: grid; place-items: center; font-size: 15px; font-weight: 800; color: var(--vui-color-secondary); }
+.ct-sig-hero .sh-tx { min-width: 0; }
+.ct-sig-hero .sh-big { font-size: 15px; font-weight: 700; color: var(--vui-color-secondary); }
+.ct-sig-hero .sh-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+/* signatory list in drawer */
+.sig-list { display: flex; flex-direction: column; gap: 2px; }
+.sig-row { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.sig-row:last-child { border-bottom: none; }
+.sig-row .sr-av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+.sig-row .sr-av.signed { background: var(--success-soft); color: var(--success); }
+.sig-row .sr-av.missing { background: var(--danger-soft); color: var(--danger); }
+.sig-row .sr-name { font-size: 13.5px; font-weight: 600; color: var(--vui-color-secondary); }
+.sig-row .sr-role { font-size: 11.5px; color: var(--text-faint); }
+.sig-row .sr-you { font-size: 10px; font-weight: 700; color: var(--vui-color-primary-dark); background: var(--vui-color-primary-soft); border-radius: 999px; padding: 1px 7px; margin-left: 6px; }
+.sig-state { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; }
+.sig-state.ok { color: var(--success); }
+.sig-state.no { color: var(--danger); }
+
+/* contract-id copy field */
+.ct-idfield { display: flex; align-items: stretch; border: 1px solid var(--border-2); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.ct-idfield code { flex: 1; padding: 9px 12px; font-family: var(--font-mono); font-size: 12px; color: var(--vui-color-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-idfield button { display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: none; border-left: 1px solid var(--border-2); background: var(--bg); color: var(--text-muted); font: inherit; font-size: 12.5px; font-weight: 600; }
+.ct-idfield button:hover { color: var(--vui-color-primary-dark); background: var(--vui-color-primary-softer); }
+
+/* contribution note */
+.ct-note { display: flex; align-items: center; gap: 9px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: 10px; background: var(--bg); font-size: 13px; color: var(--text-muted); }
+.ct-note svg { color: var(--text-muted); flex-shrink: 0; }
+
+/* helper / ai in sidebar reuse myoffers/settings styles */
+
+@media (max-width: 860px) {
+  .ct-inner { padding: 18px 16px 110px; }
+  .ct-row { grid-template-columns: 42px 1fr; row-gap: 10px; }
+  .ct-mono { width: 42px; height: 42px; }
+  .ct-actions { grid-column: 1 / -1; }
+  .ct-actions .ct-cta { flex: 1; justify-content: center; }
+}

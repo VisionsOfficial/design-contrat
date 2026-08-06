@@ -1,0 +1,100 @@
+/* VisionsTrust — Layout v3 : l'assistant sans sidebar droite.
+   Se charge APRÈS layout2.css (mêmes tokens --v2-*). Préfixe .v3-. */
+
+/* plus de rail ni de dock : le contenu occupe toute la largeur */
+.v3-app{grid-template-columns:var(--v2-side) minmax(0,1fr)}
+.v3-app.is-dock-open{grid-template-columns:var(--v2-side) minmax(0,1fr)}
+.v3-app .v2-content{padding-bottom:calc(var(--v3-bottom,16px) + 82px)}
+
+/* ── SIDEBAR : le bloc d'appel des agents ───────────────────────────────── */
+.v3-ai{flex:none;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:6px}
+.v3-ai-top{display:flex;gap:6px}
+.v3-ai-main{flex:1;min-width:0;display:flex;align-items:center;gap:9px;padding:9px 10px;border:0;border-radius:10px;background:linear-gradient(120deg,rgba(8,255,173,.2),rgba(0,162,174,.28));box-shadow:inset 0 0 0 1px rgba(8,255,173,.4);color:#fff;font:800 13px/1.2 var(--v2-font);text-align:left}
+.v3-ai-main:hover{background:linear-gradient(120deg,rgba(8,255,173,.32),rgba(0,162,174,.4))}
+.v3-ai-main svg{color:var(--v2-accent);flex:none}
+.v3-ai-main span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-kbd{flex:none;font:700 10px/1 var(--v2-mono);color:rgba(255,255,255,.75);background:rgba(0,0,0,.22);border-radius:5px;padding:4px 5px}
+.v3-ai-help{flex:none;width:34px;border:0;border-radius:10px;background:rgba(255,255,255,.09);color:#fff;font:800 14px/1 var(--v2-font);display:grid;place-items:center}
+.v3-ai-help:hover{background:rgba(255,255,255,.17)}
+.v3-ai-sec{display:flex;align-items:center;gap:6px;width:100%;border:0;background:transparent;color:rgba(255,255,255,.4);font:700 10px/1 var(--v2-font);letter-spacing:.09em;text-transform:uppercase;padding:6px 10px 2px}
+.v3-ai-sec span{flex:1;text-align:left}
+.v3-ai-list{display:flex;flex-direction:column;gap:2px}
+.v3-ai-row{display:flex;align-items:center;gap:9px;width:100%;padding:6px 9px;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.82);font:600 12px/1.2 var(--v2-font);text-align:left}
+.v3-ai-row:hover{background:rgba(255,255,255,.09);color:#fff}
+.v3-ai-row i{width:20px;height:20px;flex:none;border-radius:6px;display:grid;place-items:center;background:rgba(255,255,255,.1)}
+.v3-ai-row.help i{color:#ffd479}.v3-ai-row.completion i{color:#9be7ff}.v3-ai-row.matching i{color:var(--v2-accent)}.v3-ai-row.legal i{color:#c7b6ff}.v3-ai-row.search i{color:#8fd8ff}
+.v3-ai-row b{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-ai-row small{flex:none;font:700 9.5px/1 var(--v2-mono);color:rgba(255,255,255,.45)}
+/* appel d'agent depuis une entrée de navigation */
+.v3-nav-ai{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:25px;height:25px;border:0;border-radius:7px;background:var(--v2-navy-3);color:var(--v2-accent);display:none;place-items:center;box-shadow:0 0 0 3px var(--v2-navy)}
+.v2-iwrap:hover .v3-nav-ai,.v2-iwrap:focus-within .v3-nav-ai{display:grid}
+.v3-nav-ai:hover{background:var(--v2-teal)}
+.v3-app.is-side-collapsed .v3-nav-ai,.v3-app.is-side-collapsed .v3-ai-list,.v3-app.is-side-collapsed .v3-ai-sec,.v3-app.is-side-collapsed .v3-ai-main span,.v3-app.is-side-collapsed .v3-kbd{display:none}
+.v3-app.is-side-collapsed .v3-ai-main{justify-content:center;padding:10px 0}
+
+/* ── A · BARRE COMPAGNON (bas de l'écran) ───────────────────────────────── */
+.v3-bar{position:fixed;left:var(--v2-side);right:0;bottom:var(--v3-bottom,16px);z-index:90;display:flex;justify-content:center;pointer-events:none;transition:left .22s ease}
+.v3-bar-in{pointer-events:auto;width:min(700px,calc(100vw - var(--v2-side) - 44px));display:flex;align-items:center;gap:9px;padding:8px 9px 8px 13px;border-radius:15px;background:var(--v2-navy);box-shadow:var(--v2-shadow-lg);color:#fff}
+.v3-bar-spark{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(8,255,173,.9),rgba(0,162,174,.9));color:var(--v2-navy)}
+.v3-bar-q{flex:1;min-width:0;display:flex;align-items:center;gap:8px;border:0;border-radius:10px;background:rgba(255,255,255,.09);color:rgba(255,255,255,.72);font:500 13px/1.2 var(--v2-font);padding:9px 11px;text-align:left}
+.v3-bar-q:hover{background:rgba(255,255,255,.15);color:#fff}
+.v3-bar-q em{flex:1;min-width:0;font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-bar-ags{display:flex;gap:4px;flex:none}
+.v3-iconag{position:relative;width:31px;height:31px;border:0;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center}
+.v3-iconag:hover{background:rgba(255,255,255,.18)}
+.v3-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0d1729;color:#fff;font:600 11px/1 var(--v2-font);padding:6px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s}
+.v3-iconag:hover .v3-tip,.v3-bar-task:hover .v3-tip{opacity:1}
+.v3-bar-task{position:relative;flex:none;display:flex;align-items:center;gap:7px;border:0;border-radius:9px;padding:8px 10px;background:rgba(8,255,173,.14);color:var(--v2-accent);font:800 11.5px/1 var(--v2-font)}
+.v3-bar-task .v3-spin{width:11px;height:11px;border-radius:50%;border:2px solid rgba(8,255,173,.3);border-top-color:var(--v2-accent);animation:v3spin .8s linear infinite}
+@keyframes v3spin{to{transform:rotate(360deg)}}
+.v3-bar-note{pointer-events:auto;position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);width:min(700px,calc(100vw - var(--v2-side) - 44px));display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:13px;background:var(--v2-surface);border:1px solid var(--v2-border);box-shadow:var(--v2-shadow-lg);font:500 12.5px/1.5 var(--v2-font);color:var(--v2-text);text-wrap:pretty}
+.v3-bar-note .v3-x{flex:none}
+
+/* feuille (bar dépliée) */
+.v3-sheet{position:fixed;left:var(--v2-side);right:0;bottom:var(--v3-bottom,16px);z-index:95;display:flex;justify-content:center;pointer-events:none}
+.v3-sheet-in{pointer-events:auto;width:min(900px,calc(100vw - var(--v2-side) - 44px));height:min(660px,74vh);display:flex;flex-direction:column;background:var(--v2-surface);border:1px solid var(--v2-border);border-radius:17px;box-shadow:var(--v2-shadow-lg);overflow:hidden}
+.v3-sheet.wide .v3-sheet-in{width:calc(100vw - var(--v2-side) - 44px);height:calc(100vh - var(--v3-bottom,16px) - 62px)}
+
+/* ── chrome commun aux trois surfaces ──────────────────────────────────── */
+.v3-head{flex:none;display:flex;align-items:center;gap:9px;padding:9px 11px;border-bottom:1px solid var(--v2-line);background:var(--v2-surface)}
+.v3-head-tx{flex:1;min-width:0;overflow:hidden}
+.v3-head-tx b{display:block;font:800 13.5px/1.25 var(--v2-font);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.v3-head-sub{display:block;font:500 11.5px/1.3 var(--v2-font);color:var(--v2-muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.v3-head-ic{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--v2-navy);color:var(--v2-accent)}
+.v3-segs{display:flex;gap:3px;padding:3px;border-radius:10px;background:#f1f4f9}
+.v3-segs button{position:relative;display:flex;align-items:center;gap:6px;border:0;background:transparent;border-radius:8px;padding:6px 10px;font:700 12px/1 var(--v2-font);color:var(--v2-muted)}
+.v3-segs button.on{background:var(--v2-surface);color:var(--v2-navy);box-shadow:var(--v2-shadow)}
+.v3-segs em{font-style:normal;font:700 10px/1 var(--v2-mono);background:#e6ebf3;border-radius:5px;padding:3px 4px;color:var(--v2-muted)}
+.v3-body{flex:1;min-height:0;display:flex;flex-direction:column}
+.v3-body .v2-dock-body{padding:15px 16px}
+
+/* ── B · SPOTLIGHT plein écran ─────────────────────────────────────────── */
+.v3-spot-scrim{position:fixed;inset:0;z-index:120;background:rgba(23,36,63,.44);display:flex;justify-content:center;padding-top:9vh}
+.v3-spot{width:min(780px,calc(100vw - 32px));height:min(640px,72vh);display:flex;flex-direction:column;background:var(--v2-surface);border-radius:17px;box-shadow:var(--v2-shadow-lg);overflow:hidden}
+.v3-restpill{position:fixed;right:18px;bottom:calc(var(--v3-bottom,16px) + 2px);z-index:90;display:flex;align-items:center;gap:9px;padding:9px 12px;border:0;border-radius:13px;background:var(--v2-navy);color:#fff;font:700 12.5px/1 var(--v2-font);box-shadow:var(--v2-shadow-lg)}
+.v3-restpill svg{color:var(--v2-accent)}
+.v3-restpill .v3-kbd{background:rgba(255,255,255,.14)}
+
+/* ── C · FENÊTRE FLOTTANTE ─────────────────────────────────────────────── */
+.v3-win{position:fixed;z-index:110;width:430px;height:min(580px,72vh);display:flex;flex-direction:column;background:var(--v2-surface);border:1px solid var(--v2-border);border-radius:15px;box-shadow:var(--v2-shadow-lg);overflow:hidden}
+.v3-win .v3-head{cursor:grab;user-select:none}
+.v3-win .v3-seglab,.v3-win .v3-head-sub{display:none}
+.v3-win .v3-segs button{padding:7px 9px}
+@media (max-width:900px){.v3-seglab{display:none}}
+.v3-win.drag .v3-head{cursor:grabbing}
+
+/* ── notes d'exploration ───────────────────────────────────────────────── */
+.v3-notes{position:fixed;right:16px;top:16px;bottom:70px;width:390px;z-index:130;overflow-y:auto;background:var(--v2-surface);border:1px solid var(--v2-border);border-radius:15px;box-shadow:var(--v2-shadow-lg);padding:16px 17px}
+.v3-notes h3{margin:0 0 4px;font:800 15px/1.3 var(--v2-font)}
+.v3-notes .v3-lead{margin:0 0 14px;font:500 12.5px/1.55 var(--v2-font);color:var(--v2-muted);text-wrap:pretty}
+.v3-notes h4{margin:15px 0 4px;font:800 12.5px/1.35 var(--v2-font);color:var(--v2-navy)}
+.v3-notes h4 .v3-tag{display:inline-block;margin-right:6px;font:800 10px/1 var(--v2-font);letter-spacing:.04em;background:var(--v2-teal-soft);color:var(--v2-teal-text);border-radius:5px;padding:4px 5px;vertical-align:2px}
+.v3-notes p{margin:0;font:500 12.5px/1.6 var(--v2-font);color:#41546f;text-wrap:pretty}
+.v3-notes .v3-reco{margin-top:14px;padding:11px 12px;border-radius:11px;background:var(--v2-teal-soft);color:#0a5f66;font:600 12.5px/1.55 var(--v2-font);text-wrap:pretty}
+
+@media (max-width:1380px){
+.v3-ai-list,.v3-ai-sec,.v3-ai-main span,.v3-ai-main .v3-kbd,.v3-nav-ai{display:none}
+.v3-ai-main{justify-content:center;padding:10px 0}
+.v3-ai-top{flex-direction:column}
+.v3-ai-help{width:100%;padding:7px 0}
+}
