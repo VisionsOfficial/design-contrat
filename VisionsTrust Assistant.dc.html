@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#fafbfc;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#17243f}
+*{box-sizing:border-box}
+a{color:#007f88;text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer}
+input,textarea{font-family:"Inter",system-ui,sans-serif}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(23,36,63,.16);border-radius:4px}
+@keyframes vtBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes vtPing{0%{transform:scale(.85);opacity:.85}70%,100%{transform:scale(1.55);opacity:0}}
+@keyframes vtIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+@media (max-width:1100px){
+[data-r="shell"]{grid-template-columns:66px minmax(0,1fr)!important}
+[data-r="sidetxt"]{display:none!important}
+[data-r="item"]{justify-content:center!important;padding:10px 0!important;gap:0!important}
+[data-r="sec"]{height:1px!important;padding:0!important;margin:12px 10px 8px!important;background:rgba(255,255,255,.14)!important;overflow:hidden!important;text-indent:-9999px!important}
+[data-r="omni"]{display:none!important}
+[data-r="deeppill"]{display:none!important}
+[data-r="hidecol"]{display:none!important}
+[data-r="panel"]{left:82px!important;width:min(390px,calc(100vw - 100px))!important}
+}
+@media (max-width:760px){
+[data-r="panel"]{left:10px!important;right:10px!important;width:auto!important;height:min(600px,calc(100vh - 24px))!important}
+[data-r="teaser"]{width:auto!important}
+}
+</style>
+</helmet>
+
+<div data-r="shell" style="display:grid;grid-template-columns:242px minmax(0,1fr);min-height:100vh;background:#fafbfc;font-size:14px;line-height:1.5">
+
+  <aside style="position:sticky;top:0;height:100vh;padding:9px;z-index:40">
+    <div style="height:100%;background:#17243f;border-radius:15px;display:flex;flex-direction:column;padding:10px 9px;min-width:0">
+      <button type="button" style="display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;border:0;background:rgba(255,255,255,.05);border-radius:10px;color:#fff;text-align:left;margin-bottom:10px" style-hover="background:rgba(255,255,255,.1)">
+        <span style="width:26px;height:26px;flex:none;display:grid;place-items:center">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#08ffad"></circle><path d="M7 8.5 12 17l5-8.5" stroke="#17243f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span data-r="sidetxt" style="flex:1;min-width:0">
+          <b style="display:block;font:800 13.5px/1.25 Inter,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Visions SAS</b>
+          <span style="display:block;font:500 11px/1.3 Inter,system-ui,sans-serif;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Mobility dataspace</span>
+        </span>
+        <svg data-r="sidetxt" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+
+      <nav aria-label="Main" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;gap:2px">
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V20h14V9.5"></path></svg>
+          <span data-r="sidetxt" style="flex:1">Home</span>
+        </a>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><rect x="3" y="3" width="7" height="7" rx="1.2"></rect><rect x="14" y="3" width="7" height="7" rx="1.2"></rect><rect x="3" y="14" width="7" height="7" rx="1.2"></rect><rect x="14" y="14" width="7" height="7" rx="1.2"></rect></svg>
+          <span data-r="sidetxt" style="flex:1">Catalogue</span>
+        </a>
+
+        <button type="button" onClick="{{ openAi }}" data-r="item" style="{{ navAssistantStyle }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor" stroke="none"></path><path d="M18.6 15.4c.35 1.8 1.2 2.65 3 3-1.8.35-2.65 1.2-3 3-.35-1.8-1.2-2.65-3-3 1.8-.35 2.65-1.2 3-3z" fill="currentColor" stroke="none"></path></svg>
+          <span data-r="sidetxt" style="flex:1;text-align:left">Assistant</span>
+          <span data-r="sidetxt" style="flex:none;font:700 10.5px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;padding:4px 6px;border-radius:5px">2</span>
+        </button>
+
+        <div data-r="sec" style="padding:14px 10px 6px;font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.38)">My organisation</div>
+        <a href="#" data-r="item" style="position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap;background:#26344f">
+          <span style="position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 3px 3px 0;background:#08ffad"></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"></path><path d="M13 3v6h6M9 14h6M9 17h4"></path></svg>
+          <span data-r="sidetxt" style="flex:1">My Offers</span>
+          <span data-r="sidetxt" style="flex:none;font:700 10.5px/1 Inter,system-ui,sans-serif;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:4px 6px;border-radius:5px">12</span>
+        </a>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span data-r="sidetxt" style="flex:1">My Projects</span>
+          <span data-r="sidetxt" style="flex:none;font:700 10.5px/1 Inter,system-ui,sans-serif;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:4px 6px;border-radius:5px">5</span>
+        </a>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M7 3h8l4 4v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path><path d="M8 13h8M8 17h5"></path></svg>
+          <span data-r="sidetxt" style="flex:1">My Contracts</span>
+          <span data-r="sidetxt" style="flex:none;font:700 10.5px/1 Inter,system-ui,sans-serif;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:4px 6px;border-radius:5px">3</span>
+        </a>
+
+        <div data-r="sec" style="padding:14px 10px 6px;font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.38)">Steering</div>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4 20V4M4 20h16"></path><path d="M7 16l4-5 3 3 5-7"></path></svg>
+          <span data-r="sidetxt" style="flex:1">My Dashboard</span>
+        </a>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M7 4v5H3"></path><path d="M3 9a9 9 0 0 1 15-4l3 3"></path><path d="M17 20v-5h4"></path><path d="M21 15a9 9 0 0 1-15 4l-3-3"></path></svg>
+          <span data-r="sidetxt" style="flex:1">Exchange Triggers</span>
+        </a>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:#fff;font:600 13px/1.2 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="background:rgba(255,255,255,.08)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+          <span data-r="sidetxt" style="flex:1">My Tech Space</span>
+        </a>
+      </nav>
+
+      <div style="flex:none;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:8px;display:flex;flex-direction:column;gap:2px">
+        <button type="button" onClick="{{ openHelpHome }}" data-r="item" style="{{ helpBtnStyle }}">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.6"></path><path d="M12 17h.01"></path></svg>
+          <span data-r="sidetxt" style="flex:1;text-align:left">Help &amp; messages</span>
+          <span data-r="sidetxt" style="flex:none;font:700 10px/1 Inter,system-ui,sans-serif;color:#fff;background:#e0243c;border-radius:8px;padding:4px 6px">2</span>
+        </button>
+        <a href="#" data-r="item" style="display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:9px;color:rgba(255,255,255,.78);font:500 12.5px/1.2 Inter,system-ui,sans-serif" style-hover="background:rgba(255,255,255,.08);color:#fff">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+          <span data-r="sidetxt" style="flex:1">Settings</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <div style="min-width:0;display:flex;flex-direction:column">
+    <header style="height:54px;flex:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto) minmax(0,1fr);align-items:center;gap:12px;padding:0 14px 0 10px;background:#fafbfc;position:sticky;top:0;z-index:30">
+      <div style="display:flex;align-items:center;gap:6px;min-width:0">
+        <button type="button" aria-label="Collapse navigation" style="display:grid;place-items:center;width:30px;height:30px;border:0;background:transparent;border-radius:8px;color:#17243f;flex:none" style-hover="background:rgba(23,36,63,.07)">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path><path d="m14.5 9-2.5 3 2.5 3"></path></svg>
+        </button>
+        <sc-if value="{{ deepLinked }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ backToOffers }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:transparent;font:600 12.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;padding:4px 4px;flex:none" style-hover="color:#17243f">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+            My Offers
+          </button>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b6bfcd" stroke-width="1.7" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+        </sc-if>
+        <span style="font:800 14.5px/1 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">{{ pageTitle }}</span>
+        <sc-if value="{{ deepLinked }}" hint-placeholder-val="{{ false }}">
+          <span data-r="deeppill" style="display:inline-flex;align-items:center;gap:6px;flex:none;font:700 10.5px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:999px;background:#e3f7f8;color:#007f88;margin-left:4px;white-space:nowrap;overflow:hidden;max-width:190px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor" stroke="none"></path></svg>
+            Opened by the assistant
+          </span>
+        </sc-if>
+      </div>
+      <button type="button" data-r="omni" onClick="{{ openHome }}" style="display:flex;align-items:center;gap:9px;width:clamp(240px,34vw,420px);height:34px;padding:0 8px 0 12px;border:1px solid #e3e7ee;background:#fff;border-radius:9px;color:#5d6b85;font:500 13px/1 Inter,system-ui,sans-serif;box-shadow:0 1px 3px rgba(23,36,63,.07)" style-hover="border-color:#c9d3e2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+        <span style="flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Search, navigate or ask the Assistant…</span>
+        <span style="font:600 11px/1 'JetBrains Mono',ui-monospace,monospace;color:#5d6b85;background:#f1f4f9;border-radius:5px;padding:5px 6px;flex:none">⌘K</span>
+      </button>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0">
+        <button type="button" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:0;border-radius:9px;background:#17243f;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          New offer
+        </button>
+        <div style="display:flex;align-items:center;gap:2px;background:#fff;border-radius:9px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:3px">
+          <button type="button" aria-label="Basket" style="position:relative;display:grid;place-items:center;width:30px;height:30px;border:0;background:transparent;border-radius:7px;color:#17243f" style-hover="background:#f1f4f9">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4" fill="currentColor" stroke="none"></circle><circle cx="17" cy="20" r="1.4" fill="currentColor" stroke="none"></circle><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.1a1.5 1.5 0 0 0 1.5-1.2L21 8H6"></path></svg>
+          </button>
+          <span style="width:1px;height:20px;background:#e3e7ee;margin:0 4px"></span>
+          <button type="button" aria-label="Notifications" style="position:relative;display:grid;place-items:center;width:30px;height:30px;border:0;background:transparent;border-radius:7px;color:#17243f" style-hover="background:#f1f4f9">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10.5 20a1.5 1.5 0 0 0 3 0"></path></svg>
+            <span style="position:absolute;top:-3px;right:-2px;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:#e0243c;color:#fff;font:700 10px/16px Inter,system-ui,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff">3</span>
+          </button>
+          <button type="button" aria-label="Account" style="display:grid;place-items:center;width:30px;height:30px;border:0;background:transparent;border-radius:7px" style-hover="background:#f1f4f9">
+            <span style="width:28px;height:28px;border-radius:7px;background:#17243f;color:#fff;display:grid;place-items:center;font:700 12px/1 Inter,system-ui,sans-serif">AD</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <sc-if value="{{ isOffers }}" hint-placeholder-val="{{ true }}">
+    <div style="min-height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 14px 0 11px;border-bottom:1px solid #e3e7ee">
+      <div style="display:flex;align-items:center;gap:2px;min-width:0;overflow-x:auto">
+        <button type="button" style="position:relative;display:flex;align-items:center;gap:7px;height:46px;padding:0 11px;border:0;background:transparent;color:#17243f;font:600 13px/1 Inter,system-ui,sans-serif;white-space:nowrap">
+          All<em style="font-style:normal;font-size:11px;font-weight:700;color:#5d6b85;background:#eef1f6;border-radius:5px;padding:3px 5px">12</em>
+          <span style="position:absolute;left:9px;right:9px;bottom:-1px;height:2px;border-radius:2px;background:#17243f"></span>
+        </button>
+        <button type="button" style="display:flex;align-items:center;gap:7px;height:46px;padding:0 11px;border:0;background:transparent;color:#5d6b85;font:600 13px/1 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="color:#17243f">Data<em style="font-style:normal;font-size:11px;font-weight:700;color:#5d6b85;background:#eef1f6;border-radius:5px;padding:3px 5px">6</em></button>
+        <button type="button" style="display:flex;align-items:center;gap:7px;height:46px;padding:0 11px;border:0;background:transparent;color:#5d6b85;font:600 13px/1 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="color:#17243f">Services<em style="font-style:normal;font-size:11px;font-weight:700;color:#5d6b85;background:#eef1f6;border-radius:5px;padding:3px 5px">4</em></button>
+        <button type="button" style="display:flex;align-items:center;gap:7px;height:46px;padding:0 11px;border:0;background:transparent;color:#5d6b85;font:600 13px/1 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="color:#17243f"><span style="width:6px;height:6px;border-radius:50%;background:#00a2ae"></span>To complete<em style="font-style:normal;font-size:11px;font-weight:700;color:#5d6b85;background:#eef1f6;border-radius:5px;padding:3px 5px">3</em></button>
+        <button type="button" style="display:flex;align-items:center;gap:7px;height:46px;padding:0 11px;border:0;background:transparent;color:#5d6b85;font:600 13px/1 Inter,system-ui,sans-serif;white-space:nowrap" style-hover="color:#17243f">Archived<em style="font-style:normal;font-size:11px;font-weight:700;color:#5d6b85;background:#eef1f6;border-radius:5px;padding:3px 5px">9</em></button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex:none">
+        <button type="button" style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 12px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>Filters
+        </button>
+        <button type="button" data-r="hidecol" style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 12px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Columns</button>
+      </div>
+    </div>
+    </sc-if>
+
+    <main style="flex:1;min-width:0;padding:16px 14px 120px 11px;display:flex;flex-direction:column;gap:14px">
+      <sc-if value="{{ isOffers }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+        <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px 15px">
+          <span style="font:600 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;text-transform:uppercase;letter-spacing:.05em">Published</span>
+          <b style="display:block;margin-top:7px;font:800 25px/1 Inter,system-ui,sans-serif">9</b>
+        </div>
+        <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px 15px">
+          <span style="font:600 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;text-transform:uppercase;letter-spacing:.05em">To complete</span>
+          <b style="display:block;margin-top:7px;font:800 25px/1 Inter,system-ui,sans-serif">3</b>
+        </div>
+        <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px 15px">
+          <span style="font:600 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;text-transform:uppercase;letter-spacing:.05em">Active exchanges</span>
+          <b style="display:block;margin-top:7px;font:800 25px/1 Inter,system-ui,sans-serif">17</b>
+        </div>
+        <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px 15px">
+          <span style="font:600 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;text-transform:uppercase;letter-spacing:.05em">Contracts to sign</span>
+          <b style="display:block;margin-top:7px;font:800 25px/1 Inter,system-ui,sans-serif">2</b>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:13px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:8px 6px 4px;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font:500 13px/1.45 Inter,system-ui,sans-serif;min-width:640px">
+          <thead>
+            <tr>
+              <th style="text-align:left;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5d6b85;padding:10px 12px 9px">Offer</th>
+              <th style="text-align:left;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5d6b85;padding:10px 12px 9px">Type</th>
+              <th style="text-align:left;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5d6b85;padding:10px 12px 9px">Status</th>
+              <th data-r="hidecol" style="text-align:left;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5d6b85;padding:10px 12px 9px">Exchanges</th>
+              <th data-r="hidecol" style="text-align:left;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5d6b85;padding:10px 12px 9px">Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Fleet telemetry — raw</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Data</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#eaf7ef;color:#1d7345">Published</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">6</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">2 days ago</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Air quality feed</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Data</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#fdf3e3;color:#8a5a13">Draft · 4 fields missing</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">—</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">today</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Traffic anomaly detection</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Service</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#eaf7ef;color:#1d7345">Published</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">4</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">6 days ago</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Geocoding API — FR</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Service</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#eef1f6;color:#5d6b85">Under review</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">2</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">11 days ago</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Parking occupancy — IDF</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Data</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#fdf3e3;color:#8a5a13">Draft</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">—</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">3 weeks ago</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;border-top:1px solid #eef1f6;font-weight:700">Bike counter history</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">Data</td>
+              <td style="padding:12px;border-top:1px solid #eef1f6"><span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:#eaf7ef;color:#1d7345">Published</span></td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">5</td>
+              <td data-r="hidecol" style="padding:12px;border-top:1px solid #eef1f6;color:#5d6b85">1 month ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isContract }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:13px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:18px 20px;max-width:860px">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:240px">
+              <h1 style="margin:0;font:800 18px/1.3 Inter,system-ui,sans-serif">DPA · Kuzzle ↔ Visions — version 4</h1>
+              <p style="margin:5px 0 0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#5d6b85">Received today 08:58 · 2 clauses changed since version 3 · signature pending on your side</p>
+            </div>
+            <span style="display:inline-flex;align-items:center;font:700 11px/1 Inter,system-ui,sans-serif;padding:6px 9px;border-radius:6px;background:#fdf3e3;color:#8a5a13">Blocked · clause 6.2</span>
+          </div>
+
+          <div style="margin-top:18px;border:1px solid #e3e7ee;border-radius:12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid #eef1f6;background:#fffaf1">
+              <b style="flex:1;min-width:0;font:800 13px/1.3 Inter,system-ui,sans-serif">6.2 — Sub-processor notification</b>
+              <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;color:#8a5a13">Needs your decision</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0">
+              <div style="padding:13px;border-right:1px solid #eef1f6">
+                <span style="display:block;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#5d6b85;margin-bottom:7px">Kuzzle's wording</span>
+                <p style="margin:0;font:500 12.5px/1.6 Inter,system-ui,sans-serif;color:#41546f;text-wrap:pretty">The processor shall inform the controller of any new sub-processor <b style="background:#fdeaea;color:#8a1c28">at least 10 business days</b> before its entry into service. The controller may <b style="background:#fdeaea;color:#8a1c28">raise reasonable concerns</b>.</p>
+              </div>
+              <div style="padding:13px">
+                <span style="display:block;font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#1d7345;margin-bottom:7px">Counter-proposal drafted for you</span>
+                <p style="margin:0;font:500 12.5px/1.6 Inter,system-ui,sans-serif;color:#41546f;text-wrap:pretty">…at least 10 business days before its entry into service. The controller <b style="background:#eaf7ef;color:#1d7345">may object within that period; transfers to the sub-processor are suspended while an objection is open</b>.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:11px 13px;border-top:1px solid #eef1f6;flex-wrap:wrap">
+              <button type="button" onClick="{{ backToOffers }}" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 12.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Accept the counter-proposal</button>
+              <button type="button" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 12.5px/1 Inter,system-ui,sans-serif;color:#17243f;white-space:nowrap" style-hover="background:#f7f9fc">Edit the wording</button>
+              <span style="flex:1"></span>
+              <button type="button" onClick="{{ openThread }}" style="border:0;background:transparent;font:600 12px/1 Inter,system-ui,sans-serif;color:#007f88;padding:6px 4px" style-hover="text-decoration:underline">Discuss in the conversation</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;border:1px solid #e3e7ee;border-radius:12px;padding:13px">
+            <b style="display:block;font:800 13px/1.3 Inter,system-ui,sans-serif">9.4 — Audit</b>
+            <p style="margin:5px 0 0;font:500 12.5px/1.6 Inter,system-ui,sans-serif;color:#41546f;text-wrap:pretty">On-site audits capped at one per calendar year, 20 days' notice. Acceptable given your audit plan — no action needed.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOfferEdit }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:13px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:18px 20px;max-width:760px">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px">
+              <h1 style="margin:0;font:800 18px/1.3 Inter,system-ui,sans-serif">Air quality feed</h1>
+              <p style="margin:5px 0 0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#5d6b85">Draft · 4 required fields left before publishing</p>
+            </div>
+            <button type="button" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 12.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Publish</button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:9px;margin-top:16px;border:1px solid rgba(29,115,69,.4);background:#f6fbf7;border-radius:11px;padding:10px 12px;flex-wrap:wrap">
+            <span style="flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:#eaf7ef;color:#1d7345">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 16 8"></path><path d="M18 3.5c.35 1.8 1.2 2.65 3 3-1.8.35-2.65 1.2-3 3-.35-1.8-1.2-2.65-3-3 1.8-.35 2.65-1.2 3-3z" fill="currentColor" stroke="none"></path></svg>
+            </span>
+            <span style="flex:1;min-width:180px;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#2c4a38;text-wrap:pretty">The assistant can prefill the four fields from Fleet telemetry — raw, your closest published feed.</span>
+            <button type="button" style="display:inline-flex;align-items:center;height:30px;padding:0 12px;border:0;border-radius:8px;background:#1d7345;color:#fff;font:700 12px/1 Inter,system-ui,sans-serif" style-hover="background:#186139">Prefill the 4 fields</button>
+          </div>
+
+          <div style="display:grid;gap:12px;margin-top:14px">
+            <div style="border:1px solid #e3e7ee;border-radius:11px;padding:12px 13px;box-shadow:0 0 0 1.5px rgba(200,138,46,.35)">
+              <label style="display:block;font:700 12.5px/1 Inter,system-ui,sans-serif;margin-bottom:7px">Licence <span style="color:#8a5a13">· required</span></label>
+              <input placeholder="e.g. Etalab 2.0, ODbL, custom" style="width:100%;border:1px solid #e3e7ee;border-radius:9px;padding:10px 12px;font:500 13px/1.4 Inter,system-ui,sans-serif;color:#17243f;background:#fff;outline:0" style-focus="border-color:#00a2ae">
+            </div>
+            <div style="border:1px solid #e3e7ee;border-radius:11px;padding:12px 13px;box-shadow:0 0 0 1.5px rgba(200,138,46,.35)">
+              <label style="display:block;font:700 12.5px/1 Inter,system-ui,sans-serif;margin-bottom:7px">Update frequency <span style="color:#8a5a13">· required</span></label>
+              <input placeholder="e.g. every 15 minutes" style="width:100%;border:1px solid #e3e7ee;border-radius:9px;padding:10px 12px;font:500 13px/1.4 Inter,system-ui,sans-serif;color:#17243f;background:#fff;outline:0" style-focus="border-color:#00a2ae">
+            </div>
+            <div style="border:1px solid #e3e7ee;border-radius:11px;padding:12px 13px;box-shadow:0 0 0 1.5px rgba(200,138,46,.35)">
+              <label style="display:block;font:700 12.5px/1 Inter,system-ui,sans-serif;margin-bottom:7px">Geographic coverage <span style="color:#8a5a13">· required</span></label>
+              <input placeholder="e.g. Île-de-France, 1 232 sensors" style="width:100%;border:1px solid #e3e7ee;border-radius:9px;padding:10px 12px;font:500 13px/1.4 Inter,system-ui,sans-serif;color:#17243f;background:#fff;outline:0" style-focus="border-color:#00a2ae">
+            </div>
+            <div style="border:1px solid #e3e7ee;border-radius:11px;padding:12px 13px;box-shadow:0 0 0 1.5px rgba(200,138,46,.35)">
+              <label style="display:block;font:700 12.5px/1 Inter,system-ui,sans-serif;margin-bottom:7px">Data contact <span style="color:#8a5a13">· required</span></label>
+              <input placeholder="Name and email of the responsible person" style="width:100%;border:1px solid #e3e7ee;border-radius:9px;padding:10px 12px;font:500 13px/1.4 Inter,system-ui,sans-serif;color:#17243f;background:#fff;outline:0" style-focus="border-color:#00a2ae">
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMatches }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1040px">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+            <div style="flex:1;min-width:220px">
+              <h1 style="margin:0;font:800 18px/1.3 Inter,system-ui,sans-serif">Matches · Mobility insights 2026</h1>
+              <p style="margin:5px 0 0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#5d6b85">21 offers analysed · 6 strong matches · ranked on scope, freshness and licence compatibility</p>
+            </div>
+            <button type="button" onClick="{{ openThread }}" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 12.5px/1 Inter,system-ui,sans-serif;color:#17243f;white-space:nowrap" style-hover="background:#f7f9fc">Ask why these ranked first</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:12px">
+            <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px;display:flex;flex-direction:column;gap:9px">
+              <div><b style="display:block;font:700 13.5px/1.3 Inter,system-ui,sans-serif">Traffic counts — Grand Paris</b><span style="font:500 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85">DiRIF</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="flex:1;height:5px;border-radius:3px;background:#eef1f6;overflow:hidden"><i style="display:block;height:100%;width:94%;background:#00a2ae;border-radius:3px"></i></span><b style="font:800 12px/1 Inter,system-ui,sans-serif;color:#007f88">94%</b></div>
+              <p style="margin:0;font:500 11.8px/1.5 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">Same perimeter and granularity as your project; licence already cleared in the DiRIF contract.</p>
+              <div style="display:flex;gap:7px;margin-top:auto"><button type="button" style="height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Add to basket</button><button type="button" style="height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Open</button></div>
+            </div>
+            <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px;display:flex;flex-direction:column;gap:9px">
+              <div><b style="display:block;font:700 13.5px/1.3 Inter,system-ui,sans-serif">Bus punctuality — IDFM</b><span style="font:500 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85">Île-de-France Mobilités</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="flex:1;height:5px;border-radius:3px;background:#eef1f6;overflow:hidden"><i style="display:block;height:100%;width:88%;background:#00a2ae;border-radius:3px"></i></span><b style="font:800 12px/1 Inter,system-ui,sans-serif;color:#007f88">88%</b></div>
+              <p style="margin:0;font:500 11.8px/1.5 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">Complements your traffic layer; refreshed hourly, no personal data involved.</p>
+              <div style="display:flex;gap:7px;margin-top:auto"><button type="button" style="height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Add to basket</button><button type="button" style="height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Open</button></div>
+            </div>
+            <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(23,36,63,.07);padding:14px;display:flex;flex-direction:column;gap:9px">
+              <div><b style="display:block;font:700 13.5px/1.3 Inter,system-ui,sans-serif">Air quality — AirLab stations</b><span style="font:500 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85">AirLab</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="flex:1;height:5px;border-radius:3px;background:#eef1f6;overflow:hidden"><i style="display:block;height:100%;width:81%;background:#00a2ae;border-radius:3px"></i></span><b style="font:800 12px/1 Inter,system-ui,sans-serif;color:#007f88">81%</b></div>
+              <p style="margin:0;font:500 11.8px/1.5 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">Organisation you already contracted with; DPA in force, so onboarding is immediate.</p>
+              <div style="display:flex;gap:7px;margin-top:auto"><button type="button" style="height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Add to basket</button><button type="button" style="height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Open</button></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <sc-if value="{{ showTeaser }}" hint-placeholder-val="{{ false }}">
+    <div data-r="teaser" style="position:fixed;right:16px;bottom:76px;z-index:150;width:min(340px,calc(100vw - 32px));background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(23,36,63,.16),0 2px 8px rgba(23,36,63,.07);padding:12px 13px 11px;animation:vtIn .22s ease">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <span style="width:24px;height:24px;flex:none;border-radius:50%;display:grid;place-items:center;background:#08ffad;color:#17243f">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor" stroke="none"></path></svg>
+        </span>
+        <b style="font:700 12px/1 Inter,system-ui,sans-serif">Assistant</b>
+        <span style="flex:1"></span>
+        <button type="button" onClick="{{ mute }}" aria-label="Dismiss" style="width:24px;height:24px;display:grid;place-items:center;border:0;background:transparent;border-radius:6px;color:#5d6b85" style-hover="background:#f1f4f9">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        </button>
+      </div>
+      <p style="margin:0 0 10px;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ teaserText }}</p>
+      <div style="display:flex;align-items:center;gap:7px">
+        <button type="button" onClick="{{ openAi }}" style="display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 12px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">Show me</button>
+        <button type="button" onClick="{{ mute }}" style="border:0;background:transparent;font:500 11.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;padding:6px 4px" style-hover="color:#17243f">Later</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ true }}">
+    <div data-r="panel" style="{{ helpPanelStyle }}">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:none;background:#17243f;color:#fff;padding:16px 16px 20px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#08ffad"></circle><path d="M7 8.5 12 17l5-8.5" stroke="#17243f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <b style="font:800 13px/1 Inter,system-ui,sans-serif">VisionsTrust</b>
+            </span>
+            <button type="button" onClick="{{ close }}" aria-label="Close" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:rgba(255,255,255,.1);border-radius:8px;color:#fff" style-hover="background:rgba(255,255,255,.2)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+            </button>
+          </div>
+          <h2 style="margin:18px 0 0;font:800 22px/1.25 Inter,system-ui,sans-serif;text-wrap:pretty">Hi Alex 👋<br>What do you need?</h2>
+          <p style="margin:8px 0 0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:rgba(255,255,255,.62);text-wrap:pretty">Ask the chatbot a question about the platform, search the documentation, or reopen one of your conversations.</p>
+        </div>
+
+        <div style="flex:1;min-height:0;overflow-y:auto;padding:0 14px 16px;background:#fafbfc">
+          <div style="margin-top:-10px;background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(23,36,63,.08);padding:13px 14px">
+            <b style="display:block;font:700 13.5px/1.35 Inter,system-ui,sans-serif">Ask the chatbot</b>
+            <span style="display:block;font:500 12px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Instant answers on the platform, its vocabulary and your data</span>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:11px;border:1px solid #e3e7ee;border-radius:10px;padding:0 10px;height:38px" style-focus="border-color:#00a2ae">
+              <input value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" placeholder="Type your question…" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 13px/1 Inter,system-ui,sans-serif;color:#17243f">
+              <button type="button" onClick="{{ send }}" aria-label="Send" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;border-radius:7px;background:#17243f;color:#08ffad" style-hover="background:#1f2d4a">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 20 4l-6.5 16-2.4-6.6z"></path><path d="m11.1 13.4 8.9-9.4"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div style="padding:16px 2px 8px">
+            <b style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85">Continue a conversation</b>
+          </div>
+          <button type="button" onClick="{{ openThread }}" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid #e3e7ee;border-radius:12px;padding:11px 12px;color:#17243f" style-hover="border-color:#00a2ae;background:#fbfdfe">
+            <span style="flex:none;width:8px;height:8px;border-radius:50%;background:#00a2ae"></span>
+            <span style="flex:1;min-width:0">
+              <b style="display:block;font:700 12.5px/1.4 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">DPA Kuzzle ↔ Visions — clause review</b>
+              <small style="display:block;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Legal replied 09:13 · 14 messages</small>
+            </span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+          </button>
+
+          <div style="padding:18px 2px 8px">
+            <b style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85">Find an answer</b>
+          </div>
+          <div style="background:#fff;border:1px solid #e3e7ee;border-radius:12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;padding:0 12px;height:40px;border-bottom:1px solid #eef1f6">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <input placeholder="Search the documentation" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 12.5px/1 Inter,system-ui,sans-serif;color:#17243f">
+            </div>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid #eef1f6;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none">
+              <span style="flex:1;min-width:0;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">What must a DPA contain before an exchange can start?</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid #eef1f6;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none">
+              <span style="flex:1;min-width:0;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Setting a retention period per resource</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none">
+              <span style="flex:1;min-width:0;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Exchange triggers explained in plain terms</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+            </a>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;align-items:center;gap:9px;padding:13px 12px 13px 15px;border-bottom:1px solid #eef1f6">
+          <b style="flex:1;min-width:0;font:800 14px/1.2 Inter,system-ui,sans-serif">Messages</b>
+          <button type="button" onClick="{{ close }}" aria-label="Close" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85" style-hover="background:#f1f4f9">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;padding:8px 10px 14px">
+          <div style="display:flex;align-items:center;gap:8px;border:1px solid #e3e7ee;border-radius:9px;padding:0 10px;height:34px;margin:4px 2px 8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <input placeholder="Search 148 conversations" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 12.5px/1 Inter,system-ui,sans-serif;color:#17243f">
+          </div>
+          <div style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85;padding:10px 8px 6px">Today</div>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:#e3f7f8;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f">
+            <span style="display:flex;align-items:center;gap:7px">
+              <span style="width:6px;height:6px;border-radius:50%;background:#00a2ae;flex:none"></span>
+              <b style="flex:1;min-width:0;font:700 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">DPA Kuzzle ↔ Visions — clause review</b>
+            </span>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px;padding-left:13px">Legal · 14 messages · 09:12</small>
+          </button>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Which offers match Mobility insights 2026?</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Matching · 6 messages · 08:40</small>
+          </button>
+          <div style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85;padding:14px 8px 6px">Yesterday</div>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Retention period for fleet telemetry</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Legal · 9 messages</small>
+          </button>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Explain “exchange trigger” in plain terms</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Help · 4 messages</small>
+          </button>
+          <div style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85;padding:14px 8px 6px">Last 7 days</div>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Draft description — Air quality feed</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Completion · 11 messages</small>
+          </button>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;margin-bottom:3px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Who signed the DiRIF licence?</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Search · 3 messages</small>
+          </button>
+          <button type="button" onClick="{{ openThread }}" style="display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 11px;color:#17243f" style-hover="background:#f4f7fb">
+            <b style="display:block;font:600 12.5px/1.35 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Onboarding checklist for AirLab</b>
+            <small style="display:block;font:500 11px/1.4 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px">Help · 7 messages · July</small>
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isThread }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;align-items:center;gap:9px;padding:11px 12px 11px 8px;border-bottom:1px solid #eef1f6">
+          <button type="button" onClick="{{ backToList }}" aria-label="Back" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85" style-hover="background:#f1f4f9">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+          </button>
+          <span style="flex:1;min-width:0">
+            <b style="display:block;font:800 13px/1.25 Inter,system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">DPA Kuzzle ↔ Visions — clause review</b>
+            <small style="display:block;font:500 11px/1.35 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:2px">Legal · 14 messages · scope kept on the contract</small>
+          </span>
+          <button type="button" onClick="{{ close }}" aria-label="Close" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85" style-hover="background:#f1f4f9">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <div ref="{{ scrollRef }}" style="flex:1;min-height:0;overflow-y:auto;padding:14px 13px 18px;background:#fafbfc;display:flex;flex-direction:column;gap:13px">
+          <div style="display:flex;align-items:center;gap:9px;font:600 10.5px/1.3 Inter,system-ui,sans-serif;color:#5d6b85">
+            <span style="flex:1;height:1px;background:#e9edf3"></span>Today · 09:12<span style="flex:1;height:1px;background:#e9edf3"></span>
+          </div>
+          <div style="align-self:flex-end;max-width:88%;border-radius:12px;padding:10px 12px;font:500 12.5px/1.55 Inter,system-ui,sans-serif;background:#17243f;color:#fff;text-wrap:pretty">Kuzzle sent the DPA back with two edits. What changed, and can I accept it as it stands?</div>
+          <div style="max-width:92%;border-radius:12px;padding:11px 13px;font:500 12.5px/1.6 Inter,system-ui,sans-serif;background:#fff;box-shadow:0 1px 3px rgba(23,36,63,.07);text-wrap:pretty">
+            <p style="margin:0 0 8px">Two clauses moved between version 3 and version 4.</p>
+            <div style="border-left:2px solid #c88a2e;background:#fffaf1;border-radius:0 8px 8px 0;padding:8px 10px;margin:0 0 8px">
+              <b style="display:block;font:700 11.5px/1.3 Inter,system-ui,sans-serif">6.2 — Sub-processor notification</b>
+              <span style="display:block;font:500 12px/1.55 Inter,system-ui,sans-serif;color:#41546f;margin-top:3px">Notice cut from 30 days to 10 business days, and your right to object became a right to “raise reasonable concerns”.</span>
+            </div>
+            <div style="border-left:2px solid #c88a2e;background:#fffaf1;border-radius:0 8px 8px 0;padding:8px 10px;margin:0 0 8px">
+              <b style="display:block;font:700 11.5px/1.3 Inter,system-ui,sans-serif">9.4 — Audit</b>
+              <span style="display:block;font:500 12px/1.55 Inter,system-ui,sans-serif;color:#41546f;margin-top:3px">On-site audits capped at one per calendar year, 20 days' notice.</span>
+            </div>
+            <p style="margin:0">I would not accept 6.2 as written: without a right to object you cannot block a sub-processor you consider non-compliant.</p>
+          </div>
+          <span style="font:500 10.5px/1 Inter,system-ui,sans-serif;color:#5d6b85;padding-left:2px">Legal · 09:13 · read version 3 and 4</span>
+          <div style="align-self:flex-end;max-width:88%;border-radius:12px;padding:10px 12px;font:500 12.5px/1.55 Inter,system-ui,sans-serif;background:#17243f;color:#fff;text-wrap:pretty">What is our exposure if we accept it anyway?</div>
+          <div style="max-width:92%;border-radius:12px;padding:11px 13px;font:500 12.5px/1.6 Inter,system-ui,sans-serif;background:#fff;box-shadow:0 1px 3px rgba(23,36,63,.07);text-wrap:pretty">
+            <p style="margin:0 0 8px">You keep responsibility for the processing chain while losing the means to control it:</p>
+            <ul style="margin:0 0 8px;padding-left:17px">
+              <li style="margin-bottom:4px">A sub-processor can be added 10 days after notice, including outside the EEA.</li>
+              <li style="margin-bottom:4px">Your Article 28 documentation stops matching the signed contract.</li>
+              <li style="margin-bottom:0">Fleet telemetry and Traffic anomaly detection inherit the weaker terms.</li>
+            </ul>
+            <p style="margin:0">Counter-proposal ready: keep the 10-day notice, restore the right to object, suspend transfers while an objection is open.</p>
+          </div>
+          <sc-for list="{{ extra }}" as="m" hint-placeholder-count="0">
+            <div style="{{ m.style }}">{{ m.text }}</div>
+          </sc-for>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <button type="button" onClick="{{ suggest1 }}" style="border:1px solid #e3e7ee;background:#fff;border-radius:999px;padding:7px 11px;font:600 11.5px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Send the counter-proposal</button>
+            <button type="button" onClick="{{ suggest2 }}" style="border:1px solid #e3e7ee;background:#fff;border-radius:999px;padding:7px 11px;font:600 11.5px/1 Inter,system-ui,sans-serif;color:#17243f" style-hover="background:#f7f9fc">Compare with AirLab DPA</button>
+          </div>
+        </div>
+        <div style="flex:none;border-top:1px solid #eef1f6;padding:10px 12px 12px;background:#fff">
+          <div style="display:flex;align-items:flex-end;gap:8px;border:1px solid #e3e7ee;border-radius:11px;padding:8px 9px" style-focus="border-color:#00a2ae">
+            <textarea value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" placeholder="Reply, or type @legal, @matching…" style="flex:1;min-width:0;border:0;outline:0;resize:none;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#17243f;background:transparent;min-height:34px"></textarea>
+            <button type="button" onClick="{{ send }}" aria-label="Send" style="width:30px;height:30px;flex:none;display:grid;place-items:center;border:0;border-radius:8px;background:#17243f;color:#08ffad" style-hover="background:#1f2d4a">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 20 4l-6.5 16-2.4-6.6z"></path><path d="m11.1 13.4 8.9-9.4"></path></svg>
+            </button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHelp }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;align-items:center;gap:9px;padding:13px 12px 13px 15px;border-bottom:1px solid #eef1f6">
+          <b style="flex:1;min-width:0;font:800 14px/1.2 Inter,system-ui,sans-serif">Help</b>
+          <button type="button" onClick="{{ close }}" aria-label="Close" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85" style-hover="background:#f1f4f9">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;padding:12px 13px 16px;background:#fafbfc">
+          <div style="display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e3e7ee;border-radius:10px;padding:0 11px;height:38px;margin-bottom:12px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <input placeholder="Search the documentation" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 12.5px/1 Inter,system-ui,sans-serif;color:#17243f">
+          </div>
+          <div style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85;padding:4px 2px 8px">For a DPO</div>
+          <div style="background:#fff;border:1px solid #e3e7ee;border-radius:12px;overflow:hidden;margin-bottom:12px">
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid #eef1f6;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none"><span style="flex:1;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Consent, legitimate interest and contract: choosing a basis per resource</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg></a>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid #eef1f6;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none"><span style="flex:1;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Recording a sub-processor objection in VisionsTrust</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg></a>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none"><span style="flex:1;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Exporting an audit trail for a supervisory authority</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg></a>
+          </div>
+          <div style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85;padding:4px 2px 8px">Getting things published</div>
+          <div style="background:#fff;border:1px solid #e3e7ee;border-radius:12px;overflow:hidden">
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid #eef1f6;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none"><span style="flex:1;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Required fields before an offer can be published</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg></a>
+            <a href="#" style="display:flex;align-items:center;gap:9px;padding:11px 12px;color:#17243f" style-hover="background:#f7f9fc;text-decoration:none"><span style="flex:1;font:500 12.5px/1.45 Inter,system-ui,sans-serif;text-wrap:pretty">Exchange triggers explained in plain terms</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5d6b85" stroke-width="1.8" stroke-linecap="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg></a>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #eef1f6;background:#fff">
+        <button type="button" onClick="{{ openHome }}" style="{{ tabHomeStyle }}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V20h14V9.5"></path></svg>
+          Home
+        </button>
+        <button type="button" onClick="{{ openList }}" style="{{ tabMsgStyle }}">
+          <span style="position:relative;display:grid;place-items:center">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z"></path></svg>
+            <span style="position:absolute;top:-5px;right:-8px;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:#e0243c;color:#fff;font:700 9.5px/15px Inter,system-ui,sans-serif;text-align:center">2</span>
+          </span>
+          Messages
+        </button>
+        <button type="button" onClick="{{ openHelp }}" style="{{ tabHelpStyle }}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.6"></path><path d="M12 17h.01"></path></svg>
+          Help
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ aiOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;right:16px;bottom:80px;z-index:160;width:min(372px,calc(100vw - 32px));max-height:min(620px,calc(100vh - 112px));display:flex;flex-direction:column;background:#fff;border-radius:16px;box-shadow:0 22px 60px rgba(23,36,63,.24),0 4px 12px rgba(23,36,63,.1);overflow:hidden;animation:vtIn .2s ease">
+      <div style="flex:none;display:flex;align-items:center;gap:9px;padding:11px 10px 11px 12px;border-bottom:1px solid #eef1f6">
+        <span style="width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;background:#17243f;color:#08ffad">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor" stroke="none"></path></svg>
+        </span>
+        <span style="flex:1;min-width:0">
+          <b style="display:block;font:800 13px/1.2 Inter,system-ui,sans-serif">AI assistant</b>
+          <small style="display:block;font:500 11px/1.35 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:2px">Watching your offers, projects and contracts</small>
+        </span>
+        <button type="button" onClick="{{ closeAi }}" aria-label="Close" style="width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;background:transparent;border-radius:7px;color:#5d6b85" style-hover="background:#f1f4f9">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        </button>
+      </div>
+
+      <div style="flex:1;min-height:0;overflow-y:auto;padding:12px 12px 14px">
+        <div style="display:flex;align-items:center;gap:7px;padding:0 2px 9px">
+          <b style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#5d6b85">Waiting on you</b>
+          <span style="font:700 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:5px;padding:4px 6px">3</span>
+        </div>
+
+        <div style="border:1px solid #e3e7ee;border-radius:12px;padding:11px 12px;margin-bottom:8px">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#f4eefb;color:#5b3a8e">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 8h14M12 4.5 5 8l-2.5 5h9L5 8m7 0 7 3-2.5 5h9L19 11"></path></svg>
+            </span>
+            <span style="flex:1;min-width:0">
+              <b style="display:block;font:700 12.5px/1.4 Inter,system-ui,sans-serif;text-wrap:pretty">Clause 6.2 of the Kuzzle DPA blocks the signature</b>
+              <small style="display:block;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px;text-wrap:pretty">Kuzzle removed your right to object. Counter-proposal drafted — 1 min to review.</small>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap">
+            <button type="button" onClick="{{ goContract }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">
+              Review clause 6.2
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+            </button>
+            <button type="button" onClick="{{ openThread }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f;white-space:nowrap" style-hover="background:#f7f9fc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z"></path></svg>
+              In chat
+            </button>
+          </div>
+          <span style="display:block;font:500 10.5px/1.3 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:7px">Goes to My Contracts › DPA Kuzzle ↔ Visions › clause 6.2</span>
+        </div>
+
+        <div style="border:1px solid #e3e7ee;border-radius:12px;padding:11px 12px;margin-bottom:8px">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#eaf7ef;color:#1d7345">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 16 8"></path><path d="M18 3.5c.35 1.8 1.2 2.65 3 3-1.8.35-2.65 1.2-3 3-.35-1.8-1.2-2.65-3-3 1.8-.35 2.65-1.2 3-3z" fill="currentColor" stroke="none"></path></svg>
+            </span>
+            <span style="flex:1;min-width:0">
+              <b style="display:block;font:700 12.5px/1.4 Inter,system-ui,sans-serif;text-wrap:pretty">Air quality feed is 4 fields short of publishing</b>
+              <small style="display:block;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px;text-wrap:pretty">Licence, update frequency, coverage, contact. I can fill them from your last feed.</small>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap">
+            <button type="button" onClick="{{ goOffer }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">
+              Complete the offer
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+            </button>
+            <button type="button" onClick="{{ openThread }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f;white-space:nowrap" style-hover="background:#f7f9fc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z"></path></svg>
+              In chat
+            </button>
+          </div>
+          <span style="display:block;font:500 10.5px/1.3 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:7px">Goes to My Offers › Air quality feed › 4 required fields</span>
+        </div>
+
+        <div style="border:1px solid #e3e7ee;border-radius:12px;padding:11px 12px">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#e3f7f8;color:#007f88">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+            </span>
+            <span style="flex:1;min-width:0">
+              <b style="display:block;font:700 12.5px/1.4 Inter,system-ui,sans-serif;text-wrap:pretty">21 offers match Mobility insights 2026</b>
+              <small style="display:block;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:3px;text-wrap:pretty">6 strong matches, 2 from organisations you already contracted with.</small>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap">
+            <button type="button" onClick="{{ goMatches }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:0;border-radius:8px;background:#17243f;color:#fff;font:700 11.5px/1 Inter,system-ui,sans-serif" style-hover="background:#1f2d4a">
+              See the 6 matches
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+            </button>
+            <button type="button" onClick="{{ openThread }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:1px solid #e3e7ee;background:#fff;border-radius:8px;font:700 11.5px/1 Inter,system-ui,sans-serif;color:#17243f;white-space:nowrap" style-hover="background:#f7f9fc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z"></path></svg>
+              In chat
+            </button>
+          </div>
+          <span style="display:block;font:500 10.5px/1.3 Inter,system-ui,sans-serif;color:#5d6b85;margin-top:7px">Goes to My Projects › Mobility insights 2026 › Matches</span>
+        </div>
+
+      </div>
+
+      <div style="flex:none;display:flex;align-items:center;gap:8px;padding:10px 11px;border-top:1px solid #eef1f6">
+        <input value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" placeholder="Ask the assistant to do something…" style="flex:1;min-width:0;height:34px;border:1px solid #e3e7ee;border-radius:9px;padding:0 11px;font:500 12.5px/1 Inter,system-ui,sans-serif;color:#17243f;background:#fafbfc" style-focus="border-color:#00a2ae">
+        <button type="button" onClick="{{ send }}" aria-label="Send" style="width:32px;height:32px;flex:none;display:grid;place-items:center;border:0;border-radius:8px;background:#17243f;color:#08ffad" style-hover="background:#1f2d4a">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 20 4l-6.5 16-2.4-6.6z"></path><path d="m11.1 13.4 8.9-9.4"></path></svg>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showOrb }}" hint-placeholder-val="{{ true }}">
+    <button type="button" onClick="{{ openAi }}" aria-label="Open the AI assistant" style="position:fixed;right:16px;bottom:16px;z-index:150;width:52px;height:52px;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 14px 40px rgba(23,36,63,.18),0 2px 8px rgba(23,36,63,.08);padding:0">
+      <sc-if value="{{ pinging }}" hint-placeholder-val="{{ false }}">
+        <span style="position:absolute;inset:-4px;border-radius:50%;border:2px solid #08ffad;animation:vtPing 1.9s cubic-bezier(0,0,.2,1) infinite;pointer-events:none"></span>
+      </sc-if>
+      <span style="position:relative;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#17243f;color:#08ffad;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);animation:vtBreathe 5s ease-in-out infinite">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor" stroke="none"></path></svg>
+      </span>
+      <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
+        <span style="position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#e0243c;color:#fff;font:700 10px/18px Inter,system-ui,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff">2</span>
+      </sc-if>
+    </button>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;proactive&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Assistant&quot;},&quot;idleSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:10,&quot;min&quot;:3,&quot;max&quot;:60,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Assistant&quot;},&quot;teaserText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Kuzzle answered on the DPA, and clause 6.2 still blocks the signature. I drafted the counter-proposal — want to see it?&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Assistant&quot;}}">
+class Component extends DCLogic {
+  state = { view: null, ai: false, page: "offers", extra: [], draft: "", teaser: false, muted: false };
+
+  componentDidMount() {
+    this.scrollRef = React.createRef();
+    this.armIdle();
+    this.onActivity = () => this.armIdle();
+    window.addEventListener("mousemove", this.onActivity);
+    window.addEventListener("keydown", this.onActivity);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.idle);
+    window.removeEventListener("mousemove", this.onActivity);
+    window.removeEventListener("keydown", this.onActivity);
+  }
+  armIdle() {
+    if (this.props.proactive === false) return;
+    clearTimeout(this.idle);
+    if (this.state.muted || this.state.ai || this.state.teaser) return;
+    this.idle = setTimeout(() => this.setState({ teaser: true }), (this.props.idleSeconds ?? 10) * 1000);
+  }
+  go(view) {
+    clearTimeout(this.idle);
+    this.setState({ view, teaser: false, ai: false });
+  }
+  bottom() {
+    const el = this.scrollRef && this.scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+  push(text) {
+    const mine = {
+      id: Date.now(), text,
+      style: { alignSelf: "flex-end", maxWidth: "88%", borderRadius: 12, padding: "10px 12px", font: "500 12.5px/1.55 Inter,system-ui,sans-serif", background: "#17243f", color: "#fff", textWrap: "pretty" }
+    };
+    const reply = {
+      id: Date.now() + 1,
+      text: "Sent to Kuzzle with the right to object restored, and I flagged the two exchanges that depend on this DPA. I will tell you as soon as they answer.",
+      style: { maxWidth: "92%", borderRadius: 12, padding: "11px 13px", font: "500 12.5px/1.6 Inter,system-ui,sans-serif", background: "#fff", boxShadow: "0 1px 3px rgba(23,36,63,.07)", textWrap: "pretty" }
+    };
+    this.setState(s => ({ extra: [...s.extra, mine], draft: "", view: "thread", ai: false }));
+    setTimeout(() => this.bottom(), 30);
+    setTimeout(() => { this.setState(s => ({ extra: [...s.extra, reply] })); setTimeout(() => this.bottom(), 30); }, 750);
+  }
+
+  renderVals() {
+    const v = this.state.view;
+    const tab = (active) => ({
+      display: "flex", flexDirection: "column", alignItems: "center", gap: 4, border: 0, background: "transparent",
+      padding: "10px 4px 12px", font: active ? "700 11px/1 Inter,system-ui,sans-serif" : "500 11px/1 Inter,system-ui,sans-serif",
+      color: active ? "#007f88" : "#5d6b85"
+    });
+    const msgActive = v === "list" || v === "thread";
+    const ai = this.state.ai;
+    const page = this.state.page;
+    const titles = { offers: "My Offers", contract: "DPA · Kuzzle ↔ Visions", offer: "Air quality feed", matches: "Mobility insights 2026" };
+    const goPage = (p) => { clearTimeout(this.idle); this.setState({ page: p, teaser: false, ai: true }); window.scrollTo({ top: 0 }); };
+    return {
+      open: !!v,
+      aiOpen: ai,
+      pageTitle: titles[page],
+      deepLinked: page !== "offers",
+      isOffers: page === "offers",
+      isContract: page === "contract",
+      isOfferEdit: page === "offer",
+      isMatches: page === "matches",
+      goContract: () => goPage("contract"),
+      goOffer: () => goPage("offer"),
+      goMatches: () => goPage("matches"),
+      backToOffers: () => this.setState({ page: "offers" }),
+      helpPanelStyle: {
+        position: "fixed", left: 258, bottom: 14, zIndex: 160,
+        width: "min(390px,calc(100vw - 276px))", height: "min(660px,calc(100vh - 28px))",
+        display: "flex", flexDirection: "column", background: "#fff", borderRadius: 18,
+        boxShadow: "0 22px 60px rgba(23,36,63,.24),0 4px 12px rgba(23,36,63,.1)",
+        overflow: "hidden", animation: "vtIn .2s ease"
+      },
+      helpBtnStyle: {
+        display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "7px 10px", border: 0,
+        borderRadius: 9, background: v ? "#26344f" : "transparent",
+        color: v ? "#fff" : "rgba(255,255,255,.78)", font: "600 12.5px/1.2 Inter,system-ui,sans-serif", whiteSpace: "nowrap"
+      },
+      openAi: () => { clearTimeout(this.idle); this.setState({ ai: true, teaser: false }); },
+      closeAi: () => { this.setState({ ai: false }, () => this.armIdle()); },
+      dismissNudge: () => { clearTimeout(this.idle); this.setState({ muted: true }); },
+      openHelpHome: () => this.go(v ? null : "home"),
+      isHome: v === "home",
+      isList: v === "list",
+      isThread: v === "thread",
+      isHelp: v === "help",
+      showOrb: !ai,
+      showTeaser: this.state.teaser && !ai,
+      pinging: this.state.teaser,
+      hasUnread: !this.state.muted,
+      teaserText: this.props.teaserText ?? "Kuzzle answered on the DPA, and clause 6.2 still blocks the signature. I drafted the counter-proposal — want to see it?",
+      extra: this.state.extra,
+      draft: this.state.draft,
+      scrollRef: this.scrollRef,
+      navAssistantStyle: {
+        display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 10px", border: 0,
+        borderRadius: 9, background: ai ? "#26344f" : "transparent", color: "#fff", font: "600 13px/1.2 Inter,system-ui,sans-serif", whiteSpace: "nowrap"
+      },
+      tabHomeStyle: tab(v === "home"),
+      tabMsgStyle: tab(msgActive),
+      tabHelpStyle: tab(v === "help"),
+      openHome: () => this.go("home"),
+      openList: () => this.go("list"),
+      openHelp: () => this.go("help"),
+      openThread: () => { this.go("thread"); setTimeout(() => this.bottom(), 40); },
+      backToList: () => this.go("list"),
+      close: () => { this.setState({ view: null }, () => this.armIdle()); },
+      mute: () => { clearTimeout(this.idle); this.setState({ teaser: false, muted: true }); },
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      onKey: (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (this.state.draft.trim()) this.push(this.state.draft.trim()); } },
+      send: () => { if (this.state.draft.trim()) this.push(this.state.draft.trim()); },
+      suggest1: () => this.push("Send the counter-proposal on 6.2."),
+      suggest2: () => this.push("Compare this with the AirLab DPA.")
+    };
+  }
+}
+
+</script>
+</body>
+</html>
