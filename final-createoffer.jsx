@@ -72,13 +72,41 @@ function KindPicker({ kind, onChange }) {
   );
 }
 
+function GuidePanel({ st }) {
+  const id = st.identity;
+  return (
+    <aside className="co-guide" aria-label="VisionsTrust guide">
+      <span className="co-guide-pill"><Icon name="help" size={14} /> VisionsTrust guide</span>
+      <h3 className="co-guide-h">What is an offer ?</h3>
+      <p className="co-guide-p">An offer on our platform is a detailed proposal for services or data that you make available to the community.</p>
+      <h3 className="co-guide-h">What it looks like on the catalogue</h3>
+      <div className="co-preview">
+        <div className="co-pv-media"><span className={`co-pv-kind ${st.kind === "Service" ? "service" : ""}`}>{st.kind}</span><span className="co-pv-ph">offer picture</span></div>
+        <div className="co-pv-body">
+          <div className="co-pv-conn"><span className="co-pv-connic"><Icon name="endpoints" size={11} /></span>Full connected - For bilateral and project exchange</div>
+          <div className="co-pv-title">{id.name || "Offer title"}</div>
+          <div className="co-pv-desc">{id.caption || "Offer description"}</div>
+        </div>
+        <div className="co-pv-prov">
+          <span className="co-pv-avatar" aria-hidden="true">ED</span>
+          <span><span className="co-pv-by">proposed by</span><br /><span className="co-pv-name">Education data Provider</span></span>
+        </div>
+        <div className="co-pv-foot">
+          <span className="co-pv-res">no resources in the offer</span>
+          <span className="co-pv-btn">Discover <Icon name="arrowRight" size={13} /></span>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 function StepEssentials({ st, set }) {
   const id = st.identity;
   const upd = (k, v) => set((s) => { s.identity[k] = v; });
   return (
     <div className="co-main-inner">
       <h1 className="co-h1">Let's start creating your offer</h1>
-      <p className="co-h1-sub">Tell partners what you're offering. A few essentials now — the Assistant AI (bottom right) can draft them for you from a document or a link.</p>
+      <p className="co-h1-sub">To launch your offer on the platform, please provide the necessary details that will capture the interest of your partners.</p>
 
       <div className="co-block">
         <div className="co-block-label">What kind of offer is this?</div>
@@ -444,7 +472,7 @@ function StepReview({ st, goTo }) {
 }
 
 // ─── AGENT WINDOW (floating) ────────────────────────────────────────────────
-function AgentWindow({ st, set, onClose }) {
+function AgentWindow({ st, set }) {
   const [desc, setDesc] = useState("");
   const [url, setUrl] = useState("");
   const [busy, setBusy] = useState(false);
@@ -472,28 +500,31 @@ function AgentWindow({ st, set, onClose }) {
   };
 
   return (
-    <div className="co-agent-win" role="dialog" aria-label="Assistant AI">
-      <div className="co-agent-head">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 5.3 4.3 9.2 9.6 9.6v.8C16.3 12.8 12.4 16.7 12 22h-.8C10.8 16.7 6.9 12.8 1.6 12.4v-.8C6.9 11.2 10.8 7.3 11.2 2z" /></svg>
-        <span className="co-agent-head-t">Assistant AI</span>
-        <button type="button" className="co-agent-close" onClick={onClose} aria-label="Close"><Icon name="x" size={16} /></button>
+    <aside className="co-agent-dock" aria-label="Assistant AI">
+      <div className="co-agent-hero">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.4 5.3 4.3 9.2 9.6 9.6v.8C16.3 12.8 12.4 16.7 12 22h-.8C10.8 16.7 6.9 12.8 1.6 12.4v-.8C6.9 11.2 10.8 7.3 11.2 2z" /></svg>
+        <h2>Let's get started with Assistant AI</h2>
       </div>
       <div className="co-agent-body">
+        <div className="co-ai-who"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.4 5.3 4.3 9.2 9.6 9.6v.8C16.3 12.8 12.4 16.7 12 22h-.8C10.8 16.7 6.9 12.8 1.6 12.4v-.8C6.9 11.2 10.8 7.3 11.2 2z" /></svg>Assistant AI</div>
         <div className="co-ai-intro">
-          <p>Welcome anthony_data_provider 👋</p>
-          <p>Describe your offering, drop a document or paste a link — I'll draft the name, caption and description for you.</p>
+          <p>Welcome Education data Provider 👋</p>
+          <p>I'm Assistant AI, your virtual assistant.</p>
+          <p>I'm here to help you structure and launch a data and/or services offering on VisionsTrust in 2 steps.</p>
+          <p>Shall we get started?</p>
+          <p>To begin with, I need to better understand the offering you would like to highlight.</p>
         </div>
         <div>
-          <label className="co-ai-lab">Describe your offering in a few words</label>
-          <textarea className="co-ai-ta" style={{ marginTop: 6 }} value={desc} placeholder="It's a data offer that…" onChange={(e) => setDesc(e.target.value)} />
+          <label className="co-ai-lab">Describe your offering in a few words.</label>
+          <textarea className="co-ai-ta" style={{ marginTop: 6 }} value={desc} placeholder="It's a data offer..." onChange={(e) => setDesc(e.target.value)} />
         </div>
         <div>
-          <label className="co-ai-lab">Upload a document presenting your offering</label>
+          <label className="co-ai-lab">Upload a document presenting your offering.</label>
           <div className="co-ai-drop" style={{ marginTop: 6 }}>Drop your documents <b>Browse</b></div>
-          <div className="co-ai-note">Formats: Word, PDF · Max size 100MB</div>
+          <div className="co-ai-note">Formats: Word, PDF - Max size: 100MB</div>
         </div>
         <div>
-          <label className="co-ai-lab">Add a URL that describes your offering</label>
+          <label className="co-ai-lab">Add the URL that describes your offering.</label>
           <input className="co-ai-url" style={{ marginTop: 6 }} value={url} placeholder="www.visionspol.eu" onChange={(e) => setUrl(e.target.value)} />
         </div>
         <button type="button" className="co-ai-gen" onClick={generate} disabled={busy || (!desc.trim() && !url.trim())}>
@@ -502,7 +533,7 @@ function AgentWindow({ st, set, onClose }) {
         {done && <div className="co-ai-ok"><Icon name="check" size={16} /><span>Draft ready — your name, caption and description are filled in. Review and edit them above.</span></div>}
         {err && <div className="co-ai-err">{err}</div>}
       </div>
-    </div>
+    </aside>
   );
 }
 
@@ -511,7 +542,6 @@ function CreateOfferApp() {
   const [t, setTweak] = useTweaks({ offerKind: "Data", startStep: "1 · Offering", pdOn: false });
   const [st, setSt] = useState(load);
   const [step, setStep] = useState(0);
-  const [agentOpen, setAgentOpen] = useState(false);
   const [published, setPublished] = useState(false);
 
   const set = (mut) => setSt((prev) => { const d = clone(prev); mut(d); return d; });
@@ -561,18 +591,15 @@ function CreateOfferApp() {
         </div>
       </nav>
 
-      <div className="co-layout">
+      <div className={`co-layout ${step === 0 ? "with-rails" : ""}`}>
+        {step === 0 && <GuidePanel st={st} />}
         <div className="co-main">
           {step === 0 && <StepEssentials st={st} set={set} />}
           {step === 1 && <StepTerms st={st} set={set} applyProfile={applyProfile} resetProfile={resetProfile} />}
           {step === 2 && <StepReview st={st} goTo={goTo} />}
         </div>
+        {step === 0 && <AgentWindow st={st} set={set} />}
       </div>
-
-      <button type="button" className={`co-fab ${agentOpen ? "on" : ""}`} aria-label={agentOpen ? "Close Assistant AI" : "Open Assistant AI"} onClick={() => setAgentOpen((o) => !o)}>
-        <Icon name={agentOpen ? "x" : "sparkle"} size={24} />
-      </button>
-      {agentOpen && <AgentWindow st={st} set={set} onClose={() => setAgentOpen(false)} />}
 
       <footer className="co-foot">
         <div className="co-foot-inner">

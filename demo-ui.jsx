@@ -114,9 +114,11 @@ function PackageGrid({ offer, selected, onSelect }) {
               <span className="ofd-pkg-reslab">Usage policies</span>
               <span className="ofd-pol-row">{pk.policies.map((p) => <span className="ofd-pol" key={p}>{p}</span>)}</span>
             </div>
-            <button type="button" className={on ? "ofd-pkg-btn on" : "ofd-pkg-btn"} onClick={() => onSelect(pk.id)} aria-pressed={on}>
-              {on ? <><Icon name="check" size={13} /> Selected</> : "Select this package"}
-            </button>
+            {onSelect && (
+              <button type="button" className={on ? "ofd-pkg-btn on" : "ofd-pkg-btn"} onClick={() => onSelect(pk.id)} aria-pressed={on}>
+                {on ? <><Icon name="check" size={13} /> Selected</> : "Select this package"}
+              </button>
+            )}
           </div>
         );
       })}

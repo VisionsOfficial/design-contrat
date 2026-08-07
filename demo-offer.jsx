@@ -14,18 +14,16 @@ const item = D.byId(qsId) || D.OFFERS[0];
 function OfferPage() {
   const [st, setSt] = useState(() => D.load());
   const line = st.cart.find((l) => l.offerId === item.id);
-  const [pkgId, setPkgId] = useState(line ? line.pkgId : null);
   const [saved, setSaved] = useState(false);
-  const pkg = D.pkgById(item, pkgId);
   const s = D.scoreOf(item);
-  const policies = pkg ? pkg.policies : [];
+  const paid = item.packages.map((p) => p.price).filter((p) => p > 0);
+  const from = paid.length ? Math.min(...paid) : 0;
+  const policies = Array.from(new Set(item.packages.flatMap((p) => p.policies)));
 
   const addToBasket = () => {
-    const mode = D.addToCart(item.id, pkgId);
-    D.flash(mode === "updated"
-      ? `${item.name} updated in your basket — ${pkg.name} package.`
-      : `${item.name} added to your basket — ${pkg.name} package.`);
-    location.href = D.PAGES.catalog;
+    D.addToCart(item.id, line ? line.pkgId : null);
+    D.flash(`${item.name} added to your basket — pick a package there.`);
+    location.href = D.PAGES.basket;
   };
 
   return (
@@ -49,7 +47,6 @@ function OfferPage() {
               </div>
               <p className="ofp-lede">{item.desc}</p>
               <div className="drawer-tags">{item.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
-              <div className="dm-cardstrip"><U.StatusBadges offer={item} /></div>
             </div>
           </div>
 
@@ -62,14 +59,14 @@ function OfferPage() {
 
               <section className="ofp-sec" id="packages">
                 <h3>Packages</h3>
-                <p className="ofp-sub">This offer is sold through three formulas. The one you pick drives the price, the volume and the usage policies. Pick one to add the offer to your basket.</p>
-                <U.PackageGrid offer={item} selected={pkgId} onSelect={setPkgId} />
+                <p className="ofp-sub">This offer is sold through {item.packages.length} formulas. The one you pick drives the price, the volume and the usage policies — you choose it in the basket, after adding the offer.</p>
+                <U.PackageGrid offer={item} selected={null} />
               </section>
 
               <section className="ofp-sec">
                 <h3>Usage policies</h3>
-                <p className="ofp-sub">{pkg ? `Policies attached to the ${pkg.name} package.` : "Pick a package above to see the policies it carries."}</p>
-                <div className="ofd-pol-row">{policies.length ? policies.map((p) => <span className="ofd-pol" key={p}>{p}</span>) : <span className="ofd-pol none">No package selected yet</span>}</div>
+                <p className="ofp-sub">Every policy carried by this offer. Which ones apply depends on the package you pick in the basket.</p>
+                <div className="ofd-pol-row">{policies.map((p) => <span className="ofd-pol" key={p}>{p}</span>)}</div>
               </section>
 
               {item.pii && (
@@ -94,15 +91,11 @@ function OfferPage() {
 
             <aside className="ofp-aside" aria-label="Offer summary">
               <div className="ofp-card">
-                <div className="ofp-price">{pkg ? (pkg.price === 0 ? "Free" : `${fmtN(pkg.price)} ${item.currency}`) : `from ${fmtN(Math.min(...item.packages.map((p) => p.price)))} ${item.currency}`}<span>{pkg && pkg.price !== 0 ? " / month" : ""}</span></div>
-                <div className="ofp-price-sub">{pkg
-                  ? `${pkg.name} · ${fmtN(pkg.vol)} ${item.unit} · ${pkg.setup ? `${fmtN(pkg.setup)} ${item.currency} set-up` : "no set-up fee"}${pkg.neg ? " · price negotiable" : " · price fixed"}`
-                  : `${item.packages.length} packages available — pick one below to continue`}</div>
-                <button type="button" className="ofp-cta" onClick={addToBasket} disabled={!pkg}>
-                  <Icon name="cart" size={16} /> {line ? "Update basket" : "Add to basket"}
+                <div className="ofp-price">{from === 0 ? "Free" : `from ${fmtN(from)} ${item.currency}`}<span>{from === 0 ? "" : "/month"}</span></div>
+                <div className="ofp-price-sub">{item.packages.length} packages available — you choose one <span className="ofp-price-hl">in the basket</span></div>
+                <button type="button" className="ofp-cta" onClick={addToBasket}>
+                  <Icon name="cart" size={16} /> Add to basket
                 </button>
-                {!pkg && <div className="ofp-price-sub" style={{ marginTop: 8 }}>Select a package first.</div>}
-                {line && <div className="ofp-price-sub" style={{ marginTop: 8 }}>Already in your basket as <b>{D.pkgById(item, line.pkgId).name}</b>. <a href={D.PAGES.basket}>Go to basket</a></div>}
                 <div className="ofp-row">
                   <button type="button" className={saved ? "ofp-ghost on" : "ofp-ghost"} onClick={() => setSaved((v) => !v)} aria-pressed={saved}><Icon name={saved ? "bookmarkFill" : "bookmark"} size={15} /> {saved ? "Saved" : "Save"}</button>
                   <button type="button" className="ofp-ghost" aria-label="Share this offer"><Icon name="share" size={15} /> Share</button>
@@ -115,7 +108,7 @@ function OfferPage() {
                 {U.resourceNames(item).map((n, i) => (
                   <div className="resource-row" key={n}>
                     <div className="rr-icon" style={{ background: item.accent }}><Icon name={item.kind === "Service" ? "tech" : "database"} size={20} /></div>
-                    <div><div className="rr-name">{n}</div><div className="rr-type">{item.kind} resource{pkg && i >= pkg.res ? " — not in this package" : ""}</div></div>
+                    <div><div className="rr-name">{n}</div><div className="rr-type">{item.kind} resource</div></div>
                   </div>
                 ))}
               </div>
@@ -125,7 +118,7 @@ function OfferPage() {
                   <span className="dp-avatar" style={{ background: item.accent }} aria-hidden="true">{initials(item.provider)}</span>
                   <div><div className="ofp-prov-name">{item.provider}</div><div className="ofp-prov-role">Provider</div></div>
                 </div>
-                <a className="ofp-link" href={D.PAGES.catalog}><Icon name="external" size={13} /> Back to catalogue</a>
+                <a className="ofp-link" href="#"><Icon name="external" size={13} /> View organisation</a>
               </div>
             </aside>
           </div>

@@ -45,3 +45,10 @@
 
 a{color:var(--vui-color-primary-text)}
 a:hover{color:var(--vui-color-primary-dark)}
+
+.ofp-price-hl{color:var(--vt-teal-text,#007f88);font-weight:600}
+.ofp-price-sub{font-size:12.5px}
+.ofp-app .ofp-cta{background:var(--vt-navy,#17243f);color:var(--vt-teal,#00a2ae);height:28px;margin-top:12px}
+.ofp-app .ofp-cta:hover{background:#22314f;color:#0fb9c6}
+.vt-app.ofp-app,.vt-app.bk-app,.vt-app.dm-app{--vt-rail-w:0px;--vt-top-h:56px}
+.ofp-app .vt-right,.bk-app .vt-right,.dm-app .vt-right{display:none}
