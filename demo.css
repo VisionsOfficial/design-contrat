@@ -1,0 +1,47 @@
+/* VisionsTrust — Demo 07/08. Only what the two reference pages did not already have:
+   the personal-data badge, the catalogue filter row, the page wrapper and the toast. */
+.dm-page{padding:22px 32px 120px;max-width:1180px;margin:0 auto}
+.dm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+.dm-head h2{font-size:24px;font-weight:700;color:var(--vui-color-secondary);letter-spacing:-.015em;margin:0 0 4px}
+.dm-head p{font-size:13.5px;color:var(--text-muted);margin:0;max-width:62ch;text-wrap:pretty}
+.dm-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.dm-filters .dm-flabel{font-size:12px;color:var(--text-faint);font-weight:600;margin-right:2px}
+.dm-filter{height:32px;padding:0 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.dm-filter:hover{border-color:var(--vui-color-primary);color:var(--vui-color-primary-text)}
+.dm-filter.on{background:var(--vui-color-primary-soft);border-color:var(--vui-color-primary);color:var(--vui-color-primary-text)}
+.dm-filter .dm-fn{font-variant-numeric:tabular-nums;opacity:.7}
+
+/* personal-data badge — same shape as the kind chip it sits next to */
+.dm-pii{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.01em;white-space:nowrap;border:1px solid}
+.dm-pii.contains{background:#fdf1e7;border-color:#e8a877;color:#a1502a}
+.dm-pii.processes{background:#eef0fe;border-color:#a9b3f7;color:#3b47b8}
+.cat-media .dm-pii{position:absolute;left:12px;bottom:12px;z-index:2;background:#fff}
+
+/* card status strip — the same gap / meet reading as the offer page and the basket */
+.dm-cardstrip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+.dm-cardstrip .bk2-badges{margin:0}
+.dm-incart{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font-size:11px;font-weight:700;background:var(--vui-color-primary-soft);color:var(--vui-color-primary-text)}
+
+/* toast */
+.dm-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:400;display:flex;align-items:center;gap:10px;max-width:min(560px,92vw);padding:12px 12px 12px 14px;border-radius:12px;background:var(--vui-color-secondary);color:#fff;font-size:13.5px;font-weight:500;box-shadow:0 14px 40px rgba(11,20,40,.28);animation:dm-toast-in .22s ease-out}
+.dm-toast-ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:var(--vui-color-accent);color:var(--vui-color-secondary)}
+.dm-toast.info .dm-toast-ic{background:#fff;color:var(--vui-color-secondary)}
+.dm-toast-x{width:24px;height:24px;border-radius:6px;border:none;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.dm-toast-x:hover{background:rgba(255,255,255,.24)}
+@keyframes dm-toast-in{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* confirmation */
+.dm-done{max-width:760px;margin:0 auto}
+.dm-lines{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
+.dm-line{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:14px;padding:14px 16px;background:var(--surface)}
+.dm-line-main{min-width:0}
+.dm-line-n{font-size:14.5px;font-weight:700;color:var(--vui-color-secondary);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dm-line-s{font-size:12.5px;color:var(--text-muted);margin-top:3px}
+.dm-line-p{font-size:14px;font-weight:700;color:var(--vui-color-secondary);white-space:nowrap;text-align:right}
+.dm-line-p em{display:block;font-style:normal;font-size:11.5px;font-weight:500;color:var(--text-faint)}
+.dm-total{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:12px;background:var(--vui-color-primary-softer);border:1px solid var(--vui-color-primary-soft);margin-bottom:20px}
+.dm-total-k{font-size:13px;font-weight:600;color:var(--text-muted)}
+.dm-total-v{font-size:20px;font-weight:800;color:var(--vui-color-secondary)}
+
+a{color:var(--vui-color-primary-text)}
+a:hover{color:var(--vui-color-primary-dark)}

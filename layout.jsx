@@ -147,7 +147,7 @@
   };
 
   // ─── TOPBAR ─────────────────────────────────────────────────────────────────
-  const TopBar = ({ title, onToggleSide, cartCount, notifications, actions }) => {
+  const TopBar = ({ title, onToggleSide, cartCount, cartHref, notifications, actions }) => {
     const [menu, setMenu] = useState(null);
     const [lang, setLang] = useState("en");
     const [notifTab, setNotifTab] = useState("all");
@@ -171,9 +171,9 @@
       <div className="vt-actions" ref={barRef}>
         {actions}
         <div className="vt-actionbar">
-          <button type="button" className="vt-abtn" aria-label={`Basket, ${cartCount} items`}>
-            <Icon name="cart" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}
-          </button>
+          {cartHref
+            ? <a className="vt-abtn" href={cartHref} aria-label={`Basket, ${cartCount} items`}><Icon name="cart" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</a>
+            : <button type="button" className="vt-abtn" aria-label={`Basket, ${cartCount} items`}><Icon name="cart" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</button>}
           <span className="vt-sep" aria-hidden="true" />
           <div className="vt-menu-wrap">
             <button type="button" className={`vt-abtn ${menu === "lang" ? "on" : ""}`} onClick={() => toggle("lang")} aria-haspopup="true" aria-expanded={menu === "lang"} aria-label="Language"><Icon name="translate" /></button>
@@ -282,7 +282,7 @@
 
   // ─── SHELL ──────────────────────────────────────────────────────────────────
   const AppLayout = ({
-    title = "Welcome", activeId = "home", nav = VT_NAV, cartCount = 2,
+    title = "Welcome", activeId = "home", nav = VT_NAV, cartCount = 2, cartHref = null,
     notifications = VT_NOTIFICATIONS, defaultPanel = null, defaultSideCollapsed = false,
     actions = null, className = "", children
   }) => {
@@ -295,7 +295,7 @@
       <Sidebar nav={nav} activeId={activeId} />
       <button type="button" className="vt-scrim" onClick={() => setSideCollapsed(false)} aria-label="Close navigation" tabIndex={sideCollapsed ? 0 : -1} />
       <div className="vt-main">
-        <TopBar title={title} onToggleSide={() => setSideCollapsed((c) => !c)} cartCount={cartCount} notifications={notifications} actions={actions} />
+        <TopBar title={title} onToggleSide={() => setSideCollapsed((c) => !c)} cartCount={cartCount} cartHref={cartHref} notifications={notifications} actions={actions} />
         <main className="vt-content" id="vt-main">{children}</main>
       </div>
       <RightSide panel={panel} setPanel={setPanel} last={last} setLast={setLast} />
