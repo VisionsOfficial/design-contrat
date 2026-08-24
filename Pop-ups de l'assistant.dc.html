@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assistant/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #eef1f6; }
+  @keyframes cvPing { 0% { transform: scale(1); opacity: .8 } 70% { transform: scale(1.5); opacity: 0 } 100% { transform: scale(1.5); opacity: 0 } }
+  @keyframes cvBar { 0% { width: 12% } 100% { width: 86% } }
+  a { color: #007f88; }
+  a:hover { color: #00a2ae; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;box-sizing:border-box;padding:40px 40px 64px;font-family:Inter,system-ui,sans-serif;color:#17243f">
+
+  <header style="max-width:860px;margin:0 auto 34px">
+    <span style="display:block;font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5d6b85">VisionsTrust · Assistant IA</span>
+    <h1 style="margin:8px 0 0;font:800 26px/1.2 Inter,system-ui,sans-serif">Pop-ups de l’assistant</h1>
+    <p style="margin:9px 0 0;max-width:60ch;font:500 13.5px/1.6 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">Une pop-up par fonctionnalité de l’assistant. Toutes suivent le même gabarit : pastille Assistant, message d’une à deux lignes, une action verte, une fermeture. Elles s’affichent en bas de l’écran, au-dessus de l’orbe.</p>
+  </header>
+
+  <div style="max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:30px">
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Proactif · à l’arrivée sur un écran</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">2 contrats attendent votre signature et 3 offres sont incomplètes — je peux commencer par les offres.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">C’est votre première visite sur cet écran. Une visite guidée de 3 étapes vous montre l’essentiel.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Démarrer</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Completer · brouillons et publication</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Il reste 4 champs obligatoires sur « Air quality feed ». Je peux les préremplir depuis Fleet telemetry.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Préremplir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">J’ai rédigé les 4 champs manquants. Rien n’est enregistré : relisez-les avant de publier.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Relire</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Vérification de cohérence : 2 offres annoncent une licence différente de votre baseline.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Matcher · recherche et correspondances</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">21 offres correspondent à votre projet " nome du projet", dont 6 fortes sur le périmètre, la fraîcheur et la licence.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Nouvelle opportunité repérée : DiRIF a publié une offre sur un flux trafic horaire compatible avec votre projet.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Votre rapport pour votre maching sur le projet/offre "nom" est prêt.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Ouvrir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Contrats · clauses et signatures</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #c88a2e">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">La clause 6.2 du DPA Kuzzle a changé : le droit d’opposition a été retiré. 2 échanges actifs héritent de ces termes.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Examiner</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">J’ai préparé une contre-proposition qui rétablit la clause 6.2. À vous de l’envoyer.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Relire</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Revue terminée sur le DPA IDFM : 3 clauses diffèrent de votre baseline/template, dont la durée de conservation.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir la revue</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">2 contrats sont prêts à signer. Tout est relu de votre côté : il ne manque que votre signature.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Signer</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #c88a2e">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Le DPA Kuzzle expire dans 8 jours. Sans signature, 2 échanges actifs seront suspendus.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Signer maintenant</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#0d8a5f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#eafff6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#eafff6">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Le contrat pour "DPA Kuzzle" est signé par toutes les parties. Les 2 échanges de données peuvent commencer immédiatement.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 18px;border:1px solid #e3e7ee;border-radius:9px;background:#fff;color:#17243f;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Voir le contrat</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Panier · sélection et demandes d’accès</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">6 offres correspondent à plus de 80% à "Nom projet" mais ne sont pas encore dans votre panier. Je peux les ajouter en une fois.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Ajouter au panier</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #c88a2e">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Dans votre panier, 2 offres de DiRIF et IDFM exigent d'être assigné à un projet mais vous n'avez aucun projet auquel les assigner.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Ouvrir un DPA</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Votre panier contient 8 offres depuis 5 jours. Je peux finaliser votre panier.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Préparer</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#0d8a5f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#eafff6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#eafff6">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">6 offres ajoutées au panier. Vous pouvez encore en retirer avant d’envoyer les demandes.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 18px;border:1px solid #e3e7ee;border-radius:9px;background:#fff;color:#17243f;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Voir le panier</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #c88a2e">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">La baseline de votre projet est incomplète : périmètre géographique et finalité d’usage manquent. Sans elles, je classe les offres à l’aveugle.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Compléter la baseline</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:9px;padding:22px 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Relances · une par étape du parcours panier</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="font:800 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:999px;padding:3px 6px">1/5</span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Étape 1 — Vérifier le panier. 8 offres attendent votre relecture depuis hier : rien n’a encore été vérifié.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Relire</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="font:800 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:999px;padding:3px 6px">2/5</span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Étape 2 — Ajuster les clauses. Le périmètre et la finalité d’usage manquent encore pour cadrer vos demandes.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Ajuster</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="font:800 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:999px;padding:3px 6px">3/5</span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Étape 3 — Attribuer au projet. 5 offres du panier ne sont rattachées à aucun projet.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Rattacher</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="font:800 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:999px;padding:3px 6px">4/5</span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Étape 4 — Associer les données personnelles. 3 offres contiennent des données personnelles à apparier avant l’envoi.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Apparier</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #c88a2e">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="font:800 10px/1 Inter,system-ui,sans-serif;color:#17243f;background:#08ffad;border-radius:999px;padding:3px 6px">5/5</span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Étape 5 — Confirmer et envoyer. Tout est prêt depuis 3 jours : 8 demandes d’accès n’attendent que votre confirmation.</p>
+          <button type="button" style="flex:none;white-space:nowrap;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Confirmer</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Helper · aide et conversations</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Une question sur cet écran ? Je peux expliquer les champs obligatoires et la publication.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Demander</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Le service juridique a répondu dans « DPA Kuzzle ↔ Visions — revue des clauses ».</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Ouvrir</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">États du système</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <span style="position:relative;display:grid;place-items:center;width:13px;height:13px">
+              <span style="position:absolute;inset:-3px;border-radius:50%;border:1.5px solid #08ffad;animation:cvPing 1.6s cubic-bezier(0,0,.2,1) infinite"></span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            </span>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <span style="flex:1;min-width:0">
+            <p style="margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Je rédige les champs manquants de « Air quality feed »…</p>
+            <span style="display:block;margin-top:8px;height:3px;border-radius:2px;background:#eef1f6;overflow:hidden">
+              <span style="display:block;height:3px;border-radius:2px;background:#08ffad;animation:cvBar 2.4s ease-in-out infinite alternate"></span>
+            </span>
+          </span>
+          <button type="button" style="flex:none;height:38px;padding:0 18px;border:1px solid #e3e7ee;border-radius:9px;background:#fff;color:#17243f;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Arrêter</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07)">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#0d8a5f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#eafff6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#eafff6">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Les 4 champs ont été appliqués à votre brouillon. Vous pouvez encore annuler.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 18px;border:1px solid #e3e7ee;border-radius:9px;background:#fff;color:#17243f;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Annuler</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 26px rgba(23,36,63,.1),0 1px 3px rgba(23,36,63,.07);border-left:4px solid #e0243c">
+          <span style="display:inline-flex;align-items:center;gap:7px;flex:none;background:#17243f;border-radius:999px;padding:8px 13px 8px 11px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 12.5px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <p style="flex:1;min-width:0;margin:0;font:500 14px/1.45 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">Je n’ai pas pu terminer la rédaction. Votre brouillon est intact, aucune modification n’a été enregistrée.</p>
+          <button type="button" style="flex:none;height:38px;padding:0 20px;border:0;border-radius:9px;background:#157347;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Réessayer</button>
+          <button type="button" aria-label="Fermer" style="flex:none;width:30px;height:30px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:baseline;gap:9px;padding:0 2px 10px">
+        <span style="font:700 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">Variante compacte · écran étroit</span>
+      </div>
+
+      <div style="width:360px;background:#fff;border-radius:14px;padding:13px 14px 14px;box-shadow:0 14px 40px rgba(23,36,63,.16),0 2px 8px rgba(23,36,63,.08)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="display:inline-flex;align-items:center;gap:6px;flex:none;background:#17243f;border-radius:999px;padding:6px 10px 6px 9px">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex:none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="#08ffad"></path></svg>
+            <b style="font:700 11px/1 Inter,system-ui,sans-serif;color:#08ffad">Assistant</b>
+          </span>
+          <span style="flex:1"></span>
+          <button type="button" aria-label="Fermer" style="width:24px;height:24px;display:grid;place-items:center;border:0;background:transparent;border-radius:6px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <p style="margin:0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">2 contrats attendent votre signature et 3 offres sont incomplètes — je peux commencer par les offres.</p>
+        <div style="display:flex;gap:8px;margin-top:11px">
+          <button type="button" style="flex:1;height:34px;border:0;border-radius:8px;background:#157347;color:#fff;font:700 12px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0f5c37">Voir</button>
+          <button type="button" style="flex:none;white-space:nowrap;height:34px;padding:0 14px;border:1px solid #e3e7ee;border-radius:8px;background:#fff;color:#5d6b85;font:600 12px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Plus tard</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</x-dc>
+</body>
+</html>

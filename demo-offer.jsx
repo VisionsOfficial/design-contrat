@@ -94,7 +94,7 @@ function OfferPage() {
                 <div className="ofp-price">{from === 0 ? "Free" : `from ${fmtN(from)} ${item.currency}`}<span>{from === 0 ? "" : "/month"}</span></div>
                 <div className="ofp-price-sub">{item.packages.length} packages available — you choose one <span className="ofp-price-hl">in the basket</span></div>
                 <button type="button" className="ofp-cta" onClick={addToBasket}>
-                  <Icon name="cart" size={16} /> Add to basket
+                  <Icon name="cart" size={16} /> <span style={{ width: 239, height: 14 }}>Add to basket</span>
                 </button>
                 <div className="ofp-row">
                   <button type="button" className={saved ? "ofp-ghost on" : "ofp-ghost"} onClick={() => setSaved((v) => !v)} aria-pressed={saved}><Icon name={saved ? "bookmarkFill" : "bookmark"} size={15} /> {saved ? "Saved" : "Save"}</button>

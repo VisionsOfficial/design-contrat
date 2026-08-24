@@ -18,7 +18,8 @@ function fmtVal(field, v) {
     case "procDeadline": return !/Immediate/.test(v.p) && v.d != null ? `${v.p} · ${v.d}d` : v.p;
     case "matrix": return Object.entries(v).map(([k, x]) => `${k} ${x.n}${x.u}`).join(" · ");
     case "date": return new Date(v).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-    default: return String(v);
+    case "twoSelect": case "selectDeadline": return [v.a, v.b].filter(Boolean).join(" · ");
+    default: return v && typeof v === "object" ? Object.values(v).filter((x) => x != null && x !== "").join(" · ") : String(v);
   }
 }
 

@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #eef1f6; }
+  @keyframes c2Ping { 0% { transform: scale(1); opacity: .8 } 70% { transform: scale(1.5); opacity: 0 } 100% { transform: scale(1.5); opacity: 0 } }
+  @keyframes c2In { from { opacity: 0; transform: translateY(10px) scale(.99) } to { opacity: 1; transform: none } }
+  @keyframes c2Fade { from { opacity: 0 } to { opacity: 1 } }
+  a { color: #007f88; }
+  a:hover { color: #00a2ae; }
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;font-family:Inter,system-ui,sans-serif;color:#17243f;overflow:hidden">
+
+  <div style="display:flex;height:100vh">
+    <div style="flex:none;width:210px;background:#17243f;padding:20px 14px;box-sizing:border-box">
+      <span style="display:block;font:800 13px/1 Inter,system-ui,sans-serif;color:#fff">VisionsTrust</span>
+      <span style="display:block;margin-top:22px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)">Espace</span>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-top:9px">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+          <button type="button" onClick="{{ n.act }}" style="{{ n.style }}">{{ n.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="flex:1;min-width:0;padding:26px 30px;background:#f4f6fa">
+      <span style="display:block;font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#8a97ad">{{ pageLabel }}</span>
+      <h2 style="margin:8px 0 0;font:800 20px/1.25 Inter,system-ui,sans-serif;color:#c3cbd8">{{ pageMeta }}</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px">
+        <span style="display:block;height:96px;border-radius:12px;background:#e8ecf3"></span>
+        <span style="display:block;height:96px;border-radius:12px;background:#e8ecf3"></span>
+        <span style="display:block;height:96px;border-radius:12px;background:#e8ecf3"></span>
+        <span style="display:block;height:96px;border-radius:12px;background:#edf0f5"></span>
+        <span style="display:block;height:96px;border-radius:12px;background:#edf0f5"></span>
+        <span style="display:block;height:96px;border-radius:12px;background:#edf0f5"></span>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ closed }}" hint-placeholder-val="{{ false }}">
+    <button type="button" onClick="{{ openModal }}" aria-label="Ouvrir l’assistant IA" style="position:fixed;right:22px;bottom:22px;z-index:60;width:56px;height:56px;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 16px 44px rgba(23,36,63,.22),0 2px 8px rgba(23,36,63,.1);cursor:pointer" style-hover="transform:scale(1.05)">
+      <span style="position:absolute;inset:-4px;border-radius:50%;border:2px solid #08ffad;animation:c2Ping 2s cubic-bezier(0,0,.2,1) infinite;pointer-events:none"></span>
+      <span style="width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#17243f;color:#08ffad">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor"></path></svg>
+      </span>
+      <span style="position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:#e0243c;color:#fff;font:700 11px/20px Inter,system-ui,sans-serif;text-align:center;box-shadow:0 0 0 2.5px #fff">5</span>
+    </button>
+  </sc-if>
+
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;right:22px;bottom:22px;z-index:70;width:min(430px,calc(100vw - 44px));height:min(660px,calc(100vh - 44px));display:flex;flex-direction:column;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(23,36,63,.26),0 2px 10px rgba(23,36,63,.12);animation:c2In .2s ease">
+
+        <div style="flex:none;display:flex;align-items:center;gap:12px;padding:15px 18px;border-bottom:1px solid #eef1f6">
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#17243f;color:#08ffad">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor"></path></svg>
+          </span>
+          <span style="flex:1;min-width:0">
+            <b style="display:block;font:800 14px/1.2 Inter,system-ui,sans-serif;color:#17243f">Assistant IA</b>
+            <small style="display:block;margin-top:2px;font:500 11.5px/1.35 Inter,system-ui,sans-serif;color:#5d6b85">Il vous accompagne dans VisionsTrust, complète vos contenus et trouve vos correspondances. Rien n’est enregistré sans vous.</small>
+          </span>
+          <button type="button" onClick="{{ closeModal }}" aria-label="Fermer l’assistant" style="flex:none;width:32px;height:32px;display:grid;place-items:center;border:0;background:transparent;border-radius:9px;color:#5d6b85;cursor:pointer" style-hover="background:#f1f4f9;color:#17243f">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="flex:1;min-height:0;display:flex">
+
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+            <div data-ai-scroll="1" style="flex:1;min-height:0;overflow-y:auto;padding:18px 20px 22px;background:#fff">
+
+              <sc-if value="{{ vHome }}" hint-placeholder-val="{{ true }}">
+                <div data-sec="home"></div>
+                <span style="display:inline-flex;align-items:center;gap:6px;background:#e3f7f8;border-radius:999px;padding:5px 10px;font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#007f88">Sur cette page · {{ pageLabel }}</span>
+                <b style="display:block;margin-top:10px;font:800 17px/1.3 Inter,system-ui,sans-serif;color:#17243f">{{ ctxTitle }}</b>
+                <p style="margin:6px 0 0;max-width:62ch;font:500 12.5px/1.55 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ ctxBody }}</p>
+
+                <div style="display:flex;align-items:flex-start;gap:11px;margin-top:14px;border:1px solid #00a2ae;border-radius:12px;padding:13px;background:#fbfdfe">
+                  <span style="flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#17243f;color:#08ffad">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c.7 3.6 2.4 5.3 6 6-3.6.7-5.3 2.4-6 6-.7-3.6-2.4-5.3-6-6 3.6-.7 5.3-2.4 6-6z" fill="currentColor"></path></svg>
+                  </span>
+                  <span style="flex:1;min-width:0">
+                    <b style="display:block;font:700 12.5px/1.4 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ ctxAction }}</b>
+                    <small style="display:block;margin-top:4px;font:500 11.5px/1.5 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ ctxWhy }}</small>
+                    <span style="display:flex;gap:7px;margin-top:11px">
+                      <button type="button" onClick="{{ ctxAct }}" style="height:32px;padding:0 15px;border:0;border-radius:8px;background:#08ffad;color:#17243f;font:800 11.5px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0ce29c">{{ ctxCta }}</button>
+                      <button type="button" onClick="{{ goTour }}" style="height:32px;padding:0 13px;border:1px solid #e3e7ee;border-radius:8px;background:#fff;color:#17243f;font:600 11.5px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">M’expliquer</button>
+                    </span>
+                  </span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px">
+                  <sc-for list="{{ quick }}" as="q" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ q.act }}" style="display:flex;flex-direction:column;gap:7px;padding:11px 12px 12px;border:1px solid #e3e7ee;border-radius:11px;background:#fff;text-align:left;cursor:pointer" style-hover="border-color:#00a2ae;background:#fbfdfe">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007f88" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg>
+                      <span style="font:700 12px/1.35 Inter,system-ui,sans-serif;color:#17243f">{{ q.label }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:8px;padding:20px 2px 9px">
+                  <span style="font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">{{ waitingLabel }}</span>
+                  <span style="min-width:18px;height:18px;box-sizing:border-box;padding:0 5px;border-radius:9px;background:#eef1f6;color:#17243f;font:700 10px/18px Inter,system-ui,sans-serif;text-align:center">{{ waitingCount }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <sc-for list="{{ waiting }}" as="w" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ w.act }}" style="display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;border:1px solid #e3e7ee;background:#fff;border-radius:11px;padding:11px 12px 12px;cursor:pointer" style-hover="border-color:#00a2ae;background:#fbfdfe">
+                      <span style="{{ w.dotStyle }}"></span>
+                      <span style="flex:1;min-width:0">
+                        <b style="display:block;font:700 12px/1.4 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ w.title }}</b>
+                        <small style="display:block;margin-top:3px;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ w.body }}</small>
+                      </span>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a97ad" stroke-width="1.9" stroke-linecap="round" style="flex:none;margin-top:3px"><path d="m9 6 6 6-6 6"></path></svg>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:8px;padding:20px 2px 9px">
+                  <span style="font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#5d6b85">{{ oppsLabel }}</span>
+                  <span style="min-width:18px;height:18px;box-sizing:border-box;padding:0 5px;border-radius:9px;background:#e3f7f8;color:#007f88;font:700 10px/18px Inter,system-ui,sans-serif;text-align:center">{{ oppsCount }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ opps }}" as="o" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ o.act }}" style="display:flex;flex-direction:column;gap:5px;text-align:left;border:1px solid #e3e7ee;background:#fff;border-radius:11px;padding:11px 12px 12px;cursor:pointer" style-hover="border-color:#00a2ae;background:#fbfdfe">
+                      <span style="display:flex;align-items:center;gap:7px">
+                        <span style="font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#007f88">{{ o.kind }}</span>
+                        <span style="font:700 9.5px/1 Inter,system-ui,sans-serif;color:#8a97ad">{{ o.score }}</span>
+                      </span>
+                      <b style="font:700 12px/1.35 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ o.title }}</b>
+                      <small style="font:500 11px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ o.body }}</small>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vSteps }}" hint-placeholder-val="{{ false }}">
+                <div style="height:1px;background:#eef1f6;margin:22px 0 18px"></div>
+                <b style="display:block;font:800 17px/1.3 Inter,system-ui,sans-serif;color:#17243f">{{ stepsTitle }}</b>
+                <p style="margin:6px 0 0;max-width:62ch;font:500 12.5px/1.55 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ stepsBody }}</p>
+                <div style="display:flex;flex-direction:column;gap:7px;margin-top:14px">
+                  <sc-for list="{{ steps }}" as="t" hint-placeholder-count="5">
+                    <div style="{{ t.rowStyle }}">
+                      <span style="{{ t.numStyle }}">{{ t.n }}</span>
+                      <span style="flex:1;min-width:0">
+                        <b style="display:block;font:700 12px/1.4 Inter,system-ui,sans-serif;color:#17243f">{{ t.title }}</b>
+                        <small style="display:block;margin-top:3px;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ t.body }}</small>
+                      </span>
+                      <span style="{{ t.tagStyle }}">{{ t.tag }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vBlocks }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
+                  <div style="height:1px;background:#eef1f6;margin:22px 0 18px"></div>
+                  <span style="display:block;font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#007f88">{{ b.kicker }}</span>
+                  <b style="display:block;margin-top:7px;font:800 16px/1.3 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ b.title }}</b>
+                  <p style="margin:6px 0 0;max-width:62ch;font:500 12.5px/1.55 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ b.body }}</p>
+                  <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+                    <sc-for list="{{ b.items }}" as="i" hint-placeholder-count="3">
+                      <div style="border:1px solid #e3e7ee;border-radius:12px;padding:12px 13px 13px;background:#fff">
+                        <div style="display:flex;align-items:center;gap:10px">
+                          <span style="flex:1;min-width:0">
+                            <b style="display:block;font:700 12.5px/1.35 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ i.title }}</b>
+                            <small style="display:block;margin-top:3px;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ i.meta }}</small>
+                          </span>
+                          <button type="button" onClick="{{ i.act }}" style="flex:none;white-space:nowrap;height:32px;padding:0 14px;border:0;border-radius:8px;background:#08ffad;color:#17243f;font:800 11.5px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0ce29c">{{ i.cta }}</button>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </sc-if>
+
+              <sc-if value="{{ vDetail }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:flex-start;gap:9px">
+                  <button type="button" onClick="{{ goHome }}" aria-label="Retour" style="flex:none;width:28px;height:28px;display:grid;place-items:center;border:1px solid #e3e7ee;background:#fff;border-radius:8px;color:#17243f;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 6l-6 6 6 6"></path></svg>
+                  </button>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#007f88">{{ dKicker }}</span>
+                    <b style="display:block;margin-top:4px;font:800 16px/1.3 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ dTitle }}</b>
+                    <small style="display:block;margin-top:5px;font:500 11.5px/1.5 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ dBody }}</small>
+                  </span>
+                </div>
+
+                <sc-if value="{{ dHasFacts }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px">
+                    <sc-for list="{{ dFacts }}" as="k" hint-placeholder-count="3">
+                      <div style="border:1px solid #eef1f6;border-radius:11px;padding:11px 12px;background:#fafbfc">
+                        <span style="display:block;font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#5d6b85">{{ k.k }}</span>
+                        <b style="display:block;margin-top:5px;font:700 12.5px/1.35 Inter,system-ui,sans-serif;color:#17243f">{{ k.v }}</b>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ flash }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:9px;margin-top:14px;border:1px solid #0d8a5f;border-radius:11px;padding:10px 12px;background:#eafff6">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0b6b48" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                    <small style="flex:1;min-width:0;font:600 11.5px/1.45 Inter,system-ui,sans-serif;color:#0b6b48;text-wrap:pretty">{{ flash }}</small>
+                    <button type="button" onClick="{{ undo }}" style="flex:none;white-space:nowrap;height:28px;padding:0 11px;border:1px solid #0d8a5f;border-radius:8px;background:#fff;color:#0b6b48;font:700 11px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#f2fffa">Annuler</button>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:15px">
+                  <sc-for list="{{ dRows }}" as="r" hint-placeholder-count="3">
+                    <div style="border:1px solid #e3e7ee;border-radius:12px;padding:12px 13px 13px;background:#fff">
+                      <div style="display:flex;align-items:center;gap:9px">
+                        <span style="flex:1;min-width:0;font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#5d6b85">{{ r.label }}</span>
+                        <span style="flex:none;font:700 10px/1 Inter,system-ui,sans-serif;color:#007f88">{{ r.tag }}</span>
+                      </div>
+                      <p style="margin:8px 0 0;font:500 12.5px/1.5 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ r.value }}</p>
+                      <sc-if value="{{ r.pending }}" hint-placeholder-val="{{ true }}">
+                        <div style="display:flex;gap:7px;margin-top:10px">
+                          <button type="button" onClick="{{ r.act }}" style="{{ r.ctaStyle }}">{{ r.cta }}</button>
+                          <sc-if value="{{ r.dismissible }}" hint-placeholder-val="{{ false }}">
+                            <button type="button" onClick="{{ r.dismiss }}" style="height:30px;padding:0 13px;border:1px solid #e3e7ee;border-radius:8px;background:#fff;color:#5d6b85;font:600 11.5px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#e0243c;color:#e0243c">Écarter</button>
+                          </sc-if>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ r.done }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;align-items:center;gap:7px;margin-top:10px">
+                          <span style="display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:6px 10px;background:#eafff6;color:#0b6b48;font:700 11px/1 Inter,system-ui,sans-serif">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                            {{ r.doneLabel }}
+                          </span>
+                          <button type="button" onClick="{{ r.revert }}" style="height:28px;padding:0 11px;border:1px solid #e3e7ee;border-radius:8px;background:#fff;color:#5d6b85;font:600 11px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">Revenir</button>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:9px;margin-top:14px;padding:12px 13px;border-radius:12px;background:#fafbfc;border:1px solid #eef1f6">
+                  <small style="flex:1;min-width:0;font:500 11.5px/1.45 Inter,system-ui,sans-serif;color:#5d6b85;text-wrap:pretty">{{ dNote }}</small>
+                  <button type="button" onClick="{{ dFooterAct }}" style="flex:none;white-space:nowrap;height:34px;padding:0 16px;border:0;border-radius:9px;background:#08ffad;color:#17243f;font:800 12px/1 Inter,system-ui,sans-serif;cursor:pointer" style-hover="background:#0ce29c">{{ dCta }}</button>
+                </div>
+              </sc-if>
+
+
+              <sc-if value="{{ vThread }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:flex-start;gap:9px">
+                  <button type="button" onClick="{{ backThreads }}" aria-label="Retour" style="flex:none;width:28px;height:28px;display:grid;place-items:center;border:1px solid #e3e7ee;background:#fff;border-radius:8px;color:#17243f;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 6l-6 6 6 6"></path></svg>
+                  </button>
+                  <span style="flex:1;min-width:0">
+                    <b style="display:block;font:800 15px/1.3 Inter,system-ui,sans-serif;color:#17243f;text-wrap:pretty">{{ thTitle }}</b>
+                    <small style="display:block;margin-top:3px;font:500 11.5px/1.4 Inter,system-ui,sans-serif;color:#5d6b85">{{ thMeta }}</small>
+                  </span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+                  <sc-for list="{{ messages }}" as="m" hint-placeholder-count="4">
+                    <div style="{{ m.rowStyle }}">
+                      <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+                    </div>
+                  </sc-for>
+                  <sc-for list="{{ sent }}" as="s" hint-placeholder-count="0">
+                    <div style="display:flex;justify-content:flex-end">
+                      <div style="max-width:74%;border-radius:12px;padding:11px 13px;background:#17243f;color:#fff;font:500 12.5px/1.55 Inter,system-ui,sans-serif;text-wrap:pretty">{{ s.text }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
+                  <span style="font:700 9.5px/1 Inter,system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#5d6b85;padding:6px 0">Suites proposées</span>
+                  <sc-for list="{{ follow }}" as="f" hint-placeholder-count="2">
+                    <button type="button" onClick="{{ f.act }}" style="border:1px solid #e3e7ee;background:#fff;border-radius:999px;padding:7px 12px;font:600 11.5px/1 Inter,system-ui,sans-serif;color:#17243f;cursor:pointer" style-hover="border-color:#00a2ae;color:#007f88">{{ f.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+
+            </div>
+
+            <div style="flex:none;padding:11px 14px 12px;background:#17243f">
+              <div style="display:flex;align-items:center;gap:9px">
+                <button type="button" onClick="{{ goThreads }}" aria-label="Vos conversations" title="Vos conversations" style="width:34px;height:34px;flex:none;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);border-radius:9px;background:transparent;color:rgba(255,255,255,.75);cursor:pointer" style-hover="border-color:#08ffad;color:#08ffad">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z"></path></svg>
+                </button>
+                <input value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" placeholder="Posez votre question, ou demandez-moi une action…" style="flex:1;min-width:0;height:38px;box-sizing:border-box;border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:0 13px;background:rgba(255,255,255,.06);font:500 12.5px/1 Inter,system-ui,sans-serif;color:#fff;outline:0" style-focus="border-color:#08ffad">
+                <button type="button" onClick="{{ send }}" aria-label="Envoyer" style="width:38px;height:38px;flex:none;display:grid;place-items:center;border:0;border-radius:9px;background:#08ffad;color:#17243f;cursor:pointer" style-hover="background:#0ce29c">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 20 4l-6.5 16-2.4-6.6z"></path><path d="m11.1 13.4 8.9-9.4"></path></svg>
+                </button>
+              </div>
+              <p style="margin:7px 4px 0;font:500 10px/1.4 Inter,system-ui,sans-serif;color:rgba(255,255,255,.55);text-align:center">Je prépare, vous décidez. Aucune modification n’est enregistrée sans votre validation.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  state = { open: true, page: "offers", sec: "home", view: null, draft: "", sent: [], basket: 8, flash: "", lastAdd: 0 };
+
+  undo() {
+    const s = this.state, keys = s.lastKeys || [];
+    if (s.lastKind === "basket") this.setState({ basket: Math.max(0, s.basket - (s.lastAdd || 0)) });
+    else if (s.lastKind === "drop") this.setState({ dropped: (s.dropped || []).filter(k => !keys.includes(k)) });
+    else if (s.lastKind === "accept") this.setState({ accepted: (s.accepted || []).filter(k => !keys.includes(k)) });
+    this.setState({ flash: "", lastAdd: 0, lastKind: null, lastKeys: [] });
+  }
+
+  doneLabel(cta) {
+    if (/signer/i.test(cta)) return "Signé";
+    if (/envoyer/i.test(cta)) return "Envoyé";
+    if (/fusionner/i.test(cta)) return "Fusionné";
+    if (/aligner|corriger/i.test(cta)) return "Corrigé";
+    if (/ouvrir/i.test(cta)) return "Ouvert";
+    if (/apparier|rattacher/i.test(cta)) return "Déclaré";
+    if (/refuser/i.test(cta)) return "Refusé";
+    if (/^voir$|y aller|détailler/i.test(cta)) return "Vu";
+    return "Accepté";
+  }
+
+  accept(key, label, cta) {
+    const done = this.doneLabel(cta).toLowerCase();
+    this.setState({
+      accepted: [...(this.state.accepted || []), key],
+      lastAdd: 0, lastKind: "accept", lastKeys: [key],
+      flash: "« " + label + " » — " + done + ". Rien n’est définitif : vous pouvez revenir en arrière."
+    });
+  }
+
+  acceptAll(det, v) {
+    if (!det) return this.go("home");
+    const keys = (det.rows || []).map(r => this.state.page + "/" + v + "/" + r.label);
+    const fresh = keys.filter(k => !(this.state.accepted || []).includes(k));
+    if (!fresh.length) return;
+    this.setState({
+      accepted: [...(this.state.accepted || []), ...fresh],
+      lastAdd: 0, lastKind: "accept", lastKeys: fresh,
+      flash: fresh.length + " élément" + (fresh.length > 1 ? "s traités" : " traité") + " sur cette liste. Rien n’est définitif : vous pouvez revenir en arrière."
+    });
+  }
+
+  addToBasket(label, n) {
+    const count = n || 1;
+    this.setState({
+      basket: this.state.basket + count,
+      lastAdd: count, lastKind: "basket", lastKeys: [],
+      flash: count > 1
+        ? count + " offres ajoutées au panier — " + (this.state.basket + count) + " au total. Vous pouvez encore les retirer avant l’envoi."
+        : "« " + label + " » ajoutée au panier — " + (this.state.basket + count) + " offres au total."
+    });
+  }
+
+
+  detailDefs() {
+    return {
+      offers: {
+        prefill: { kicker: "Completer · Air quality feed", title: "4 champs rédigés depuis vos offres publiées",
+          body: "Repris de « Fleet telemetry — raw », votre fiche la plus proche. Rien n’est enregistré avant votre accord.",
+          rows: [
+            { label: "Description", tag: "confiance élevée", value: "Mesures horaires de qualité de l’air issues du réseau de capteurs fixes, agrégées par station et exposées en flux continu.", cta: "Accepter" },
+            { label: "Licence", tag: "confiance élevée", value: "Réutilisation autorisée avec mention de la source, sans redistribution brute à des tiers.", cta: "Accepter" },
+            { label: "Fréquence", tag: "confiance moyenne", value: "Toutes les heures, avec une latence de publication de 20 minutes.", cta: "Accepter" },
+            { label: "Couverture", tag: "confiance moyenne", value: "Métropole du Grand Paris, 47 stations actives.", cta: "Accepter" }
+          ],
+          note: "Accepter les 4 champs remplit le brouillon. Il reste modifiable, et la publication demande une seconde confirmation.", cta: "Accepter les 4" },
+        coherence: { kicker: "Vos offres · cohérence", title: "Deux fiches se contredisent",
+          body: "La durée de conservation déclarée dépasse ce que la licence autorise. Visible par tout acteur qui consulte votre catalogue.",
+          facts: [{ k: "Fiches", v: "2" }, { k: "Écart", v: "12 mois" }, { k: "Bloquant", v: "Non" }],
+          rows: [
+            { label: "Air quality history", tag: "conservation 36 mois", value: "La licence retenue plafonne la conservation à 24 mois. Aligner l’un ou l’autre lève la contradiction.", cta: "Aligner" },
+            { label: "Bike counter", tag: "conservation 24 mois", value: "La licence ouverte n’impose pas de plafond, mais la fiche déclare une restriction absente du texte.", cta: "Corriger" }
+          ],
+          note: "Rien n’est bloqué : ces écarts n’empêchent ni la consultation ni les demandes d’accès.", cta: "Corriger les 2" },
+        dupes: { kicker: "Vos offres · doublon", title: "Bike counter et Bike counter history se recouvrent",
+          body: "Les deux fiches exposent la même source à deux profondeurs d’historique. Les consultations se répartissent entre elles.",
+          facts: [{ k: "Vues cumulées", v: "98" }, { k: "Recouvrement", v: "82 %" }, { k: "Demandes", v: "1" }],
+          rows: [
+            { label: "Bike counter", tag: "63 vues", value: "Flux courant, 30 derniers jours. Fiche la mieux renseignée des deux.", cta: "Conserver" },
+            { label: "Bike counter history", tag: "35 vues", value: "Historique depuis 2023. Un champ de licence reste à confirmer.", cta: "Fusionner" }
+          ],
+          note: "Fusionner regrouperait les consultations sur une seule fiche, sans perdre l’historique.", cta: "Fusionner les 2" },
+        preview: { kicker: "Vos offres · aperçu public", title: "Ce que voient les autres acteurs",
+          body: "Vos 9 fiches publiées telles qu’elles apparaissent dans le catalogue, dans l’ordre où elles y sortent.",
+          facts: [{ k: "Publiées", v: "9" }, { k: "Complètes", v: "6" }, { k: "Sans périmètre", v: "3" }],
+          rows: [
+            { label: "Fleet telemetry — raw", tag: "1re position", value: "Fiche complète : licence, fréquence, couverture et contact renseignés.", cta: "Ouvrir" },
+            { label: "Air quality history", tag: "4e position", value: "Sort plus bas faute de couverture géographique déclarée.", cta: "Compléter" },
+            { label: "Bike counter", tag: "7e position", value: "Concurrencée par sa propre variante historique.", cta: "Comparer" }
+          ],
+          note: "Les fiches sans couverture géographique sortent en moyenne 40 % moins souvent.", cta: "Compléter les 3" },
+        results: { kicker: "Vos offres · 9 publiées", title: "Qui consulte vos offres",
+          body: "Consultations des 30 derniers jours, et ce que les acteurs cherchaient en arrivant sur vos fiches.",
+          facts: [{ k: "Consultations", v: "412" }, { k: "Demandes", v: "7" }, { k: "Refus", v: "1" }],
+          rows: [
+            { label: "Air quality feed", tag: "184 vues", value: "Recherché pour l’analyse de pollution aux heures de pointe. Trois projets bloqués par l’absence de périmètre déclaré.", cta: "Compléter" },
+            { label: "Fleet telemetry — raw", tag: "121 vues", value: "Votre fiche la plus consultée. Aucune réserve relevée.", cta: "Ouvrir" },
+            { label: "Bike counter", tag: "63 vues", value: "Se recouvre avec Bike counter history, ce qui disperse les consultations.", cta: "Comparer" }
+          ],
+          note: "Compléter la couverture géographique améliorerait le classement de vos fiches dans le catalogue.", cta: "Compléter" },
+        opp: { kicker: "Réutilisation · 3 acteurs", title: "Votre flux qualité de l’air est recherché",
+          body: "Trois projets cherchent exactement ce périmètre et cette fréquence, mais votre fiche ne déclare pas encore sa couverture.",
+          facts: [{ k: "Projets", v: "3" }, { k: "Périmètre", v: "Grand Paris" }, { k: "Licence", v: "Compatible" }],
+          rows: [
+            { label: "Projet mobilité — IDFM", tag: "correspondance 94 %", value: "Cherche des mesures horaires sur le même périmètre que votre flux.", cta: "Mettre en relation" },
+            { label: "Observatoire santé — ARS", tag: "correspondance 88 %", value: "Cherche un historique de trois ans, que votre fiche ne mentionne pas.", cta: "Mettre en relation" }
+          ],
+          note: "Ajouter la couverture et l’historique rendrait votre fiche éligible aux trois projets.", cta: "Compléter la fiche" },
+        tour: { kicker: "Visite guidée · 3 étapes", title: "Publier une offre de bout en bout",
+          body: "Ce qu’il faut pour qu’un brouillon devienne une offre visible dans le catalogue.",
+          rows: [
+            { label: "Étape 1", tag: "Mes offres", value: "Chaque jeu de données ou service que vous partagez vit ici. Les brouillons remontent en tête avec ce qui leur manque.", cta: "Y aller" },
+            { label: "Étape 2", tag: "Le brouillon", value: "Un brouillon devient publiable une fois ses champs obligatoires remplis : licence, fréquence, couverture, contact.", cta: "Ouvrir" },
+            { label: "Étape 3", tag: "La proposition", value: "L’assistant propose des valeurs avec un niveau de confiance. Vous gardez celles qui conviennent, puis vous publiez.", cta: "Voir" }
+          ],
+          note: "Vous gardez la main : aucune publication n’a lieu sans une confirmation explicite.", cta: "Démarrer" }
+      },
+      contracts: {
+        prefill: { kicker: "Contrats · contre-proposition", title: "Clause 6.2 rétablie dans sa version du 12 juin",
+          body: "Rédigée à partir de vos trois autres DPA qui conservent cette clause à l’identique. À vous de l’envoyer.",
+          rows: [
+            { label: "Clause 6.2 — proposée", tag: "rétablie", value: "La personne concernée conserve le droit de s’opposer au traitement, sans justification et sans frais, avec effet sous 30 jours.", cta: "Envoyer" },
+            { label: "Clause 6.2 — reçue", tag: "à refuser", value: "Le droit d’opposition est retiré pour la durée de l’accord.", cta: "Refuser" },
+            { label: "Motif joint", tag: "rédigé", value: "Cohérence avec les trois autres DPA en vigueur et avec vos engagements auprès des utilisateurs finaux.", cta: "Valider" }
+          ],
+          note: "L’envoi ouvre une négociation. Le contrat actuel reste en vigueur pendant l’échange.", cta: "Envoyer la contre-proposition" },
+        dpa: { kicker: "Contrats · accord manquant", title: "Aucun DPA avec DiRIF",
+          body: "Deux offres de votre panier l’exigent avant tout accès. DiRIF et IDFM acceptent le même modèle d’accord.",
+          facts: [{ k: "Offres bloquées", v: "2" }, { k: "Modèle", v: "Commun" }, { k: "Délai moyen", v: "9 jours" }],
+          rows: [
+            { label: "DPA DiRIF", tag: "à ouvrir", value: "Modèle repris de votre DPA Ville de Paris, qui a été accepté sans réserve.", cta: "Ouvrir" },
+            { label: "Extension IDFM", tag: "optionnel", value: "Le même accord peut couvrir IDFM, ce qui éviterait une seconde négociation.", cta: "Inclure" }
+          ],
+          note: "Ouvrir l’accord n’engage rien : la signature reste une étape distincte.", cta: "Ouvrir le DPA" },
+        results: { kicker: "Contrats · comparaison", title: "Vos 4 DPA côte à côte",
+          body: "Trois clauses distinguent le DPA IDFM du reste de vos accords.",
+          facts: [{ k: "En vigueur", v: "4" }, { k: "Écarts", v: "3" }, { k: "À signer", v: "2" }],
+          rows: [
+            { label: "Durée de conservation", tag: "écart", value: "IDFM impose 12 mois, vos autres accords 36 mois.", cta: "Aligner" },
+            { label: "Sous-traitance", tag: "écart", value: "IDFM interdit toute sous-traitance ultérieure sans accord écrit préalable.", cta: "Examiner" },
+            { label: "Audit", tag: "écart", value: "IDFM autorise un audit annuel sur site, absent de vos autres DPA.", cta: "Examiner" }
+          ],
+          note: "Partir d’un modèle commun réduirait la revue à la seule annexe technique.", cta: "Créer un modèle" },
+        opp: { kicker: "Contrats · échéance", title: "Le DPA IDFM expire dans 8 jours",
+          body: "Sans signature, deux échanges actifs seront suspendus automatiquement à l’échéance.",
+          facts: [{ k: "Échéance", v: "8 jours" }, { k: "Échanges", v: "2" }, { k: "Réserves", v: "Aucune" }],
+          rows: [
+            { label: "Qualité de l’air → IDFM", tag: "suspendu à l’échéance", value: "Flux horaire, 47 stations. Le destinataire perdrait l’accès sans préavis.", cta: "Signer" },
+            { label: "Comptage vélo → IDFM", tag: "suspendu à l’échéance", value: "Historique quotidien depuis 2023.", cta: "Signer" }
+          ],
+          note: "Le contrat a été relu de votre côté, il ne manque que votre signature.", cta: "Signer maintenant" },
+        tour: { kicker: "Visite guidée · 3 étapes", title: "Lire et négocier une clause",
+          body: "Comment je compare vos accords et ce que vous pouvez décider à chaque étape.",
+          rows: [
+            { label: "Étape 1", tag: "Le diff", value: "Je compare la clause reçue avec la même clause dans vos autres accords en vigueur.", cta: "Voir" },
+            { label: "Étape 2", tag: "L’impact", value: "Je liste les échanges actifs qui hériteront des nouveaux termes à la signature.", cta: "Voir" },
+            { label: "Étape 3", tag: "La réponse", value: "Je rédige une contre-proposition que vous relisez avant tout envoi.", cta: "Voir" }
+          ],
+          note: "Aucun contrat n’est signé ni envoyé sans votre validation explicite.", cta: "Démarrer" }
+      },
+      catalog: {
+        prefill: { kicker: "Catalogue · baseline projet", title: "Deux champs à confirmer avant de classer",
+          body: "Sans eux, je classe les 1 248 offres du catalogue sans savoir ce que votre projet cherche vraiment.",
+          rows: [
+            { label: "Périmètre géographique", tag: "proposé", value: "Métropole du Grand Paris, avec extension A86 et A6.", cta: "Accepter" },
+            { label: "Finalité d’usage", tag: "proposé", value: "Analyse de la congestion aux heures de pointe, à des fins de planification publique.", cta: "Accepter" }
+          ],
+          note: "Ces deux champs affinent le classement et sont repris dans vos demandes d’accès.", cta: "Accepter les 2" },
+        results: { kicker: "Catalogue · 21 résultats", title: "Trafic horaire — Grand Paris",
+          body: "Classés sur le périmètre, la fraîcheur et la compatibilité de licence. Six sont fortes sur les trois critères.",
+          facts: [{ k: "Résultats", v: "21" }, { k: "Fortes", v: "6" }, { k: "Sans contrat", v: "9" }],
+          rows: [
+            { label: "DiRIF — trafic horaire A86 / A6", tag: "92 %", value: "Fraîcheur 15 minutes, licence compatible. Un DPA reste à ouvrir.", cta: "Au panier" },
+            { label: "IDFM — fréquentation des gares", tag: "87 %", value: "Fraîcheur 1 heure, accord déjà en vigueur.", cta: "Au panier" },
+            { label: "Ville de Paris — comptage vélo", tag: "81 %", value: "Licence ouverte, aucun contrat à négocier.", cta: "Au panier" },
+            { label: "Kuzzle — capteurs mobilité", tag: "74 %", value: "Fraîcheur 5 minutes, mais licence à négocier.", cta: "Au panier" }
+          ],
+          note: "Ajouter les six correspondances fortes au panier prépare les demandes d’accès correspondantes.", cta: "Ajouter les 6" },
+        opp: { kicker: "Catalogue · correspondance 92 %", title: "DiRIF publie un flux trafic horaire",
+          body: "Le périmètre couvre l’A86 et l’A6, aux mêmes horaires que votre projet mobilité. Publié hier.",
+          facts: [{ k: "Périmètre", v: "A86 · A6" }, { k: "Fraîcheur", v: "15 minutes" }, { k: "Licence", v: "Compatible" }],
+          rows: [
+            { label: "Pourquoi 92 %", tag: "périmètre", value: "Recouvrement de 94 % avec la zone déclarée par votre projet mobilité.", cta: "Détailler" },
+            { label: "Ce qui manque", tag: "contrat", value: "Aucun DPA avec DiRIF. Un accord unique pourrait aussi couvrir IDFM.", cta: "Ouvrir un DPA" }
+          ],
+          note: "Ajouter cette offre au panier n’engage rien : la demande d’accès part à l’étape 5.", cta: "Ajouter au panier" },
+        tour: { kicker: "Visite guidée · 3 étapes", title: "Comprendre le score de correspondance",
+          body: "Trois critères, pondérés par ce que votre projet déclare.",
+          rows: [
+            { label: "Critère 1", tag: "Périmètre", value: "Recouvrement entre la zone de l’offre et celle déclarée par votre projet.", cta: "Voir" },
+            { label: "Critère 2", tag: "Fraîcheur", value: "Écart entre la fréquence publiée et celle dont votre usage a besoin.", cta: "Voir" },
+            { label: "Critère 3", tag: "Licence", value: "Compatibilité entre les conditions de l’offre et votre finalité déclarée.", cta: "Voir" }
+          ],
+          note: "Un score bas ne disqualifie pas une offre : il indique où la négociation portera.", cta: "Démarrer" }
+      },
+      basket: {
+        prefill: { kicker: "Panier · étape 2 sur 5", title: "Les deux champs qui bloquent votre envoi",
+          body: "Ce sont ceux que les fournisseurs regardent en premier pour accepter une demande. Rédigés depuis votre projet mobilité.",
+          rows: [
+            { label: "Périmètre géographique", tag: "proposé", value: "Métropole du Grand Paris, avec extension A86 et A6.", cta: "Accepter" },
+            { label: "Finalité d’usage", tag: "proposé", value: "Analyse de la congestion aux heures de pointe, à des fins de planification publique.", cta: "Accepter" }
+          ],
+          note: "Accepter débloque l’étape 3. Vos 8 offres restent au panier jusqu’à l’envoi.", cta: "Accepter et continuer" },
+        results: { kicker: "Panier · 8 offres", title: "Ce qui bloquera l’envoi, offre par offre",
+          body: "Trois obstacles distincts. Aucun n’empêche de préparer les demandes, tous empêchent de les envoyer.",
+          facts: [{ k: "Au panier", v: "8" }, { k: "Bloquantes", v: "5" }, { k: "Étape", v: "2 / 5" }],
+          rows: [
+            { label: "DiRIF — trafic horaire", tag: "DPA manquant", value: "Aucun accord existant. Un DPA unique pourrait aussi couvrir IDFM.", cta: "Ouvrir un DPA" },
+            { label: "IDFM — fréquentation", tag: "DPA manquant", value: "Couvert par le même modèle d’accord que DiRIF.", cta: "Ouvrir un DPA" },
+            { label: "3 offres — données personnelles", tag: "appariement", value: "L’appariement doit être déclaré avant l’envoi de la demande.", cta: "Apparier" },
+            { label: "5 offres — sans projet", tag: "rattachement", value: "Le rattachement conditionne la finalité déclarée dans la demande.", cta: "Rattacher" }
+          ],
+          note: "Une fois ces points levés, les 8 demandes d’accès partent en une seule confirmation.", cta: "Préparer les 8" },
+        opp: { kicker: "Panier · 6 offres absentes", title: "Six correspondances fortes manquent à votre sélection",
+          body: "Elles couvrent les mêmes horaires que votre panier actuel, et trois n’exigent aucun contrat.",
+          facts: [{ k: "Absentes", v: "6" }, { k: "Sans contrat", v: "3" }, { k: "Score moyen", v: "84 %" }],
+          rows: [
+            { label: "Ville de Paris — comptage vélo", tag: "81 %", value: "Licence ouverte, aucun contrat à négocier.", cta: "Ajouter" },
+            { label: "DiRIF — trafic horaire A86 / A6", tag: "92 %", value: "Le plus fort recouvrement avec votre projet. DPA à ouvrir.", cta: "Ajouter" }
+          ],
+          note: "Les ajouter maintenant évite un second parcours de demandes dans deux semaines.", cta: "Ajouter les 6" },
+        tour: { kicker: "Visite guidée · 5 étapes", title: "Le parcours panier jusqu’à l’envoi",
+          body: "Vous êtes bloqué à la deuxième étape depuis trois jours.",
+          rows: [
+            { label: "Étape 2", tag: "En cours", value: "Ajuster la baseline : périmètre et finalité d’usage manquants.", cta: "Reprendre" },
+            { label: "Étape 3", tag: "À faire", value: "Rattacher les 5 offres sans projet, ce qui fixe la finalité déclarée.", cta: "Voir" },
+            { label: "Étape 4", tag: "À faire", value: "Déclarer l’appariement des 3 offres contenant des données personnelles.", cta: "Voir" },
+            { label: "Étape 5", tag: "À faire", value: "Confirmer et envoyer les 8 demandes d’accès en une fois.", cta: "Voir" }
+          ],
+          note: "Rien ne part avant l’étape 5, et l’envoi demande une confirmation explicite.", cta: "Reprendre à l’étape 2" }
+      }
+    };
+  }
+
+  ctxDefs(go, dot) {
+    return {
+      offers: {
+        label: "Mes offres", meta: "9 publiées · 3 brouillons",
+        title: "Trois brouillons vous séparent d’une publication.",
+        body: "Air quality feed est le plus avancé : 4 champs obligatoires restants sur 14. Je peux les rédiger depuis vos offres déjà en ligne.",
+        action: "Compléter Air quality feed",
+        why: "Vos deux autres brouillons dorment depuis plus de trois semaines. Celui-ci est publiable aujourd’hui.",
+        cta: "Rédiger les 4 champs", act: () => go("home", "prefill"),
+        waitingLabel: "Sur vos offres", oppsLabel: "Ce que vos offres pourraient rapporter",
+        waiting: [
+          { title: "Air quality feed — 4 champs obligatoires manquants", body: "Licence, fréquence, couverture et contact. Rédaction possible immédiatement.", dotStyle: dot("#c88a2e"), act: () => go("home", "prefill") },
+          { title: "Parking occupancy — IDF · dormant depuis le 14 juillet", body: "2 champs restants. Sans reprise, le brouillon sera archivé le 1er septembre.", dotStyle: dot("#8a97ad"), act: () => go("home", "prefill") },
+          { title: "2 offres publiées annoncent des licences incohérentes", body: "La conservation déclarée dépasse la durée autorisée par la licence.", dotStyle: dot("#e0243c"), act: () => go("home", "coherence") }
+        ],
+        opps: [
+          { kind: "Réutilisation", score: "3 acteurs", title: "Votre flux qualité de l’air est recherché", body: "Trois projets cherchent exactement ce périmètre et cette fréquence.", act: () => go("home", "opp") },
+          { kind: "Économie", score: "doublon", title: "Bike counter et Bike counter history se recouvrent", body: "Fusionner évite d’entretenir deux fiches presque identiques.", act: () => go("home", "dupes") },
+          { kind: "Visibilité", score: "+40 %", title: "Ajouter la couverture géographique améliore le classement", body: "Vos offres sans périmètre sortent 40 % moins souvent dans le catalogue.", act: () => go("home", "preview") }
+        ],
+        quick: [
+          { label: "Compléter 3 brouillons", d: "M4 20h16M6 16l9.5-9.5a2.1 2.1 0 0 0-3-3L3 13v3h3z", act: () => go("home", "prefill") },
+          { label: "Vérifier la cohérence", d: "m5 12.5 4.5 4.5L19 7.5", act: () => go("home", "coherence") },
+          { label: "Prévisualiser mes 9 offres", d: "M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z", act: () => go("home", "preview") },
+          { label: "Qui consulte mes offres ?", d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.6 9.2a2.5 2.5 0 1 1 3.4 2.3", act: () => go("home", "results") }
+        ],
+        steps: null,
+        blocks: [
+          {
+            kicker: "Vos 3 brouillons", title: "Ce qui manque, brouillon par brouillon",
+            body: "Je rédige les champs depuis vos offres publiées les plus proches. Vous relisez avant que quoi que ce soit soit enregistré.",
+            items: [
+              { title: "Air quality feed", meta: "4 champs restants · publiable aujourd’hui", cta: "Compléter", act: () => go("home", "prefill") },
+              { title: "Parking occupancy — IDF", meta: "2 champs restants · dormant depuis le 14 juillet", cta: "Reprendre", act: () => go("home", "prefill") },
+              { title: "Bike counter history", meta: "1 champ restant · licence à confirmer", cta: "Compléter", act: () => go("home", "prefill") }
+            ]
+          },
+          {
+            kicker: "Vos 9 offres publiées", title: "Deux fiches méritent une correction",
+            body: "Rien de bloquant, mais ces écarts sont visibles par les acteurs qui consultent votre catalogue.",
+            items: [
+              { title: "Conservation supérieure à la licence", meta: "Air quality history et Bike counter", cta: "Corriger", act: () => go("home", "coherence") },
+              { title: "Deux fiches presque identiques", meta: "Bike counter et Bike counter history", cta: "Comparer", act: () => go("home", "dupes") }
+            ]
+          }
+        ]
+      },
+      contracts: {
+        label: "Mes contrats", meta: "4 en vigueur · 2 en attente de signature",
+        title: "Une clause a changé dans votre dos.",
+        body: "Le DPA Kuzzle retire le droit d’opposition à la clause 6.2. Deux échanges actifs héritent de ces termes dès la signature.",
+        action: "Examiner la clause 6.2",
+        why: "Vos trois autres DPA conservent cette clause à l’identique. La contre-proposition est déjà rédigée.",
+        cta: "Voir la contre-proposition", act: () => go("home", "thread"),
+        waitingLabel: "Sur vos contrats", oppsLabel: "Ce que je surveille pour vous",
+        waiting: [
+          { title: "DPA Kuzzle — clause 6.2 modifiée", body: "Droit d’opposition retiré. Contre-proposition rédigée, à envoyer.", dotStyle: dot("#e0243c"), act: () => go("home", "thread") },
+          { title: "DPA IDFM — expire dans 8 jours", body: "Sans signature, 2 échanges actifs seront suspendus.", dotStyle: dot("#c88a2e"), act: () => go("home", "opp") },
+          { title: "2 contrats prêts à signer", body: "Relus de votre côté, il ne manque que votre signature.", dotStyle: dot("#00a2ae"), act: () => go("home", "opp") },
+          { title: "Contrat DiRIF — absent alors qu’il est requis", body: "Deux offres de votre panier l’exigent avant tout accès.", dotStyle: dot("#8a97ad"), act: () => go("home", "dpa") }
+        ],
+        opps: [
+          { kind: "Écart", score: "3 clauses", title: "Le DPA IDFM diffère de vos autres accords", body: "Durée de conservation, sous-traitance et audit sont plus stricts.", act: () => go("home", "results") },
+          { kind: "Modèle", score: "—", title: "Vos 4 DPA pourraient partir d’un même modèle", body: "Cela réduirait la revue à la seule annexe technique.", act: () => go("home", "dpa") }
+        ],
+        quick: [
+          { label: "Signer 2 contrats", d: "M6 4h9l4 4v12H6zM14 4v5h5", act: () => go("home", "opp") },
+          { label: "Comparer mes DPA", d: "M4 6h16M4 12h16M4 18h10", act: () => go("home", "results") },
+          { label: "Impact sur les échanges", d: "M12 3 3 8v8l9 5 9-5V8z", act: () => go("home", "results") },
+          { label: "Expliquer une clause", d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 17h.01", act: () => go("home", "tour") }
+        ],
+        steps: {
+          title: "Où en est chaque contrat",
+          body: "Quatre accords, quatre états. Je vous signale celui qui bloque le reste.",
+          list: [
+            { n: "1", title: "DPA Kuzzle", body: "Clause 6.2 en litige — contre-proposition prête", tag: "Action", on: true },
+            { n: "2", title: "DPA IDFM", body: "Expire dans 8 jours", tag: "Urgent", on: true },
+            { n: "3", title: "DPA Ville de Paris", body: "En vigueur jusqu’au 31 mars", tag: "OK", on: false },
+            { n: "4", title: "DPA DiRIF", body: "À ouvrir — exigé par votre panier", tag: "À créer", on: false }
+          ]
+        },
+        blocks: [
+          {
+            kicker: "Clause 6.2 · DPA Kuzzle", title: "Ce que le retrait change concrètement",
+            body: "Sans droit d’opposition, vos utilisateurs finaux ne peuvent plus refuser le traitement. Deux échanges actifs héritent de ces termes dès la signature.",
+            items: [
+              { title: "Contre-proposition rédigée", meta: "Rétablit la clause dans sa version du 12 juin", cta: "Relire", act: () => go("home", "thread") },
+              { title: "Comparaison avec vos 4 autres DPA", meta: "Trois la conservent à l’identique", cta: "Comparer", act: () => go("home", "results") },
+              { title: "Échanges concernés", meta: "Qualité de l’air → Kuzzle, comptage vélo → Kuzzle", cta: "Voir", act: () => go("home", "results") }
+            ]
+          },
+          {
+            kicker: "Signatures en attente", title: "Deux contrats n’attendent que vous",
+            body: "Les deux ont été relus de votre côté. Le DPA IDFM expire dans 8 jours et suspendrait deux échanges.",
+            items: [
+              { title: "DPA IDFM", meta: "Expire dans 8 jours · 2 échanges suspendus sans signature", cta: "Signer", act: () => go("home", "opp") },
+              { title: "Conditions d’usage — Ville de Paris", meta: "Aucune réserve relevée", cta: "Signer", act: () => go("home", "opp") }
+            ]
+          }
+        ]
+      },
+      catalog: {
+        label: "Catalogue", meta: "1 248 offres · 21 correspondent à votre projet",
+        title: "21 offres correspondent à votre projet mobilité.",
+        body: "Six sont fortes sur les trois critères qui comptent chez vous : périmètre, fraîcheur et compatibilité de licence.",
+        action: "Voir les 6 correspondances fortes",
+        why: "DiRIF vient de publier un flux trafic horaire qui couvre l’A86 et l’A6, exactement votre zone.",
+        cta: "Ouvrir le classement", act: () => go("home", "results"),
+        waitingLabel: "Dans le catalogue", oppsLabel: "Repéré pour vous aujourd’hui",
+        waiting: [
+          { title: "DiRIF — flux trafic horaire publié hier", body: "Correspondance 92 %. Licence compatible, DPA à ouvrir.", dotStyle: dot("#00a2ae"), act: () => go("home", "opp") },
+          { title: "Votre baseline projet est incomplète", body: "Sans périmètre ni finalité d’usage, je classe les offres à l’aveugle.", dotStyle: dot("#c88a2e"), act: () => go("home", "prefill") },
+          { title: "3 offres suivies ont changé de licence", body: "Deux restent compatibles, une ne l’est plus.", dotStyle: dot("#8a97ad"), act: () => go("home", "results") }
+        ],
+        opps: [
+          { kind: "Correspondance", score: "92 %", title: "DiRIF — trafic horaire A86 / A6", body: "Même périmètre et mêmes horaires que votre projet.", act: () => go("home", "opp") },
+          { kind: "Correspondance", score: "87 %", title: "IDFM — fréquentation des gares", body: "Complète vos comptages vélo sur l’heure de pointe.", act: () => go("home", "opp") },
+          { kind: "Complément", score: "81 %", title: "Ville de Paris — comptage vélo", body: "Licence ouverte, aucun contrat à négocier.", act: () => go("home", "results") }
+        ],
+        quick: [
+          { label: "Chercher pour moi", d: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm5.5-1.5 4 4", act: () => go("home", "results") },
+          { label: "Depuis mon projet", d: "M4 6h16M4 12h16M4 18h10", act: () => go("home", "results") },
+          { label: "Compléter ma baseline", d: "M4 20h16M6 16l9.5-9.5a2.1 2.1 0 0 0-3-3L3 13v3h3z", act: () => go("home", "prefill") },
+          { label: "Comprendre le score", d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 17h.01", act: () => go("home", "tour") }
+        ],
+        steps: null,
+        blocks: [
+          {
+            kicker: "Vos 6 correspondances fortes", title: "Classées sur vos trois critères",
+            body: "Périmètre, fraîcheur et compatibilité de licence. Le score reflète l’écart avec ce que votre projet déclare.",
+            items: [
+              { title: "DiRIF — trafic horaire A86 / A6", meta: "92 % · fraîcheur 15 min · DPA à ouvrir", cta: "Ouvrir", act: () => go("home", "opp") },
+              { title: "IDFM — fréquentation des gares", meta: "87 % · fraîcheur 1 h · accord en vigueur", cta: "Ouvrir", act: () => go("home", "results") },
+              { title: "Ville de Paris — comptage vélo", meta: "81 % · licence ouverte, aucun contrat", cta: "Ouvrir", act: () => go("home", "results") }
+            ]
+          },
+          {
+            kicker: "Trois façons de chercher", title: "Dites-moi d’où partir",
+            body: "Une requête en clair, ou je repars de ce que vous avez déjà déclaré dans un projet ou une offre.",
+            items: [
+              { title: "Recherche libre", meta: "Décrivez ce que vous cherchez, je classe le catalogue", cta: "Chercher", act: () => go("home", "results") },
+              { title: "Depuis un projet", meta: "Fournisseurs et jeux de données qui collent au projet mobilité", cta: "Lancer", act: () => go("home", "results") },
+              { title: "Depuis une offre", meta: "Services complémentaires et ressources compatibles", cta: "Lancer", act: () => go("home", "results") }
+            ]
+          }
+        ]
+      },
+      basket: {
+        label: "Panier", meta: "8 offres · 4 étapes restantes avant envoi",
+        title: "Vous êtes à l’étape 2 sur 5 depuis trois jours.",
+        body: "Vos 8 offres sont sélectionnées, mais la baseline du projet reste incomplète : sans périmètre ni finalité d’usage, les demandes d’accès partiront affaiblies.",
+        action: "Ajuster la baseline du projet",
+        why: "Les deux champs manquants sont ceux que les fournisseurs regardent en premier pour accepter une demande.",
+        cta: "Compléter la baseline", act: () => go("home", "prefill"),
+        waitingLabel: "Dans votre panier", oppsLabel: "Ce qui améliorerait vos demandes",
+        waiting: [
+          { title: "Baseline incomplète — périmètre et finalité d’usage", body: "Bloque l’étape 2. Je peux les rédiger depuis votre projet mobilité.", dotStyle: dot("#c88a2e"), act: () => go("home", "prefill") },
+          { title: "2 offres exigent un DPA qui n’existe pas", body: "DiRIF et IDFM. Sans accord, la demande sera refusée.", dotStyle: dot("#e0243c"), act: () => go("home", "results") },
+          { title: "3 offres contiennent des données personnelles", body: "L’appariement doit être déclaré avant l’envoi.", dotStyle: dot("#8a97ad"), act: () => go("home", "results") },
+          { title: "5 offres ne sont rattachées à aucun projet", body: "Le rattachement conditionne la finalité déclarée.", dotStyle: dot("#8a97ad"), act: () => go("home", "results") }
+        ],
+        opps: [
+          { kind: "Panier", score: "6 offres", title: "6 correspondances fortes absentes du panier", body: "Elles couvrent les mêmes horaires que votre sélection actuelle.", act: () => go("home", "results") },
+          { kind: "Groupement", score: "2 DPA", title: "Un seul DPA pourrait couvrir DiRIF et IDFM", body: "Les deux acceptent le même modèle d’accord.", act: () => go("home", "opp") }
+        ],
+        quick: [
+          { label: "Relire le panier", d: "M6 4h12l1 16H5z", act: () => go("home", "results") },
+          { label: "Ajuster la baseline", d: "M4 20h16M6 16l9.5-9.5a2.1 2.1 0 0 0-3-3L3 13v3h3z", act: () => go("home", "prefill") },
+          { label: "Ouvrir les DPA manquants", d: "M6 4h9l4 4v12H6zM14 4v5h5", act: () => go("home", "results") },
+          { label: "Préparer les 8 demandes", d: "M4 12 20 4l-6.5 16-2.4-6.6z", act: () => go("home", "results") }
+        ],
+        steps: {
+          title: "Votre parcours panier",
+          body: "Cinq étapes avant l’envoi. Vous êtes bloqué à la deuxième.",
+          list: [
+            { n: "1", title: "Review the basket", body: "8 offres relues", tag: "Fait", on: false },
+            { n: "2", title: "Adjust the baseline", body: "Périmètre et finalité d’usage manquants", tag: "En cours", on: true },
+            { n: "3", title: "Assign to project", body: "5 offres sans projet rattaché", tag: "À faire", on: false },
+            { n: "4", title: "Pair the personal data", body: "3 offres avec données personnelles", tag: "À faire", on: false },
+            { n: "5", title: "Confirm & send", body: "8 demandes d’accès prêtes à partir", tag: "À faire", on: false }
+          ]
+        },
+        blocks: [
+          {
+            kicker: "Étape 2 · baseline", title: "Les deux champs qui vous bloquent",
+            body: "Ce sont ceux que les fournisseurs regardent en premier. Je peux les rédiger depuis votre projet mobilité, vous relisez.",
+            items: [
+              { title: "Périmètre géographique", meta: "Proposé : Métropole du Grand Paris, A86 et A6", cta: "Relire", act: () => go("home", "prefill") },
+              { title: "Finalité d’usage", meta: "Proposé : analyse de congestion aux heures de pointe", cta: "Relire", act: () => go("home", "prefill") }
+            ]
+          },
+          {
+            kicker: "Vos 8 offres au panier", title: "Ce qui bloquera l’envoi",
+            body: "Trois obstacles distincts. Aucun n’empêche de préparer les demandes, tous empêchent de les envoyer.",
+            items: [
+              { title: "2 offres exigent un DPA inexistant", meta: "DiRIF et IDFM — un seul accord peut couvrir les deux", cta: "Ouvrir", act: () => go("home", "opp") },
+              { title: "3 offres contiennent des données personnelles", meta: "L’appariement doit être déclaré avant l’envoi", cta: "Apparier", act: () => go("home", "results") },
+              { title: "5 offres sans projet rattaché", meta: "Le rattachement conditionne la finalité déclarée", cta: "Rattacher", act: () => go("home", "results") }
+            ]
+          }
+        ]
+      }
+    };
+  }
+
+  go(sec, view) {
+    this.setState({ sec, view: view || null, flash: "", lastAdd: 0 });
+    if (!view) setTimeout(() => this.scrollTo(sec), 30);
+  }
+
+  setPage(page) {
+    this.setState({ page, sec: "home", view: null, flash: "" });
+    const wrap = document.querySelector("[data-ai-scroll]");
+    if (wrap) wrap.scrollTop = 0;
+  }
+
+  scrollTo(sec) {
+    const wrap = document.querySelector("[data-ai-scroll]");
+    const el = wrap && wrap.querySelector('[data-sec="' + sec + '"]');
+    if (!wrap || !el) return;
+    wrap.scrollTop = Math.max(0, el.offsetTop - wrap.offsetTop - 10);
+  }
+
+  renderVals() {
+    const s = this.state, v = s.view;
+    const railStyle = (on) => ({
+      display: "flex", alignItems: "center", gap: 9, width: "100%", padding: "9px 10px", marginBottom: 2,
+      border: 0, borderRadius: 9, cursor: "pointer",
+      background: on ? "#17243f" : "transparent", color: on ? "#fff" : "#17243f",
+      font: (on ? "700" : "600") + " 12.5px/1.3 Inter,system-ui,sans-serif"
+    });
+    const dot = (c) => ({ flex: "none", width: 7, height: 7, borderRadius: "50%", background: c, marginTop: 6 });
+    const bar = (pct) => ({ display: "block", height: 4, borderRadius: 2, background: "#08ffad", width: pct + "%" });
+    const go = (sec, view) => this.go(sec, view);
+    const ctx = this.ctxDefs(go, dot)[s.page];
+    const det = (this.detailDefs()[s.page] || {})[v] || null;
+    const th = {
+      offers: { title: "Air quality feed — que faut-il pour publier ?", meta: "6 messages · vous et l’assistant",
+        turns: [
+          { me: true, t: "Il manque quoi exactement sur Air quality feed pour que je puisse publier ?" },
+          { t: "Quatre champs obligatoires : licence, fréquence de mise à jour, couverture géographique et contact référent. Les trois premiers, je peux les rédiger depuis Fleet telemetry — raw." },
+          { t: "Le contact référent est le seul que je ne peux pas déduire : il engage une personne nommée dans votre organisation." }
+        ] },
+      contracts: { title: "DPA Kuzzle ↔ Visions — revue des clauses", meta: "14 messages · juridique a répondu à 09:13",
+        turns: [
+          { me: true, t: "La clause 6.2 du DPA Kuzzle retire le droit d’opposition. Qu’est-ce que ça change pour nous ?" },
+          { t: "Deux échanges actifs héritent de ces termes : le flux qualité de l’air vers Kuzzle, et le comptage vélo. Sans droit d’opposition, vos utilisateurs finaux perdent la possibilité de refuser le traitement." },
+          { t: "J’ai rédigé une contre-proposition qui rétablit la clause dans sa version du 12 juin, et comparé avec vos quatre autres DPA : trois la conservent à l’identique." }
+        ] },
+      catalog: { title: "Trafic horaire — comment le score est calculé", meta: "5 messages · vous et l’assistant",
+        turns: [
+          { me: true, t: "Pourquoi DiRIF sort à 92 % et Kuzzle seulement à 74 % ?" },
+          { t: "DiRIF recouvre 94 % de votre périmètre déclaré et publie toutes les 15 minutes, ce que votre usage demande. Sa licence est compatible sans négociation." },
+          { t: "Kuzzle est plus frais encore, mais sa licence interdit la réutilisation à des fins de planification publique, qui est votre finalité déclarée. C’est ce point qui fait chuter le score." }
+        ] },
+      basket: { title: "Panier — pourquoi l’envoi est bloqué", meta: "7 messages · vous et l’assistant",
+        turns: [
+          { me: true, t: "Mes 8 offres sont sélectionnées, pourquoi je ne peux pas envoyer les demandes ?" },
+          { t: "L’étape 2 attend le périmètre et la finalité d’usage. Sans eux, la demande partirait sans justification d’usage, et les fournisseurs la refusent presque systématiquement." },
+          { t: "Ensuite, deux offres exigent un DPA qui n’existe pas encore. Un seul accord peut couvrir DiRIF et IDFM : les deux acceptent le même modèle." }
+        ] }
+    }[s.page];
+    const navStyle = (on) => ({
+      display: "block", width: "100%", textAlign: "left", padding: "8px 10px", border: 0, borderRadius: 8, cursor: "pointer",
+      background: on ? "#26344f" : "transparent", color: on ? "#fff" : "rgba(255,255,255,.6)",
+      font: (on ? "600" : "500") + " 12.5px/1 Inter,system-ui,sans-serif"
+    });
+    const stepRow = (on) => ({
+      display: "flex", alignItems: "flex-start", gap: 11, borderRadius: 12, padding: "11px 12px 12px",
+      border: on ? "1px solid #00a2ae" : "1px solid #e3e7ee", background: on ? "#fbfdfe" : "#fff"
+    });
+    const stepNum = (on) => ({
+      flex: "none", width: 24, height: 24, borderRadius: "50%", display: "grid", placeItems: "center",
+      background: on ? "#17243f" : "#eef1f6", color: on ? "#08ffad" : "#5d6b85",
+      font: "800 11px/1 Inter,system-ui,sans-serif"
+    });
+    const stepTag = (on) => ({
+      flex: "none", whiteSpace: "nowrap", borderRadius: 999, padding: "4px 8px",
+      background: on ? "#e3f7f8" : "#f4f6fa", color: on ? "#007f88" : "#8a97ad",
+      font: "700 9.5px/1 Inter,system-ui,sans-serif", letterSpacing: ".05em", textTransform: "uppercase"
+    });
+
+    return {
+      nav: [
+        { label: "Mes offres", act: () => this.setPage("offers"), style: navStyle(s.page === "offers") },
+        { label: "Mes contrats", act: () => this.setPage("contracts"), style: navStyle(s.page === "contracts") },
+        { label: "Catalogue", act: () => this.setPage("catalog"), style: navStyle(s.page === "catalog") },
+        { label: "Panier · " + s.basket, act: () => this.setPage("basket"), style: navStyle(s.page === "basket") }
+      ],
+      pageLabel: ctx.label,
+      pageMeta: s.page === "basket" ? s.basket + " offres · 4 étapes restantes avant envoi" : ctx.meta,
+      basketCount: String(s.basket),
+      ctxTitle: ctx.title,
+      ctxBody: ctx.body,
+      ctxAction: ctx.action,
+      ctxWhy: ctx.why,
+      ctxCta: ctx.cta,
+      ctxAct: ctx.act,
+      waitingLabel: ctx.waitingLabel,
+      waitingCount: String(ctx.waiting.length),
+      oppsLabel: ctx.oppsLabel,
+      oppsCount: String(ctx.opps.length),
+      vSteps: !v && !!ctx.steps,
+      stepsTitle: ctx.steps ? ctx.steps.title : "",
+      stepsBody: ctx.steps ? ctx.steps.body : "",
+      steps: (ctx.steps ? ctx.steps.list : []).map(t => ({
+        n: t.n, title: t.title, body: t.body, tag: t.tag,
+        rowStyle: stepRow(t.on), numStyle: stepNum(t.on), tagStyle: stepTag(t.on)
+      })),
+      open: s.open,
+      closed: !s.open,
+      openModal: () => this.setState({ open: true }),
+      closeModal: () => this.setState({ open: false }),
+      goHome: () => this.go("home"),
+      goThreads: () => this.go("home", "thread"),
+      goTour: () => this.go("home", "tour"),
+      backComplete: () => this.go("home"),
+      backMatch: () => this.go("home"),
+      backThreads: () => this.go("home"),
+      openThread: () => this.go("home", "thread"),
+
+      vHome: !v,
+      vBlocks: !v,
+      blocks: ctx.blocks,
+      vDetail: !!det,
+      vThread: v === "thread",
+      dKicker: det ? det.kicker : "",
+      dTitle: det ? det.title : "",
+      dBody: det ? det.body : "",
+      dHasFacts: !!(det && det.facts),
+      dFacts: (det && det.facts) || [],
+      dRows: ((det && det.rows) || [])
+        .filter(r => !(s.dropped || []).includes(s.page + "/" + v + "/" + r.label))
+        .map(r => ({
+          ...r,
+          pending: !(s.accepted || []).includes(s.page + "/" + v + "/" + r.label),
+          done: (s.accepted || []).includes(s.page + "/" + v + "/" + r.label),
+          doneLabel: this.doneLabel(r.cta),
+          revert: () => this.setState({
+            accepted: (s.accepted || []).filter(k => k !== s.page + "/" + v + "/" + r.label),
+            flash: "", lastAdd: 0
+          }),
+          dismissible: v !== "tour" && !/signer|refuser|détailler|y aller|^voir$/i.test(r.cta),
+          ctaStyle: {
+            height: 30, padding: "0 13px", borderRadius: 8, cursor: "pointer",
+            font: "700 11.5px/1 Inter,system-ui,sans-serif",
+            ...(/accepter|ajouter|au panier|inclure|valider|conserver/i.test(r.cta)
+              ? { border: 0, background: "#eafff6", color: "#0b6b48" }
+              : { border: "1px solid #17243f", background: "#17243f", color: "#fff" })
+          },
+          act: /panier|ajouter|inclure/i.test(r.cta)
+            ? () => this.addToBasket(r.label)
+            : () => this.accept(s.page + "/" + v + "/" + r.label, r.label, r.cta),
+          dismiss: () => this.setState({
+            dropped: [...(s.dropped || []), s.page + "/" + v + "/" + r.label],
+            flash: "« " + r.label + " » écartée de cette liste.",
+            lastAdd: 0, lastKind: "drop", lastKeys: [s.page + "/" + v + "/" + r.label]
+          })
+        })),
+      flash: s.flash || "",
+      undo: () => this.undo(),
+      dNote: det ? det.note : "",
+      dCta: det ? det.cta : "",
+      dFooterAct: det && /panier|ajouter les/i.test(det.cta)
+        ? () => this.addToBasket(det.title, (det.cta.match(/\d+/) || [1])[0] * 1)
+        : () => this.acceptAll(det, v),
+      vThread: v === "thread",
+      vTour: v === "tour",
+
+      rail: [
+        { label: "Pour vous", badge: "5", d: "M4 13h7V4H4v9zm9 7h7v-9h-7v9zM4 20h7v-4H4v4zM13 8h7V4h-7v4z", act: () => this.go("home"), style: railStyle(s.sec === "home" && v !== "tour") },
+        { label: "Completer", badge: "3", d: "M4 20h16M6 16l9.5-9.5a2.1 2.1 0 0 0-3-3L3 13v3h3z", act: () => this.go("home", "prefill"), style: railStyle(s.sec === "complete") },
+        { label: "Matcher", badge: "21", d: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm5.5-1.5 4 4", act: () => this.go("home", "results"), style: railStyle(s.sec === "match") },
+        { label: "Helper", badge: "", d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.6M12 17h.01", act: () => this.go("home", "tour"), style: railStyle(s.sec === "helper") },
+        { label: "Conversations", badge: "2", d: "M4.5 5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4.5 4V6a1 1 0 0 1 1-1z", act: () => this.go("home", "thread"), style: railStyle(s.sec === "threads") }
+      ],
+
+      quick: ctx.quick,
+      waiting: ctx.waiting,
+      opps: ctx.opps,
+
+      drafts: [
+        { title: "Air quality feed", meta: "4 champs obligatoires restants · le plus proche de la publication", cta: "Compléter", barStyle: bar(72), act: () => this.go("home", "prefill") },
+        { title: "Parking occupancy — IDF", meta: "2 champs restants · dormant depuis le 14 juillet", cta: "Compléter", barStyle: bar(58), act: () => this.go("home", "prefill") },
+        { title: "Bike counter history", meta: "1 champ restant · licence à confirmer", cta: "Compléter", barStyle: bar(86), act: () => this.go("home", "prefill") }
+      ],
+
+      fields: [
+        { label: "Description", conf: "confiance élevée", value: "Mesures horaires de qualité de l’air issues du réseau de capteurs fixes, agrégées par station et exposées en flux continu." },
+        { label: "Licence", conf: "confiance élevée", value: "Réutilisation autorisée avec mention de la source, sans redistribution brute à des tiers." },
+        { label: "Fréquence de mise à jour", conf: "confiance moyenne", value: "Toutes les heures, avec une latence de publication de 20 minutes." },
+        { label: "Couverture", conf: "confiance moyenne", value: "Métropole du Grand Paris, 47 stations actives." }
+      ],
+
+      matchEntries: [
+        { title: "Lancer une recherche", d: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm5.5-1.5 4 4", body: "Décrivez ce que vous cherchez en clair, je classe le catalogue.", act: () => this.go("home", "results") },
+        { title: "Correspondances depuis un projet", d: "M4 6h16M4 12h16M4 18h10", body: "Fournisseurs, jeux de données et services qui collent à votre projet.", act: () => this.go("home", "results") },
+        { title: "Correspondances depuis une offre", d: "M12 3 3 8v8l9 5 9-5V8z", body: "Services complémentaires, partenaires et ressources compatibles.", act: () => this.go("home", "results") }
+      ],
+
+      recents: [
+        { label: "Trafic horaire — Grand Paris", act: () => this.go("home", "results") },
+        { label: "Qualité de l’air, licence ouverte", act: () => this.go("home", "results") },
+        { label: "Télémétrie de flotte conforme RGPD", act: () => this.go("home", "results") }
+      ],
+
+      results: [
+        { score: "92", title: "DiRIF — trafic horaire A86 / A6", body: "Fraîcheur 15 min · licence compatible · DPA à ouvrir" },
+        { score: "87", title: "IDFM — fréquentation des gares", body: "Fraîcheur 1 h · licence compatible · accord en vigueur" },
+        { score: "81", title: "Ville de Paris — comptage vélo", body: "Fraîcheur quotidienne · licence ouverte" },
+        { score: "74", title: "Kuzzle — capteurs mobilité", body: "Fraîcheur 5 min · licence à négocier" }
+      ],
+
+      oppFacts: [
+        { k: "Périmètre", v: "A86 · A6" },
+        { k: "Fraîcheur", v: "15 minutes" },
+        { k: "Licence", v: "Compatible" }
+      ],
+
+      helpAsks: [
+        { label: "Que faut-il pour publier une offre ?", act: () => this.go("home", "thread") },
+        { label: "Qui voit mes brouillons ?", act: () => this.go("home", "thread") },
+        { label: "Comment fonctionne le score de correspondance ?", act: () => this.go("home", "thread") },
+        { label: "Différence entre DPA et conditions d’usage ?", act: () => this.go("home", "thread") }
+      ],
+
+      guides: [
+        { title: "Publier une offre", meta: "3 étapes · 2 min" },
+        { title: "Négocier un contrat", meta: "3 étapes · 3 min" },
+        { title: "Utiliser le panier", meta: "5 étapes · 4 min" },
+        { title: "Se repérer avec l’assistant", meta: "3 étapes · 2 min" }
+      ],
+
+      threads: [
+        { title: "DPA Kuzzle ↔ Visions — revue des clauses", meta: "Juridique a répondu · 09:13 · 14 messages", dotStyle: dot("#00a2ae"), act: () => this.go("home", "thread") },
+        { title: "Complétion — Air quality feed", meta: "4 champs proposés · hier", dotStyle: dot("#8a97ad"), act: () => this.go("home", "prefill") },
+        { title: "Recherche — trafic horaire Grand Paris", meta: "21 résultats · 11 août", dotStyle: dot("#8a97ad"), act: () => this.go("home", "results") },
+        { title: "Cohérence des licences", meta: "2 écarts relevés · 8 août", dotStyle: dot("#8a97ad"), act: () => this.go("home", "prefill") }
+      ],
+
+      thTitle: th.title,
+      thMeta: th.meta,
+      messages: th.turns.map(t => ({
+        text: t.t,
+        rowStyle: t.me ? { display: "flex", justifyContent: "flex-end" } : { display: "flex" },
+        bubbleStyle: {
+          maxWidth: t.me ? "74%" : "78%", borderRadius: 12, padding: "11px 13px",
+          background: t.me ? "#17243f" : "#f4f6fa", color: t.me ? "#fff" : "#17243f",
+          font: "500 12.5px/1.55 Inter,system-ui,sans-serif", textWrap: "pretty"
+        }
+      })),
+
+      sent: s.sent,
+
+      follow: [
+        { label: "Envoyer la contre-proposition", act: () => this.go("home", "thread") },
+        { label: "Voir l’impact sur les échanges", act: () => this.go("home", "results") }
+      ],
+
+      tourSteps: [
+        { n: "1", title: "Partez de Mes offres", body: "Chaque jeu de données ou service que vous partagez vit ici. Les brouillons remontent en tête avec ce qui leur manque." },
+        { n: "2", title: "Ouvrez le brouillon", body: "Un brouillon devient publiable une fois ses champs obligatoires remplis : licence, fréquence, couverture, contact." },
+        { n: "3", title: "Laissez l’assistant proposer", body: "Il propose des valeurs avec un niveau de confiance. Vous gardez celles qui conviennent, puis vous publiez." }
+      ],
+
+      draft: s.draft,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      onKey: (e) => { if (e.key === "Enter") this.send(); },
+      send: () => this.send()
+    };
+  }
+
+  send() {
+    const t = (this.state.draft || "").trim();
+    if (!t) return;
+    this.setState({ draft: "", sec: "threads", view: "thread", sent: [...this.state.sent, { text: t }] });
+  }
+}
+</script>
+</body>
+</html>

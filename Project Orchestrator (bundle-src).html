@@ -3,20 +3,18 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VisionsTrust — Project settings</title>
+<title>VisionsTrust — Project (Orchestrator view)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css"/>
 <link rel="stylesheet" href="catalogue.css"/>
-<link rel="stylesheet" href="offersettings.css"/>
-<link rel="stylesheet" href="projectsettings.css"/>
+<link rel="stylesheet" href="myoffers.css"/>
 <link rel="stylesheet" href="projects.css"/>
-<link rel="stylesheet" href="layout.css"/>
 </head>
 <body>
 <template id="__bundler_thumbnail" data-bg-color="#0b1220">
-<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#0b1220"/><g transform="translate(360,240)"><rect x="0" y="0" width="480" height="320" rx="28" fill="#152238"/><circle cx="240" cy="120" r="54" fill="none" stroke="#5b8cff" stroke-width="14"/><path d="M213 120l22 22 44-46" fill="none" stroke="#5b8cff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="130" y="212" width="220" height="16" rx="8" fill="#2c3f5f"/><rect x="170" y="248" width="140" height="16" rx="8" fill="#22334e"/></g></svg>
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#0b1220"/><g transform="translate(360,240)" fill="none" stroke="#5b8def" stroke-width="18"><rect x="0" y="0" width="480" height="320" rx="28"/><path d="M0 96h480"/><path d="M160 96v224"/></g><circle cx="480" cy="52" r="0" fill="#5b8def"/></svg>
 </template>
 <div id="root"></div>
 
@@ -24,13 +22,13 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
+<script type="text/babel" data-presets="react" src="tweaks-panel.jsx"></script>
 <script type="text/babel" data-presets="react" src="app.jsx"></script>
-<script type="text/babel" data-presets="react" src="layout.jsx"></script>
-<script type="text/babel" data-presets="react" src="projectsettings-data.jsx"></script>
 <script type="text/babel" data-presets="react" src="projects-data.jsx"></script>
+<script type="text/babel" data-presets="react" src="projectsettings-data.jsx"></script>
 <script type="text/babel" data-presets="react" src="offersettings-data.jsx"></script>
 <script type="text/babel" data-presets="react" src="projects-shared.jsx"></script>
 <script type="text/babel" data-presets="react" src="contract-terms.jsx"></script>
-<script type="text/babel" data-presets="react" src="projectsettings.jsx"></script>
+<script type="text/babel" data-presets="react" src="project-orch.jsx"></script>
 </body>
 </html>

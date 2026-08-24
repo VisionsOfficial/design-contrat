@@ -10,19 +10,39 @@ const { useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle } = window
 
 const LS_KEY = "vt.createOffer.v1";
 const STEPS = [
-  { k: "Step 1", t: "Your offering" },
-  { k: "Step 2", t: "Terms & pricing" },
-  { k: "Step 3", t: "Review & publish" },
+  { k: "Step 1", t: "Your offering", d: "Name, kind, description and the resources behind it." },
+  { k: "Step 2", t: "Terms & pricing", d: "Contractual terms, price, policies and negotiation." },
 ];
+const DRAFT_KEY = "vt.createOffer.draft.v1";
+const loadDraft = () => { try { const r = localStorage.getItem(DRAFT_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } };
+const agoLabel = (ts) => { const m = Math.round((Date.now() - ts) / 60000); if (m < 1) return "just now"; if (m < 60) return `${m} min ago`; const h = Math.round(m / 60); if (h < 24) return `${h} h ago`; return new Date(ts).toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
 const CATEGORIES = ["Job Offers", "Skills & competencies", "Training & learning", "Data analytics", "HR & recruitment", "Other"];
 const COUNTRIES = ["France", "Belgium", "Germany", "Netherlands", "Spain", "Italy", "European Union", "Worldwide"];
 
-// Quick-select profiles — each is a one-click transformation of the dataspace baseline.
+// Baseline choices — each applies a ready-made set of terms in one click, or opens the form.
 const PROFILES = [
-  { id: "recommended", tag: "Recommended", icon: "layers", t: "Dataspace default", d: "The balanced terms most participants already accept. A few key terms open to the agent.", meta: "Fastest to publish" },
-  { id: "open", icon: "triggers", t: "Open & fast", d: "Maximise auto-negotiation — the contract agent settles most terms so deals close on their own.", meta: "Most terms negotiable" },
-  { id: "strict", icon: "lock", t: "Strict & fixed", d: "Every term fixed exactly as published. Full control, no automatic negotiation.", meta: "All terms fixed" },
+  { id: "dataspace", tag: "Recommended", icon: "layers", t: "Dataspace Template", d: "The balanced terms most participants already accept. A few key terms open to the agent.", meta: "Fastest to publish" },
+  { id: "mine", icon: "user", t: "My Offer Template", d: "Your own saved provider defaults — stricter SLA and your pricing — reused across your offers.", meta: "Your saved defaults" },
+  { id: "manual", icon: "sliders", t: "Configure every term manually", d: "Open the full form and set each term yourself, starting from the dataspace values.", meta: "Full control" },
 ];
+
+// The provider's own saved baseline (from My baseline › provider role).
+const MY_TERM_BASELINE = {
+  delivery_deadline: { n: 3, u: "business days" }, availability: "99.9%", update_frequency: "Daily",
+  response_time: { n: 300, u: "ms", b: "p95" }, retention_period: "Contract duration",
+  support_channels: ["Email", "Ticketing portal", "Chat"], support_hours: "Extended 5×12",
+  support_severity: { Critical: { n: 2, u: "h" }, High: { n: 4, u: "h" }, Medium: { n: 1, u: "business days" }, Low: { n: 3, u: "business days" } },
+  contract_duration: { n: 24, u: "months" }, renewal_mode: "Automatic renewal", notice_nonrenewal: { n: 90, u: "days" },
+  term_convenience: "Yes", notice_early: { n: 60, u: "days" },
+  reversibility: { a: "Return + deletion + destruction certificate", b: "30 days" },
+  subcontracting: "Prior written approval", security_incident: "48h", ip_outputs: "Provider retains all",
+  governing_law: { a: "France", b: "Courts" }, force_majeure: "Standard + epidemic",
+  audit_right: { a: "Audit on notice", b: "Annual" }, confidentiality: { a: "Mutual NDA", b: "5 years" },
+};
+const MY_PRICING = { sub: "200", billing: "Monthly", setup: "0", api: "0", currency: "EUR", model: "Subscription" };
+const DS_PRICING = { sub: "0", billing: "One shot", setup: "60", api: "0", currency: "EUR", model: "Subscription" };
+const MY_POLICIES = { time_period: true, notification: true };
+const DS_POLICIES = { time_period: true, count: true };
 
 // ─── STATE ────────────────────────────────────────────────────────────────
 function seed() {
@@ -46,8 +66,46 @@ function seed() {
   };
 }
 function load() {
-  try { const raw = localStorage.getItem(LS_KEY); if (raw) return { ...seed(), ...JSON.parse(raw) }; } catch (e) {}
+  try { const raw = localStorage.getItem(LS_KEY); if (raw) { const st = { ...seed(), ...JSON.parse(raw) }; if (st.profile && !PROFILES.some((p) => p.id === st.profile)) st.profile = null; return st; } } catch (e) {}
   return seed();
+}
+
+// A half-finished offer, as it looks when the provider comes back to it.
+function draftSeed() {
+  const s = seed();
+  s.kind = "Data";
+  s.identity = { name: "Skills Graph API", caption: "Aggregated, consent-governed skills profiles", desc: "", category: "Skills & competencies", country: "" };
+  return s;
+}
+const DRAFT_FIELDS = [
+  { k: "name", label: "Offer name" },
+  { k: "caption", label: "Caption" },
+  { k: "desc", label: "Description" },
+  { k: "category", label: "Category" },
+  { k: "country", label: "Country" },
+];
+
+function DraftBanner({ st, savedAt, step, onDiscard }) {
+  const missing = DRAFT_FIELDS.filter((f) => !String(st.identity[f.k] || "").trim());
+  const done = DRAFT_FIELDS.length - missing.length;
+  const pct = Math.round((done / DRAFT_FIELDS.length) * 100);
+  return (
+    <div className="co-draftbar">
+      <div className="co-draftbar-top">
+        <span className="co-draftbar-pill"><Icon name="archive" size={13} /> Draft</span>
+        <div className="co-draftbar-tx">
+          <div className="co-draftbar-t">You are picking up an unfinished offer</div>
+          <div className="co-draftbar-d">Last saved {agoLabel(savedAt)} · stopped on {STEPS[step].t.toLowerCase()} · nothing is public until you publish.</div>
+        </div>
+        <button type="button" className="co-draftbar-discard" onClick={onDiscard}><Icon name="trash" size={14} /> Discard draft</button>
+      </div>
+      <div className="co-draftbar-bar" aria-hidden="true"><i style={{ width: pct + "%" }} /></div>
+      <div className="co-draftbar-meta">
+        <span><b>{done}/{DRAFT_FIELDS.length}</b> essentials filled</span>
+        {missing.length ? <span className="co-draftbar-miss">Still missing: {missing.map((m) => m.label).join(", ")}</span> : <span className="co-draftbar-ok"><Icon name="check" size={13} /> Essentials complete</span>}
+      </div>
+    </div>
+  );
 }
 
 const NEGOTIABLE_FIELDS = ALL_FIELDS.filter((f) => f.type !== "date");
@@ -159,15 +217,15 @@ function StepEssentials({ st, set }) {
   );
 }
 
-// ─── DATASPACE DEFAULT HERO (Step 2, priority) ──────────────────────────────
-function DataspaceHero({ onAdopt, onManual }) {
-  const [picked, setPicked] = useState("recommended");
+// ─── BASELINE PICKER (Step 2, priority) ─────────────────────────────────────
+// Clicking a card applies it straight away — no confirmation step. What appears below
+// the row (preview vs. full form) is driven by which card is selected.
+function DataspaceHero({ picked, onPick }) {
   const WHY = [
     { ic: "share", t: "Interoperable", d: "Your offer speaks the same terms as the rest of the dataspace." },
     { ic: "clock", t: "Faster deals", d: "Takers rarely contest the norm — the agent settles matching requests." },
     { ic: "refresh", t: "Always current", d: "Terms left on the default track future dataspace updates." },
   ];
-  const negFor = (id) => id === "open" ? NEGOTIABLE_FIELDS.length : id === "strict" ? 0 : recommendedNegCount;
   return (
     <div className="co-ds">
       <div className="co-ds-top">
@@ -181,23 +239,62 @@ function DataspaceHero({ onAdopt, onManual }) {
         ))}
       </div>
       <div className="co-ds-pk">
-        <div className="co-ds-pk-lab">Quick select — pick a starting profile</div>
+        <div className="co-ds-pk-lab">Pick a starting point — applied instantly</div>
         <div className="co-presets">
           {PROFILES.map((p) => (
-            <button key={p.id} type="button" className={`co-preset ${picked === p.id ? "on" : ""}`} onClick={() => setPicked(p.id)} aria-pressed={picked === p.id}>
+            <button key={p.id} type="button" className={`co-preset ${picked === p.id ? "on" : ""}`} onClick={() => onPick(p.id)} aria-pressed={picked === p.id}>
               {p.tag && <span className="co-preset-tag">{p.tag}</span>}
               <span className="co-preset-check"><Icon name="check" size={13} /></span>
               <span className="co-preset-ic"><Icon name={p.icon} size={17} /></span>
               <span className="co-preset-t">{p.t}</span>
               <span className="co-preset-d">{p.d}</span>
-              <span className="co-preset-meta"><Icon name="triggers" size={10} /> {negFor(p.id)} of {NEGOTIABLE_FIELDS.length} terms negotiable</span>
             </button>
           ))}
         </div>
       </div>
-      <div className="co-ds-foot">
-        <button type="button" className="co-ds-apply" onClick={() => onAdopt(picked)}><Icon name="check" size={17} /> Adopt “{PROFILES.find((p) => p.id === picked).t}” &amp; continue</button>
-        <button type="button" className="co-ds-manual" onClick={onManual}>Or configure every term manually</button>
+    </div>
+  );
+}
+
+// ─── APPLIED-VALUES PREVIEW (shown under the row for the two baselines) ──────
+const PREVIEW_SECTIONS = ["sla", "duration", "termination", "clauses"];
+function BaselinePreview({ source, st, onEdit }) {
+  const p = PROFILES.find((x) => x.id === source);
+  const groups = [
+    { label: "Pricing", icon: "coin", rows: [
+      ["Pricing model", st.pricing.model],
+      ["Subscription price", `${st.pricing.sub} ${st.pricing.currency}`],
+      ["Billing period", st.pricing.billing],
+      ["Setup fee", `${st.pricing.setup} ${st.pricing.currency}`],
+    ] },
+    { label: "Usage policies", icon: "shield", rows: [
+      ["Policies applied", POLICIES.filter((x) => st.policies[x.id]).map((x) => x.t).join(", ") || "None"],
+    ] },
+    ...PREVIEW_SECTIONS.map((id) => {
+      const s = SECTIONS.find((x) => x.id === id);
+      return { label: s.title, icon: s.icon, rows: sectionFields(s).map((f) => [f.label, fmtVal(f, st.values[f.id])]) };
+    }),
+  ];
+  const total = groups.reduce((n, g) => n + g.rows.length, 0);
+  return (
+    <div className="co-prev">
+      <div className="co-prev-head">
+        <span className="co-prev-ic"><Icon name="check" size={18} /></span>
+        <div className="co-prev-tx">
+          <div className="co-prev-t">“{p.t}” applied — {total} terms set</div>
+          <div className="co-prev-d">These are the values now attached to your offer. Every one of them stays editable.</div>
+        </div>
+        <button type="button" className="co-prev-edit" onClick={onEdit}><Icon name="edit" size={13} /> Adjust terms</button>
+      </div>
+      <div className="co-prev-grid">
+        {groups.map((g) => (
+          <div className="co-prev-grp" key={g.label}>
+            <div className="co-prev-grp-t"><Icon name={g.icon} size={13} /> {g.label}</div>
+            {g.rows.map(([k, v]) => (
+              <div className="co-prev-row" key={k}><span className="co-prev-k">{k}</span><span className="co-prev-v">{v || "—"}</span></div>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -361,7 +458,7 @@ function PersonalDataCard({ st, set }) {
 }
 
 // ─── STEP 2 ───────────────────────────────────────────────────────────────
-function StepTerms({ st, set, applyProfile, resetProfile }) {
+function StepTerms({ st, set, applyProfile }) {
   const secSummary = (secId) => {
     const s = SECTIONS.find((x) => x.id === secId); const fl = sectionFields(s);
     const neg = fl.filter((f) => f.type !== "date" && st.neg[f.id]).length;
@@ -373,176 +470,52 @@ function StepTerms({ st, set, applyProfile, resetProfile }) {
     return <>{onDef === total && <span className="co-badge-def"><Icon name="check" size={10} /> On default</span>}{neg > 0 && <span className="co-badge-neg"><Icon name="triggers" size={10} /> {neg}</span>}</>;
   };
   const first = (secId) => { const s = SECTIONS.find((x) => x.id === secId); return sectionFields(s).slice(0, 3).map((f) => fmtVal(f, st.values[f.id])).join(" · "); };
-  const profileName = st.profile && st.profile !== "manual" ? PROFILES.find((p) => p.id === st.profile)?.t : null;
 
   return (
     <div className="co-main-inner">
       <h1 className="co-h1">Terms &amp; pricing</h1>
       <p className="co-h1-sub">The terms your offer is published with. Start from the dataspace default — then change only what matters to you.</p>
 
-      {!st.profile && <DataspaceHero onAdopt={applyProfile} onManual={() => applyProfile("manual")} />}
+      <DataspaceHero picked={st.profile} onPick={applyProfile} />
 
-      {st.profile && (
-        <>
-          <div className="co-applied">
-            <span className="co-applied-ic"><Icon name="check" size={20} /></span>
-            <div className="co-applied-main">
-              <div className="co-applied-t">{profileName ? `“${profileName}” terms applied` : "Configuring terms manually"}</div>
-              <div className="co-applied-d">{profileName ? "Every contractual term is set from the dataspace default. Open any section below to adjust it — or continue straight to review." : "All terms start from the dataspace default. Adjust anything below."}</div>
-            </div>
-            <button type="button" className="co-applied-change" onClick={resetProfile}><Icon name="refresh" size={13} /> Change</button>
-          </div>
+      <div className="co-below" key={st.profile || "none"}>
+        {(st.profile === "dataspace" || st.profile === "mine") &&
+          <BaselinePreview source={st.profile} st={st} onEdit={() => applyProfile("manual")} />}
 
-          <PricingCard st={st} set={set} />
-          <PoliciesCard st={st} set={set} />
-          <SectionCard icon="clock" title="Service levels (SLA)" summary={first("sla")} pills={pills("sla")}><TermFields section={SECTIONS.find((s) => s.id === "sla")} st={st} set={set} /></SectionCard>
-          <PenaltiesCard st={st} set={set} />
-          <SectionCard icon="hourglass" title="Duration & renewal" summary={first("duration")} pills={pills("duration")}><TermFields section={SECTIONS.find((s) => s.id === "duration")} st={st} set={set} /></SectionCard>
-          <SectionCard icon="danger" title="Termination" summary={first("termination")} pills={pills("termination")}><TermFields section={SECTIONS.find((s) => s.id === "termination")} st={st} set={set} /></SectionCard>
-          <PersonalDataCard st={st} set={set} />
-          <NegotiationCard st={st} set={set} />
-        </>
-      )}
-    </div>
-  );
-}
-
-// ─── STEP 3 — REVIEW ────────────────────────────────────────────────────────
-function StepReview({ st, goTo }) {
-  const id = st.identity;
-  const p = st.pricing;
-  const negTotal = NEGOTIABLE_FIELDS.filter((f) => st.neg[f.id]).length;
-  const selPol = POLICIES.filter((x) => st.policies[x.id]);
-  const negTag = <span className="co-rev-neg"><Icon name="triggers" size={9} /> Neg.</span>;
-  const Item = ({ k, children }) => <div className="co-rev-item"><span className="co-rev-k">{k}</span><span className="co-rev-v">{children}</span></div>;
-  const Sec = ({ icon, title, step, children }) => (
-    <div className="co-rev-sec">
-      <div className="co-rev-head"><span className="co-rev-ic"><Icon name={icon} size={15} /></span><span className="co-rev-h">{title}</span><button type="button" className="co-rev-edit" onClick={() => goTo(step)}><Icon name="edit" size={12} /> Edit</button></div>
-      <div className="co-rev-grid">{children}</div>
-    </div>
-  );
-  const termItems = (secId) => { const s = SECTIONS.find((x) => x.id === secId); return sectionFields(s).map((f) => <Item key={f.id} k={f.label}>{fmtVal(f, st.values[f.id])}{f.type !== "date" && st.neg[f.id] && negTag}</Item>); };
-
-  return (
-    <div className="co-main-inner">
-      <h1 className="co-h1">Review &amp; publish</h1>
-      <p className="co-h1-sub">A last look before your offer goes live on the catalogue. Edit any section, or publish now.</p>
-      <div className="co-rev">
-        <div className="co-rev-hero">
-          <div className="co-rev-logo">{id.name ? id.name.slice(0, 4).toUpperCase() : "TECHNÈ"}</div>
-          <div className="co-rev-main">
-            <h2 className="co-rev-title">{id.name || "Untitled offer"}<span className={`os-kind-pill ${st.kind === "Service" ? "svc" : "data"}`}>{st.kind === "Service" ? <Icon name="triggers" size={12} /> : <Icon name="database" size={12} />} {st.kind}</span>{st.personalData.enabled && <span className="os-kind-pill pd"><Icon name="lock" size={11} /> Personal data</span>}</h2>
-            <p className="co-rev-sub">{id.caption || "No caption yet."}</p>
-          </div>
-        </div>
-
-        <Sec icon="user" title="Offering" step={0}>
-          <Item k="Name">{id.name || "—"}</Item>
-          <Item k="Category">{id.category || "—"}</Item>
-          <Item k="Country / region">{id.country || "—"}</Item>
-          <Item k="Description">{id.desc ? (id.desc.length > 80 ? id.desc.slice(0, 80) + "…" : id.desc) : "—"}</Item>
-        </Sec>
-        <Sec icon="coin" title="Pricing" step={1}>
-          <Item k="Subscription">{p.sub} {p.currency} · {p.billing}</Item>
-          <Item k="Setup fee">{p.setup} {p.currency}</Item>
-          <Item k="Cost per API call">{p.api} {p.currency}</Item>
-        </Sec>
-        <Sec icon="shield" title="Usage policies" step={1}>
-          {selPol.length ? <div className="os-ov-tags" style={{ padding: "6px 0" }}>{selPol.map((x) => <span key={x.id} className="pill pill-primary">{x.t}</span>)}</div> : <div className="os-ov-empty">No policy selected.</div>}
-        </Sec>
-        <Sec icon="clock" title="Service levels (SLA)" step={1}>{termItems("sla")}</Sec>
-        <Sec icon="shield" title="Commitments & penalties" step={1}>
-          {st.rules.map((r, i) => <Item key={r._id} k={`Rule ${i + 1}`}>{r.commitment_concerned} → {r.consequence_type}</Item>)}
-        </Sec>
-        <Sec icon="hourglass" title="Duration & renewal" step={1}>{termItems("duration")}</Sec>
-        <Sec icon="danger" title="Termination" step={1}>{termItems("termination")}</Sec>
-        <Sec icon="lock" title="Personal data & GDPR" step={1}>
-          {!st.personalData.enabled ? <div className="os-ov-empty">No personal data — no additional obligations.</div> : st.kind === "Data"
-            ? <><Item k="Controller">{st.personalData.controller || "—"}</Item><Item k="Legal basis">{st.personalData.legalBasis}</Item><Item k="Data subjects">{(st.personalData.subjectCategories || []).join(", ") || "—"}</Item></>
-            : <><Item k="Role">{st.personalData.role}</Item><Item k="Purpose">{st.personalData.purpose || "—"}</Item><Item k="Operations">{(st.personalData.operations || []).join(", ") || "—"}</Item></>}
-        </Sec>
-        <Sec icon="triggers" title="Negotiation & acceptance" step={1}>
-          <Item k="Baseline (no negotiation)">{st.baselineMode === "auto" ? "Auto-accept" : "Review first"}</Item>
-          <Item k="Contract agent">{st.autoAgent ? "On" : "Off"}</Item>
-          <Item k="Terms">{negTotal} negotiable · {NEGOTIABLE_FIELDS.length - negTotal} fixed</Item>
-        </Sec>
+        {st.profile === "manual" && (
+          <>
+            <PricingCard st={st} set={set} />
+            <PoliciesCard st={st} set={set} />
+            <SectionCard icon="clock" title="Service levels (SLA)" summary={first("sla")} pills={pills("sla")}><TermFields section={SECTIONS.find((s) => s.id === "sla")} st={st} set={set} /></SectionCard>
+            <PenaltiesCard st={st} set={set} />
+            <SectionCard icon="hourglass" title="Duration & renewal" summary={first("duration")} pills={pills("duration")}><TermFields section={SECTIONS.find((s) => s.id === "duration")} st={st} set={set} /></SectionCard>
+            <SectionCard icon="danger" title="Termination" summary={first("termination")} pills={pills("termination")}><TermFields section={SECTIONS.find((s) => s.id === "termination")} st={st} set={set} /></SectionCard>
+            <PersonalDataCard st={st} set={set} />
+            <NegotiationCard st={st} set={set} />
+          </>
+        )}
       </div>
     </div>
-  );
-}
-
-// ─── AGENT WINDOW (floating) ────────────────────────────────────────────────
-function AgentWindow({ st, set }) {
-  const [desc, setDesc] = useState("");
-  const [url, setUrl] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(null);
-  const [err, setErr] = useState(null);
-
-  const generate = async () => {
-    if (busy || (!desc.trim() && !url.trim())) return;
-    setBusy(true); setErr(null); setDone(null);
-    const sys = `You help a provider draft a data/service offering for VisionsTrust, a European data-space marketplace. From the user's short brief, produce marketing-quality offer copy. Return ONLY a JSON object: {"name": string (max 6 words), "caption": string (ONE sentence, max 69 chars, the unique value), "description": string (2-3 short paragraphs, plain text), "kind": "Data" | "Service", "category": one of ["Job Offers","Skills & competencies","Training & learning","Data analytics","HR & recruitment","Other"]}. No markdown, no prose outside the JSON.`;
-    const user = `Brief: ${desc || "(none)"}${url ? `\nReference URL: ${url}` : ""}\nCurrent kind guess: ${st.kind}. Produce the JSON now.`;
-    try {
-      const reply = await window.claude.complete({ system: sys, messages: [{ role: "user", content: user }], max_tokens: 700 });
-      const j = JSON.parse(reply.slice(reply.indexOf("{"), reply.lastIndexOf("}") + 1));
-      set((s) => {
-        if (typeof j.name === "string") s.identity.name = j.name;
-        if (typeof j.caption === "string") s.identity.caption = j.caption.slice(0, 69);
-        if (typeof j.description === "string") s.identity.desc = j.description;
-        if (j.kind === "Data" || j.kind === "Service") { s.kind = j.kind; s.personalData._kind = j.kind; }
-        if (CATEGORIES.includes(j.category)) s.identity.category = j.category;
-      });
-      setDone(true);
-    } catch (e) { setErr("Couldn't generate just now. Please try again."); }
-    finally { setBusy(false); }
-  };
-
-  return (
-    <aside className="co-agent-dock" aria-label="Assistant AI">
-      <div className="co-agent-hero">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.4 5.3 4.3 9.2 9.6 9.6v.8C16.3 12.8 12.4 16.7 12 22h-.8C10.8 16.7 6.9 12.8 1.6 12.4v-.8C6.9 11.2 10.8 7.3 11.2 2z" /></svg>
-        <h2>Let's get started with Assistant AI</h2>
-      </div>
-      <div className="co-agent-body">
-        <div className="co-ai-who"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.4 5.3 4.3 9.2 9.6 9.6v.8C16.3 12.8 12.4 16.7 12 22h-.8C10.8 16.7 6.9 12.8 1.6 12.4v-.8C6.9 11.2 10.8 7.3 11.2 2z" /></svg>Assistant AI</div>
-        <div className="co-ai-intro">
-          <p>Welcome Education data Provider 👋</p>
-          <p>I'm Assistant AI, your virtual assistant.</p>
-          <p>I'm here to help you structure and launch a data and/or services offering on VisionsTrust in 2 steps.</p>
-          <p>Shall we get started?</p>
-          <p>To begin with, I need to better understand the offering you would like to highlight.</p>
-        </div>
-        <div>
-          <label className="co-ai-lab">Describe your offering in a few words.</label>
-          <textarea className="co-ai-ta" style={{ marginTop: 6 }} value={desc} placeholder="It's a data offer..." onChange={(e) => setDesc(e.target.value)} />
-        </div>
-        <div>
-          <label className="co-ai-lab">Upload a document presenting your offering.</label>
-          <div className="co-ai-drop" style={{ marginTop: 6 }}>Drop your documents <b>Browse</b></div>
-          <div className="co-ai-note">Formats: Word, PDF - Max size: 100MB</div>
-        </div>
-        <div>
-          <label className="co-ai-lab">Add the URL that describes your offering.</label>
-          <input className="co-ai-url" style={{ marginTop: 6 }} value={url} placeholder="www.visionspol.eu" onChange={(e) => setUrl(e.target.value)} />
-        </div>
-        <button type="button" className="co-ai-gen" onClick={generate} disabled={busy || (!desc.trim() && !url.trim())}>
-          {busy ? <span className="la-typing" style={{ padding: 0 }}><i /><i /><i /></span> : <><Icon name="sparkle" size={15} /> Generate</>}
-        </button>
-        {done && <div className="co-ai-ok"><Icon name="check" size={16} /><span>Draft ready — your name, caption and description are filled in. Review and edit them above.</span></div>}
-        {err && <div className="co-ai-err">{err}</div>}
-      </div>
-    </aside>
   );
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────
 function CreateOfferApp() {
-  const [t, setTweak] = useTweaks({ offerKind: "Data", startStep: "1 · Offering", pdOn: false });
+  const [t, setTweak] = useTweaks({ offerKind: "Data", startStep: "1 · Offering", pdOn: false, pageState: "New offer" });
+  const isDraft = t.pageState === "Resuming a draft";
   const [st, setSt] = useState(load);
   const [step, setStep] = useState(0);
   const [published, setPublished] = useState(false);
+  const draft0 = loadDraft();
+  const [savedAt, setSavedAt] = useState(draft0 ? draft0.savedAt : null);
+  const [draftDismissed, setDraftDismissed] = useState(false);
+  const [toast, setToast] = useState(false);
+
+  const saveDraft = () => {
+    const ts = Date.now();
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: ts, step, st })); } catch (e) {}
+    setSavedAt(ts); setToast(true); setTimeout(() => setToast(false), 2600);
+  };
 
   const set = (mut) => setSt((prev) => { const d = clone(prev); mut(d); return d; });
 
@@ -550,19 +523,26 @@ function CreateOfferApp() {
   // Mirror tweaks → state
   useEffect(() => { if (t.offerKind !== st.kind) set((s) => { s.kind = t.offerKind; s.personalData._kind = t.offerKind; }); }, [t.offerKind]);
   useEffect(() => { if (t.pdOn !== st.personalData.enabled) set((s) => { s.personalData.enabled = t.pdOn; }); }, [t.pdOn]);
-  useEffect(() => { const n = { "1 · Offering": 0, "2 · Terms": 1, "3 · Review": 2 }[t.startStep]; if (n != null && n !== step) setStep(n); }, [t.startStep]);
+  useEffect(() => { const n = { "1 · Offering": 0, "2 · Terms": 1 }[t.startStep]; if (n != null && n !== step) setStep(n); }, [t.startStep]);
+  const firstRun = useRef(true);
+  useEffect(() => {
+    const first = firstRun.current; firstRun.current = false;
+    setDraftDismissed(false);
+    if (isDraft) { setSt(draftSeed()); setSavedAt(Date.now() - 2 * 864e5); }
+    else if (!first) { setSt(seed()); setSavedAt(null); }
+  }, [t.pageState]);
 
   const applyProfile = (id) => set((s) => {
     s.profile = id;
-    if (id === "manual") return;
-    // reset values to baseline default
-    ALL_FIELDS.forEach((f) => { s.values[f.id] = clone(f.def); });
-    s.policies = { time_period: true, count: true };
-    if (id === "recommended") { ALL_FIELDS.forEach((f) => { s.neg[f.id] = !!f.neg; }); s.autoAgent = true; s.baselineMode = "auto"; }
-    if (id === "open") { NEGOTIABLE_FIELDS.forEach((f) => { s.neg[f.id] = true; }); s.autoAgent = true; s.baselineMode = "auto"; }
-    if (id === "strict") { ALL_FIELDS.forEach((f) => { s.neg[f.id] = false; }); s.autoAgent = false; s.baselineMode = "review"; }
+    if (id === "manual") return; // keep whatever is currently set; the form opens below
+    ALL_FIELDS.forEach((f) => {
+      s.values[f.id] = clone(id === "mine" && MY_TERM_BASELINE[f.id] !== undefined ? MY_TERM_BASELINE[f.id] : f.def);
+      s.neg[f.id] = !!f.neg;
+    });
+    s.pricing = { ...s.pricing, ...(id === "mine" ? MY_PRICING : DS_PRICING) };
+    s.policies = { ...(id === "mine" ? MY_POLICIES : DS_POLICIES) };
+    s.autoAgent = true; s.baselineMode = "auto";
   });
-  const resetProfile = () => set((s) => { s.profile = null; });
 
   const canContinue = step === 0 ? !!st.identity.name.trim() : true;
   const goTo = (n) => setStep(n);
@@ -570,7 +550,7 @@ function CreateOfferApp() {
   return (
     <div className="co-shell">
       <header className="co-topbar">
-        <div className="co-crumb"><a href="My Offers.html">My offers</a><span className="sep">/</span><b>Create</b></div>
+        <div className="co-crumb"><a href="My Offers.html">My offers</a><span className="sep">/</span><b>Create</b>{isDraft && !draftDismissed && <span className="co-crumb-pill">Draft</span>}</div>
         <div className="co-top-actions">
           <button type="button" className="co-top-btn" aria-label="Basket"><Icon name="cart" size={18} /><span className="co-top-dot">2</span></button>
           <button type="button" className="co-top-btn" aria-label="Language"><Icon name="translate" size={18} /></button>
@@ -580,38 +560,44 @@ function CreateOfferApp() {
         </div>
       </header>
 
-      <nav className="co-steps" aria-label="Progress">
-        <div className="co-steps-inner">
+      <div className="co-layout co-layout-v">
+        <nav className="co-vsteps" aria-label="Progress">
+          <div className="co-vsteps-label">Create an offer</div>
           {STEPS.map((s, i) => (
-            <button key={s.k} type="button" className={`co-step ${i === step ? "active" : i < step ? "done" : ""}`} onClick={() => (i < step || i <= step) && setStep(i)} disabled={i > step && !st.identity.name.trim()}>
+            <button key={s.k} type="button" className={`co-vstep ${i === step ? "active" : i < step ? "done" : ""}`} onClick={() => setStep(i)} disabled={i > step && !st.identity.name.trim()} aria-current={i === step ? "step" : undefined}>
               <span className="co-step-n">{i < step ? <Icon name="check" size={15} /> : i + 1}</span>
-              <span className="co-step-tx"><span className="co-step-k">{s.k}</span><span className="co-step-t">{s.t}</span></span>
+              <span className="co-vstep-tx"><span className="co-step-k">{s.k}</span><span className="co-step-t">{s.t}</span><span className="co-vstep-d">{s.d}</span></span>
             </button>
           ))}
+          <div className="co-vsteps-draft">
+            <button type="button" className="co-draft-btn" onClick={saveDraft}><Icon name="archive" size={14} /> Save as draft</button>
+            <span className="co-draft-note">{savedAt ? `Draft saved ${agoLabel(savedAt)}` : "Nothing saved yet — you can come back later."}</span>
+          </div>
+          {step === 0 && <GuidePanel st={st} />}
+        </nav>
+        <div className="co-col">
+          {isDraft && !draftDismissed && <DraftBanner st={st} savedAt={savedAt} step={step} onDiscard={() => { setDraftDismissed(true); setSt(seed()); setSavedAt(null); setStep(0); setTweak("pageState", "New offer"); }} />}
+          <div className="co-main">
+            {step === 0 && <StepEssentials st={st} set={set} />}
+            {step === 1 && <StepTerms st={st} set={set} applyProfile={applyProfile} />}
+          </div>
         </div>
-      </nav>
-
-      <div className={`co-layout ${step === 0 ? "with-rails" : ""}`}>
-        {step === 0 && <GuidePanel st={st} />}
-        <div className="co-main">
-          {step === 0 && <StepEssentials st={st} set={set} />}
-          {step === 1 && <StepTerms st={st} set={set} applyProfile={applyProfile} resetProfile={resetProfile} />}
-          {step === 2 && <StepReview st={st} goTo={goTo} />}
-        </div>
-        {step === 0 && <AgentWindow st={st} set={set} />}
       </div>
 
       <footer className="co-foot">
         <div className="co-foot-inner">
           {step > 0 ? <button type="button" className="co-btn ghost" onClick={() => setStep(step - 1)}><Icon name="chevronLeft" size={16} /> Back</button> : <span />}
-          <span className="co-foot-hint"><Icon name="check" size={14} /> Progress saved automatically</span>
+          <span className="co-foot-hint"><Icon name="check" size={14} /> {savedAt ? `Draft saved ${agoLabel(savedAt)}` : "Progress saved automatically"}</span>
           <div className="co-foot-actions">
-            {step < 2
+            <button type="button" className="co-btn ghost" onClick={saveDraft}><Icon name="archive" size={16} /> Save as draft</button>
+            {step < STEPS.length - 1
               ? <button type="button" className="co-btn primary" disabled={!canContinue} onClick={() => setStep(step + 1)}>Continue <Icon name="arrowRight" size={16} /></button>
               : <button type="button" className="co-btn publish" onClick={() => setPublished(true)}><Icon name="check" size={16} /> Publish offer</button>}
           </div>
         </div>
       </footer>
+
+      {toast && <div className="co-toast" role="status"><Icon name="check" size={16} /> Draft saved — you can close this page and pick it up later.</div>}
 
       {published && (
         <div className="co-modal-bd" onClick={() => setPublished(false)}>
@@ -632,7 +618,8 @@ function CreateOfferApp() {
         <TweakRadio label="Offer kind" value={t.offerKind} options={["Data", "Service"]} onChange={(v) => setTweak("offerKind", v)} />
         <TweakToggle label="Involves personal data" value={t.pdOn} onChange={(v) => setTweak("pdOn", v)} />
         <TweakSection label="Preview" />
-        <TweakRadio label="Jump to step" value={t.startStep} options={["1 · Offering", "2 · Terms", "3 · Review"]} onChange={(v) => setTweak("startStep", v)} />
+        <TweakRadio label="Page state" value={t.pageState} options={["New offer", "Resuming a draft"]} onChange={(v) => setTweak("pageState", v)} />
+        <TweakRadio label="Jump to step" value={t.startStep} options={["1 · Offering", "2 · Terms"]} onChange={(v) => setTweak("startStep", v)} />
       </TweaksPanel>
     </div>
   );

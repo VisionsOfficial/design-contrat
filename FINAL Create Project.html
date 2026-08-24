@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VisionsTrust — Basket · merged flow (packages + personal data)</title>
+<title>VisionsTrust — Create project</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css"/>
-<link rel="stylesheet" href="layout.css"/>
 <link rel="stylesheet" href="catalogue.css"/>
 <link rel="stylesheet" href="offersettings.css"/>
-<link rel="stylesheet" href="basket.css"/>
-<link rel="stylesheet" href="basket2.css"/>
-<link rel="stylesheet" href="basket-step3.css"/>
-<link rel="stylesheet" href="basket3.css"/>
-<link rel="stylesheet" href="basket-pii.css"/>
+<link rel="stylesheet" href="projectsettings.css"/>
+<link rel="stylesheet" href="final-createoffer.css"/>
+<link rel="stylesheet" href="createproject.css"/>
 </head>
-<body>
+<body class="co-body">
+<template id="__bundler_thumbnail" data-bg-color="#0e1a2b">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#0e1a2b"/><rect x="360" y="240" width="480" height="320" rx="28" fill="#ffffff"/><rect x="410" y="300" width="230" height="26" rx="13" fill="#0e1a2b"/><rect x="410" y="358" width="380" height="16" rx="8" fill="#c9d3e0"/><rect x="410" y="396" width="300" height="16" rx="8" fill="#c9d3e0"/><rect x="410" y="470" width="150" height="44" rx="22" fill="#2f6df6"/></svg>
+</template>
 <div id="root"></div>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -25,18 +25,10 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script type="text/babel" data-presets="react" src="app.jsx"></script>
-<script type="text/babel" data-presets="react" src="layout.jsx"></script>
-<script type="text/babel" data-presets="react" src="catalogue-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="offersettings-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket3-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket-pii-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="projectsettings-data.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket-step3-form.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket3-guide.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket3-explain.jsx"></script>
 <script type="text/babel" data-presets="react" src="tweaks-panel.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket-pii2.jsx"></script>
-<script type="text/babel" data-presets="react" src="basket4.jsx"></script>
+<script type="text/babel" data-presets="react" src="offersettings-data.jsx"></script>
+<script type="text/babel" data-presets="react" src="projectsettings-data.jsx"></script>
+<script type="text/babel" data-presets="react" src="createoffer-fields.jsx"></script>
+<script type="text/babel" data-presets="react" src="final-createproject.jsx"></script>
 </body>
 </html>

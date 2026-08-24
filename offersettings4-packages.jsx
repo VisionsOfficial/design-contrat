@@ -15,6 +15,7 @@
   { id: "r_score", name: "risk_scoring_service", kind: "Service", meta: "Processing service · async" },
   { id: "r_onboard", name: "guided_onboarding", kind: "Service", meta: "Human support · 5 business days" }];
 
+  const MAX_PKG = 3; // a taker can only compare so many formulas — cap the offer at 3.
   const resById = (id) => RESOURCES.find((r) => r.id === id);
   const onKeys = (o) => Object.keys(o || {}).filter((k) => o[k]).sort();
 
@@ -106,6 +107,7 @@
     const issues = pkIssues(pk);
     const diff = pkDiff(st, pk);
     const canDel = st.packages.length > 1;
+    const canAdd = st.packages.length < MAX_PKG;
     const nRes = pkRes(st, pk).length;
     return (
       <div className={`pkx-card${pk.recommended ? " reco" : ""}${issues.length ? " warn" : ""}${open ? " open" : ""}`}>
@@ -121,7 +123,7 @@
         </span>
         <span className="pkx-tools">
           <button type="button" className={`pk-tool${pk.recommended ? " on" : ""}`} title="Highlight as recommended" onClick={() => set((s) => { s.packages.forEach((x, j) => { x.recommended = j === i ? !pk.recommended : false; }); })}><Icon name="star" size={14} /></button>
-          <button type="button" className="pk-tool" title="Duplicate package" onClick={() => set((s) => { s.packages.splice(i + 1, 0, { ...clone(pk), _id: "pk" + Math.random().toString(36).slice(2, 7), name: (pk.name || "Package") + " copy", recommended: false }); })}><Icon name="copy" size={14} /></button>
+          <button type="button" className="pk-tool" title={canAdd ? "Duplicate package" : `Maximum ${MAX_PKG} packages`} disabled={!canAdd} onClick={() => canAdd && set((s) => { s.packages.splice(i + 1, 0, { ...clone(pk), _id: "pk" + Math.random().toString(36).slice(2, 7), name: (pk.name || "Package") + " copy", recommended: false }); })}><Icon name="copy" size={14} /></button>
           <button type="button" className="pk-tool danger" title="Remove package" disabled={!canDel} onClick={() => { if (canDel) set((s) => { s.packages.splice(i, 1); }); }}><Icon name="trash" size={14} /></button>
         </span>
       </div>
@@ -153,6 +155,74 @@
 
   }
 
+  // ─── comparison table ───────────────────────────────────────────────────────
+  // Side-by-side read of every formula, so the provider sees the ladder the taker
+  // will see: is each step up actually worth its price?
+  function PackageCompare({ st }) {
+    const { pkFmt, pkNum, PKG_POL } = window.OS4;
+    const [open, setOpen] = useState(true);
+    const pkgs = st.packages || [];
+    const cur = (pk) => pk.currency || st.pricing.currency;
+    const priceOf = (pk) => String(pk.sub == null ? "" : pk.sub).trim() === "" ? null : pkNum(pk.sub);
+    const cheapest = Math.min(...pkgs.map((p) => priceOf(p) == null ? Infinity : priceOf(p)));
+
+    const allRes = RESOURCES.filter((r) => (st.resources || []).includes(r.id));
+    const rows = [
+      { k: "Price", cell: (pk) => priceOf(pk) == null ? <span className="pkc-none">Not set</span> : <><b>{pkFmt(pk.sub)} {cur(pk)}</b><span className="pkc-sub">{pk.billing || "Monthly"}</span></> },
+      { k: "Set-up fee", cell: (pk) => pkNum(pk.setup) ? <>{pkFmt(pk.setup)} {cur(pk)}</> : <span className="pkc-none">None</span> },
+      { k: "Per API call", cell: (pk) => pkNum(pk.api) ? <>{pkFmt(pk.api)} {cur(pk)}</> : <span className="pkc-none">None</span> },
+      { k: "Price negotiable", cell: (pk) => pk.neg
+        ? <span className="pkc-yes"><Icon name="check" size={13} /> {(pk.accept || {}).min || (pk.accept || {}).max ? `${(pk.accept || {}).min || "—"}–${(pk.accept || {}).max || "—"} ${cur(pk)}` : "Yes"}</span>
+        : <span className="pkc-no">Fixed</span> },
+      { k: "Resources", cell: (pk) => <b>{pkRes(st, pk).length}</b> },
+    ];
+
+    return (
+      <div className={`pkc${open ? " open" : ""}`}>
+        <button type="button" className="pkc-head" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+          <Icon name="chevronDown" size={16} />
+          <span className="pkc-head-t">Compare packages</span>
+          <span className="pkc-head-d">Side by side, exactly as a taker reads the ladder.</span>
+        </button>
+        {open &&
+        <div className="pkc-scroll">
+          <table className="pkc-table">
+            <thead>
+              <tr>
+                <th className="pkc-rowh"><span className="sr-only">Criterion</span></th>
+                {pkgs.map((pk, i) => (
+                  <th key={pk._id} className={pk.recommended ? "reco" : ""}>
+                    <span className="pkc-name">{pk.name || `Package ${i + 1}`}</span>
+                    {pk.recommended && <span className="pkc-tag"><Icon name="star" size={10} /> Recommended</span>}
+                    {priceOf(pk) != null && priceOf(pk) === cheapest && pkgs.length > 1 && <span className="pkc-tag low">Entry price</span>}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.k}><th scope="row">{r.k}</th>{pkgs.map((pk) => <td key={pk._id} className={pk.recommended ? "reco" : ""}>{r.cell(pk)}</td>)}</tr>
+              ))}
+              <tr className="pkc-group"><th scope="row" colSpan={pkgs.length + 1}>Resources included</th></tr>
+              {allRes.map((r) => (
+                <tr key={r.id}>
+                  <th scope="row" className="pkc-item">{r.name}<span className="pkc-sub">{r.kind}</span></th>
+                  {pkgs.map((pk) => <td key={pk._id} className={pk.recommended ? "reco" : ""}>{pkRes(st, pk).includes(r.id) ? <span className="pkc-yes"><Icon name="check" size={14} /></span> : <span className="pkc-no">—</span>}</td>)}
+                </tr>
+              ))}
+              <tr className="pkc-group"><th scope="row" colSpan={pkgs.length + 1}>Usage policies</th></tr>
+              {PKG_POL.map((p) => (
+                <tr key={p.id}>
+                  <th scope="row" className="pkc-item">{p.t}</th>
+                  {pkgs.map((pk) => <td key={pk._id} className={pk.recommended ? "reco" : ""}>{pkPol(st, pk)[p.id] ? <span className="pkc-yes"><Icon name="check" size={14} /></span> : <span className="pkc-no">—</span>}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>}
+      </div>);
+  }
+
   // ─── packages list, rendered inside the Pricing & Packages panel ────────────
   function PackagesSection({ st, set }) {
     const { pkIssues, EMPTY_PKG } = window.OS4;
@@ -162,17 +232,20 @@
     return (
       <>
       <div className="pk-head">
-        <div><h3>Packages</h3><p>{pkgs.length} variant{pkgs.length > 1 ? "s" : ""} · shown to takers in this order.</p></div>
-        <button type="button" className="os-add-btn" onClick={() => set((s) => { s.packages.push(EMPTY_PKG(s)); })}><Icon name="plus" size={14} /> Add a package</button>
+        <div><h3>Packages</h3><p>{pkgs.length} of {MAX_PKG} variants · shown to takers in this order.</p></div>
+        <button type="button" className="os-add-btn" disabled={pkgs.length >= MAX_PKG} title={pkgs.length >= MAX_PKG ? `Maximum ${MAX_PKG} packages per offer` : undefined} onClick={() => set((s) => { if (s.packages.length < MAX_PKG) s.packages.push(EMPTY_PKG(s)); })}><Icon name="plus" size={14} /> Add a package</button>
       </div>
 
       {incomplete.length > 0 && <div className="pk-alert"><Icon name="danger" size={15} /><span><b>{incomplete.length} package{incomplete.length > 1 ? "s" : ""} incomplete</b> — a package can only be published once its price and billing period are filled in.</span></div>}
       {empty.length > 0 && <div className="pk-alert"><Icon name="danger" size={15} /><span><b>{empty.length} package{empty.length > 1 ? "s" : ""} with no resource</b> — pick at least one resource so takers get access to something.</span></div>}
 
+      {pkgs.length >= MAX_PKG && <div className="pk-cap"><Icon name="info" size={14} /><span>Maximum reached — an offer carries at most <b>{MAX_PKG} packages</b>. Remove one to add another.</span></div>}
+
       <div className="pkx-list">{pkgs.map((pk, i) => <PackageRow key={pk._id} i={i} st={st} set={set} />)}</div>
+      {pkgs.length > 1 && <PackageCompare st={st} />}
     </>);
 
   }
 
-  window.OS4Packages = { PackagesSection, RESOURCES, resById, pkDiff, pkRes, pkPol, OVS, onKeys };
+  window.OS4Packages = { PackagesSection, PackageCompare, MAX_PKG, RESOURCES, resById, pkDiff, pkRes, pkPol, OVS, onKeys };
 })();

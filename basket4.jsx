@@ -36,7 +36,8 @@ const FIELD = Object.fromEntries([...ALL_FIELDS, ...EXTRA_FIELDS].map((f) => [f.
 // packages the packaged offer sells, and which fields the provider left open to
 // auto-accept. ITEMS / USER_BASELINE / NEG_IDS are read at call time, so applying
 // a scenario and remounting the app is enough.
-const ALL_ITEMS = window.BasketData.ITEMS;
+const ALL_ITEMS = [...window.BasketData.ITEMS, ...window.BK4PII2.EXTRA_ITEMS];
+const itemsByIds = (...ids) => ids.map((id) => ALL_ITEMS.find((o) => o.id === id)).filter(Boolean);
 const FULL_BASELINE = window.BasketData.USER_BASELINE;
 // The only baseline fields a taker may edit / counter. Everything else a provider
 // publishes is fixed.
@@ -58,6 +59,11 @@ const SCENARIOS = {
   one_package: { label: "Un seul package", items: () => [packagedWith(1)], neg: BASE_NEG, baseline: FULL_BASELINE },
   no_negotiable: { label: "Aucun champ à négocier", items: () => [...flatOffers(), packagedWith(3)], neg: [], baseline: FULL_BASELINE },
   no_baseline: { label: "Aucune baseline définie", items: () => [...flatOffers(), packagedWith(3)], neg: WIDE_NEG, baseline: {} },
+  // ── Personal-data pairing scenarios ──────────────────────────────────────
+  pii_data: { label: "PII · 1 offre data", items: () => itemsByIds("data_offer_1", "consume_any_data"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_service: { label: "PII · 1 offre service", items: () => itemsByIds("skills_analytics_pii"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_multi: { label: "PII · plusieurs data + services", items: () => itemsByIds("data_offer_1", "learner_records_pii", "consume_any_data", "skills_analytics_pii"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_blocked: { label: "PII · aucune association possible", items: () => itemsByIds("data_offer_1", "learning_reco_pii"), neg: BASE_NEG, baseline: FULL_BASELINE, projectPool: "none" },
 };
 const SCENARIO_IDS = Object.keys(SCENARIOS);
 let SCENARIO = "many_offers";
@@ -802,7 +808,7 @@ const stepsFor = (hasPII) => hasPII
       { n: 1, label: "Review the basket", icon: "layers" },
       { n: 2, label: "Adjust the baseline", icon: "scale" },
       { n: 3, label: "Assign to project", icon: "folder" },
-      { n: 4, label: "Assign a consuming service", icon: "shield" },
+      { n: 4, label: "Pair the personal data", icon: "shield" },
       { n: 5, label: "Confirm & send", icon: "check" },
     ]
   : [
@@ -1025,7 +1031,7 @@ function BasketApp({ help = "tour" }) {
   const [projectId, setProjectId] = useState(null);
   const [newProj, setNewProj] = useState({ title: "", caption: "", desc: "", category: "Browse", gov: { purpose: "", benefit: "", processing: "", availDate: "", legalBasis: "Consent", legalDesc: "" }, clauses: npClauseDefaults() });
   const [memberOpen, setMemberOpen] = useState(false);
-  const [piiSel, setPiiSel] = useState([]);
+  const [piiKeys, setPiiKeys] = useState([]);
   const [moreOpen, setMoreOpen] = useState(false);
   const [drawer, setDrawer] = useState(null);       // { offerId, mode }
   const guide = useBasketGuide();
@@ -1129,18 +1135,20 @@ function BasketApp({ help = "tour" }) {
   const target = assignTab === "existing" ? (PROJECTS.find((p) => p.id === projectId)?.name || "") : (newProj.title || "New project");
   const targetCaption = assignTab === "existing" ? (PROJECTS.find((p) => p.id === projectId)?.caption || "") : newProj.caption;
   // ── personal data ──────────────────────────────────────────────────────────
-  const P = window.BK4PII;
-  const piiOffers = selectedOffers.filter(P.isPiiOffer);
-  const hasPII = piiOffers.length > 0;
+  // One pairing task per personal-data offer in the basket, whichever side it sits
+  // on (dataset needing processors, or service needing datasets). Selections are
+  // stored as canonical pair keys, so both directions stay consistent.
+  const P2 = window.BK4PII2;
+  const piiTasks = P2.buildTasks(selectedOffers, { newProject: assignTab === "new", projectPool: SCENARIOS[SCENARIO].projectPool });
+  const hasPII = piiTasks.length > 0;
   const STEPS = stepsFor(hasPII);
   const confirmStep = STEPS.length;
   const piiStep = hasPII ? 4 : null;
-  const candidates = P.candidatesFor(selectedOffers, { newProject: assignTab === "new" });
-  const eligible = [...candidates.project, ...candidates.basket].filter(P.isEligible);
-  const piiServices = eligible.filter((s) => piiSel.includes(s.id));
-  const piiNegCount = piiServices.filter((s) => s.source !== "project").length;
-  const piiAmendRefs = piiServices.filter((s) => s.source === "project").map((s) => s.contractRef).filter(Boolean);
-  const piiPick = (id) => setPiiSel((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  const piiS = P2.stats(piiTasks, piiKeys, selectedOffers);
+  const piiToggle = (task, candId) => setPiiKeys((prev) => {
+    const k = task.need === "service" ? P2.pairKey(task.id, candId) : P2.pairKey(candId, task.id);
+    return prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k];
+  });
   const empty = selectedOffers.length === 0 && savedOffers.length === 0;
   const drawerOffer = drawer ? byId(drawer.offerId) : null;
 
@@ -1166,7 +1174,7 @@ function BasketApp({ help = "tour" }) {
                     <div className="bk-next-h">What is left to do</div>
                     <ol className="bk-next-list">
                       <li><span className="bk-next-n">1</span><div><b>Providers respond to your counter-offers</b><em>Nothing to do on your side — each response lands in your notifications and in the project's contract list.</em></div></li>
-                      {hasPII && <li><span className="bk-next-n">2</span><div><b>{piiNegCount > 0 ? `${piiNegCount} data ⇄ service negotiation${piiNegCount !== 1 ? "s" : ""} opened` : "Personal-data usage recorded"}</b><em>{piiServices.map((s) => s.name).join(", ")} {piiServices.length !== 1 ? "are" : "is"} authorised to process {piiOffers.map((o) => o.name).join(", ")}. Personal-data terms are locked for every party{piiAmendRefs.length ? `; contract${piiAmendRefs.length !== 1 ? "s" : ""} ${piiAmendRefs.join(", ")} received a personal-data rider` : ""}.</em></div></li>}
+                      {hasPII && <li><span className="bk-next-n">2</span><div><b>{piiS.newCount > 0 ? `${piiS.newCount} dataset ⇄ service negotiation${piiS.newCount !== 1 ? "s" : ""} opened` : "Personal-data usage recorded"}</b><em>{piiS.pairs.length} pairing{piiS.pairs.length !== 1 ? "s" : ""} recorded: {piiS.pairs.map((p) => `${p.data.name} ⇄ ${p.svc.name}`).join(", ")}. Personal-data terms are locked for every party{piiS.amendRefs.length ? `; contract${piiS.amendRefs.length !== 1 ? "s" : ""} ${piiS.amendRefs.join(", ")} received a personal-data rider` : ""}.</em></div></li>}
                       <li><span className="bk-next-n">3</span><div><b>Activate the exchange in the project</b><em>Once every contract is signed, switch the project live to start the data exchange.</em></div></li>
                     </ol>
                   </div>
@@ -1249,7 +1257,7 @@ function BasketApp({ help = "tour" }) {
                       newProj={newProj} setNewProj={setNewProj} memberOpen={memberOpen} setMemberOpen={setMemberOpen} />
                     <div className="bk-nav">
                       <button type="button" className="bk-btn ghost" onClick={() => setStep(2)}><Icon name="chevronLeft" size={15} /> Back</button>
-                      <button type="button" className="bk-confirm" disabled={!canAssign} onClick={() => goTo(4)}>{hasPII ? <>Assign a consuming service <Icon name="arrowRight" size={15} /></> : <>Review &amp; confirm <Icon name="arrowRight" size={15} /></>}</button>
+                      <button type="button" className="bk-confirm" disabled={!canAssign} onClick={() => goTo(4)}>{hasPII ? <>Pair the personal data <Icon name="arrowRight" size={15} /></> : <>Review &amp; confirm <Icon name="arrowRight" size={15} /></>}</button>
                     </div>
                   </div>
                 )}
@@ -1257,13 +1265,15 @@ function BasketApp({ help = "tour" }) {
                 {/* ─── EXTRA STEP · ASSIGN A CONSUMING SERVICE (personal data only) ─── */}
                 {hasPII && step === piiStep && (
                   <div className="bk-stepbody">
-                    <div className="bk-step-intro"><h2>Assign the consuming service offers</h2><p>This basket contains personal data. Pick every service offer that will process it — one negotiation is opened per pairing, and the controller's terms carry into each one unchanged.</p></div>
-                    <P.PiiAssignStep dataOffers={piiOffers} candidates={candidates} sel={piiSel} onPick={piiPick} projectName={target} newProject={assignTab === "new"} />
+                    <div className="bk-step-intro"><h2>Pair the personal data</h2><p>{piiTasks.length === 1 ? "One offer in this basket carries personal data. It cannot be contracted until the other side of the exchange is designated." : `${piiTasks.length} offers in this basket carry personal data. Each one needs the other side of the exchange designated before anything can be contracted.`}</p></div>
+                    <P2.PiiAssignStep tasks={piiTasks} keys={piiKeys} onToggle={piiToggle} s={piiS} projectName={target} newProject={assignTab === "new"} onRemoveOffer={removeFromSelected} />
                     <div className="bk-nav">
                       <button type="button" className="bk-btn ghost" onClick={() => setStep(3)}><Icon name="chevronLeft" size={15} /> Back</button>
-                      {piiServices.length > 0
+                      {piiS.ready
                         ? <button type="button" className="bk-confirm" onClick={() => goTo(confirmStep)}>Review &amp; confirm <Icon name="arrowRight" size={15} /></button>
-                        : <span className="pii-nav-hint">Select at least one eligible service offer to continue</span>}
+                        : <span className="pii-nav-hint">{piiS.blocked.length > 0
+                            ? `${piiS.blocked.length} offer${piiS.blocked.length !== 1 ? "s" : ""} cannot be paired — remove ${piiS.blocked.length !== 1 ? "them" : "it"} from the basket to continue`
+                            : `Assign the remaining ${piiS.open.length} personal-data offer${piiS.open.length !== 1 ? "s" : ""} to continue`}</span>}
                     </div>
                   </div>
                 )}
@@ -1273,12 +1283,12 @@ function BasketApp({ help = "tour" }) {
                   <div className="bk-stepbody">
                     <div className="bk-step-intro"><h2>Confirm &amp; send</h2><p>Check every decision below, then send to the provider{selectedOffers.length !== 1 ? "s" : ""}.{hasPII ? " The personal-data section recaps the locked declarations and the services authorised to process the dataset." : ""}</p></div>
                     <ConfirmStep rows={rows} pricing={st.pricing} proposals={proposals} packageBy={st.packageBy} target={target} targetCaption={targetCaption} onView={(id) => openDrawer(id, "review")} />
-                    {hasPII && piiServices.length > 0 && <P.PiiConfirmBlock dataOffers={piiOffers} services={piiServices} />}
+                    {hasPII && piiS.pairs.length > 0 && <P2.PiiConfirmBlock s={piiS} />}
                     <div className="bk-nav">
                       <button type="button" className="bk-btn ghost" onClick={() => setStep(confirmStep - 1)}><Icon name="chevronLeft" size={15} /> Back</button>
-                      <button type="button" className="bk-confirm" disabled={pendingCount > 0 || (hasPII && piiServices.length === 0)} onClick={() => setSent(true)}>
-                        {hasPII && piiNegCount > 0
-                          ? <>Accept · create {piiNegCount} data ⇄ service negotiation{piiNegCount !== 1 ? "s" : ""}{piiAmendRefs.length ? ` · amend ${piiAmendRefs.join(", ")}` : ""} <Icon name="check" size={16} /></>
+                      <button type="button" className="bk-confirm" disabled={pendingCount > 0 || (hasPII && !piiS.ready)} onClick={() => setSent(true)}>
+                        {hasPII && piiS.newCount > 0
+                          ? <>Accept · create {piiS.newCount} dataset ⇄ service negotiation{piiS.newCount !== 1 ? "s" : ""}{piiS.amendRefs.length ? ` · amend ${piiS.amendRefs.join(", ")}` : ""} <Icon name="check" size={16} /></>
                           : <>Accept <Icon name="check" size={16} /></>}
                       </button>
                     </div>

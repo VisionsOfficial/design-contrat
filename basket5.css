@@ -1,0 +1,13 @@
+.bk-assign-tools{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:14px 0 4px}
+.bk-assign-bulk{display:flex;align-items:center;gap:10px}
+.bk-assign-bulk-l{font-size:13px;font-weight:600;color:#5b6472}
+.bk-projsel select{min-width:250px}
+.bk-assignlist{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.bk-assignrow{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:14px;padding:14px 16px;border:1px solid #e4e8ee;border-radius:12px;background:#fff}
+.bk-assignrow.sel{border-color:rgba(0,162,174,.45);background:rgba(0,162,174,.04)}
+.bk-assignrow-pick{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.bk-assignrow-cap{font-size:12px;color:#8b95a3;max-width:250px;text-align:right}
+.bk-assign-split{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(0,162,174,.07);color:#0b5c63;font-size:13px;line-height:1.45}
+.bk-ct-list{display:flex;flex-direction:column;gap:10px}
+.bk-ct-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:rgba(0,162,174,.1);color:#0b5c63;font-size:12px;font-weight:600}
+@media(max-width:720px){.bk-assignrow{grid-template-columns:38px 1fr}.bk-assignrow-pick{grid-column:1/-1;align-items:stretch}.bk-assignrow-cap{text-align:left}.bk-projsel select{min-width:0;width:100%}}

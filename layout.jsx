@@ -172,8 +172,8 @@
         {actions}
         <div className="vt-actionbar">
           {cartHref
-            ? <a className="vt-abtn" href={cartHref} aria-label={`Basket, ${cartCount} items`}><Icon name="cart" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</a>
-            : <button type="button" className="vt-abtn" aria-label={`Basket, ${cartCount} items`}><Icon name="cart" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</button>}
+            ? <a className="vt-abtn" href={cartHref} aria-label={`Contract request, ${cartCount} items`}><Icon name="contracts" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</a>
+            : <button type="button" className="vt-abtn" aria-label={`Contract request, ${cartCount} items`}><Icon name="contracts" />{cartCount > 0 && <span className="vt-badge">{cartCount}</span>}</button>}
           <span className="vt-sep" aria-hidden="true" />
           <div className="vt-menu-wrap">
             <button type="button" className={`vt-abtn ${menu === "lang" ? "on" : ""}`} onClick={() => toggle("lang")} aria-haspopup="true" aria-expanded={menu === "lang"} aria-label="Language"><Icon name="translate" /></button>

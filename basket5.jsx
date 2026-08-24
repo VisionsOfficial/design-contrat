@@ -1,4 +1,7 @@
-// VisionsTrust — Basket · refonte 23/07.
+// VisionsTrust — Basket · merged flow (basket + personal-data steps).
+// Same page and same display as the standard basket; when a personal-data offer is in
+// the basket, one extra step is inserted (assign the consuming services) and the recap
+// carries the personal-data blocks. Without personal data the flow is untouched.
 // A single "Review & negotiate" step (steps 1+2 merged). Each offer in the basket
 // is one card: its terms are checked against the buyer's acceptance baseline, gaps
 // are surfaced, and the buyer settles the offer through three unambiguous per-offer
@@ -33,7 +36,8 @@ const FIELD = Object.fromEntries([...ALL_FIELDS, ...EXTRA_FIELDS].map((f) => [f.
 // packages the packaged offer sells, and which fields the provider left open to
 // auto-accept. ITEMS / USER_BASELINE / NEG_IDS are read at call time, so applying
 // a scenario and remounting the app is enough.
-const ALL_ITEMS = window.BasketData.ITEMS;
+const ALL_ITEMS = [...window.BasketData.ITEMS, ...window.BK4PII2.EXTRA_ITEMS];
+const itemsByIds = (...ids) => ids.map((id) => ALL_ITEMS.find((o) => o.id === id)).filter(Boolean);
 const FULL_BASELINE = window.BasketData.USER_BASELINE;
 // The only baseline fields a taker may edit / counter. Everything else a provider
 // publishes is fixed.
@@ -55,6 +59,11 @@ const SCENARIOS = {
   one_package: { label: "Un seul package", items: () => [packagedWith(1)], neg: BASE_NEG, baseline: FULL_BASELINE },
   no_negotiable: { label: "Aucun champ à négocier", items: () => [...flatOffers(), packagedWith(3)], neg: [], baseline: FULL_BASELINE },
   no_baseline: { label: "Aucune baseline définie", items: () => [...flatOffers(), packagedWith(3)], neg: WIDE_NEG, baseline: {} },
+  // ── Personal-data pairing scenarios ──────────────────────────────────────
+  pii_data: { label: "PII · 1 offre data", items: () => itemsByIds("data_offer_1", "consume_any_data"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_service: { label: "PII · 1 offre service", items: () => itemsByIds("skills_analytics_pii"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_multi: { label: "PII · plusieurs data + services", items: () => itemsByIds("data_offer_1", "learner_records_pii", "consume_any_data", "skills_analytics_pii"), neg: BASE_NEG, baseline: FULL_BASELINE },
+  pii_blocked: { label: "PII · aucune association possible", items: () => itemsByIds("data_offer_1", "learning_reco_pii"), neg: BASE_NEG, baseline: FULL_BASELINE, projectPool: "none" },
 };
 const SCENARIO_IDS = Object.keys(SCENARIOS);
 let SCENARIO = "many_offers";
@@ -611,7 +620,7 @@ function BaselineRecall() {
       <div className="bk-baseline-bar">
         <span className="bk-baseline-ic"><Icon name="sliders" size={16} /></span>
         <div className="bk-baseline-txt">
-          <div className="bk-baseline-title">Your acceptance template</div>
+          <div className="bk-baseline-title">Your acceptance baseline</div>
           <div className="bk-baseline-sub">{ids.length ? "Your minimum requirements — set once in settings, checked against every offer here." : "Not set yet — no offer is checked automatically, so review each one yourself."}</div>
         </div>
         <a className="bk-baseline-link" href="Profile Settings.html"><Icon name="external" size={13} /> Edit in settings</a>
@@ -724,7 +733,7 @@ function BaselineForm({ groups, values, touched, conceded, offers, onSet, onRese
             : <span className="bk-recap-pill ok"><Icon name="check" size={11} /><span>No gap</span></span>}
         </div>
         <div className="bk3-form-acts">
-          {withBase > 0 && <button type="button" className="bk2-sum-btn propose" onClick={onApplyBaseline}><Icon name="sliders" size={13} /> Apply my acceptance template<br/></button>}
+          {withBase > 0 && <button type="button" className="bk2-sum-btn propose" onClick={onApplyBaseline}><Icon name="sliders" size={13} /> Apply my acceptance baseline</button>}
           <button type="button" className="bk2-sum-btn accept" onClick={onTakePublished}><Icon name="check" size={13} /> Take what providers published</button>
         </div>
       </div>
@@ -792,16 +801,26 @@ function RecapBar({ rows, target }) {
 // Reviewing the basket and editing the baseline are two different jobs: step 1 is
 // read-only (what is in the basket, which package, where the gaps are), step 2 is
 // where the buyer actually moves values.
-const STEPS = [
-  { n: 1, label: "Review the request", icon: "layers" },
-  { n: 2, label: "Adjust the terms", icon: "scale" },
-  { n: 3, label: "Assign to project", icon: "folder" },
-  { n: 4, label: "Confirm & send", icon: "check" },
-];
-function Stepper({ step, maxReached, onGo }) {
+// A basket that holds a personal-data offer gains one step: the consuming services
+// have to be designated before anything can be contracted.
+const stepsFor = (hasPII) => hasPII
+  ? [
+      { n: 1, label: "Review the basket", icon: "layers" },
+      { n: 2, label: "Adjust the baseline", icon: "scale" },
+      { n: 3, label: "Assign to project", icon: "folder" },
+      { n: 4, label: "Pair the personal data", icon: "shield" },
+      { n: 5, label: "Confirm & send", icon: "check" },
+    ]
+  : [
+      { n: 1, label: "Review the basket", icon: "layers" },
+      { n: 2, label: "Adjust the baseline", icon: "scale" },
+      { n: 3, label: "Assign to project", icon: "folder" },
+      { n: 4, label: "Confirm & send", icon: "check" },
+    ];
+function Stepper({ steps, step, maxReached, onGo }) {
   return (
     <ol className="bk-stepper">
-      {STEPS.map((s, i) => {
+      {steps.map((s, i) => {
         const state = step === s.n ? "current" : s.n < step ? "done" : "todo";
         const clickable = s.n <= maxReached && s.n !== step;
         return (
@@ -818,44 +837,70 @@ function Stepper({ step, maxReached, onGo }) {
   );
 }
 
-// ─── STEP 2 · ASSIGN ──────────────────────────────────────────────────────────
-function AssignPanel({ tab, setTab, projectId, setProjectId, newProj, setNewProj, memberOpen, setMemberOpen }) {
-  const set = (mutator) => setNewProj((prev) => { const d = npClone(prev); mutator(d); return d; });
+function groupByProject(offers, assignBy) {
+  const map = new Map();
+  offers.forEach((o) => { const id = assignBy[o.id]; if (!id) return; if (!map.has(id)) map.set(id, []); map.get(id).push(o); });
+  return Array.from(map.entries()).map(([id, list]) => ({ project: PROJECTS.find((p) => p.id === id), offers: list }));
+}
+
+// ─── STEP 2 · ASSIGN (one project per offer) ─────────────────────────────────
+function ProjSel({ value, onChange }) {
+  return (
+    <span className="os-selectw bk-projsel">
+      <select className="os-in" value={value || ""} onChange={(e) => onChange(e.target.value || null)}>
+        <option value="">Choose a project…</option>
+        {PROJECTS.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+      </select>
+      <Icon name="chevronDown" size={14} />
+    </span>
+  );
+}
+function AssignPanel({ offers, assignBy, setOne, setAll }) {
+  const [bulk, setBulk] = useState("");
+  const done = offers.filter((o) => assignBy[o.id]).length;
+  const groups = groupByProject(offers, assignBy);
   return (
     <div className="bk-assign">
       <div className="bk-assign-head">
         <h2>Assign to project</h2>
-        <p>Choose where these offers should go — an existing project, or a new one.</p>
+        <p>Each offer goes to the project it serves — they do not have to share one.</p>
       </div>
-      <div className="seg2 bk-assign-tabs">
-        <button type="button" className={tab === "existing" ? "active teal" : ""} onClick={() => setTab("existing")}><Icon name="folder" size={14} /> Existing project</button>
-        <button type="button" className={tab === "new" ? "active teal" : ""} onClick={() => setTab("new")}><Icon name="plus" size={14} /> New project</button>
+      <div className="bk-assign-tools">
+        <div className="bk-assign-bulk">
+          <span className="bk-assign-bulk-l">Same project for all</span>
+          <span className="os-selectw bk-projsel">
+            <select className="os-in" value={bulk} onChange={(e) => { setBulk(e.target.value); if (e.target.value) setAll(e.target.value); }}>
+              <option value="">Choose a project…</option>
+              {PROJECTS.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+            <Icon name="chevronDown" size={14} />
+          </span>
+        </div>
+        <a className="bk-btn" href="FINAL Create Project.html"><Icon name="plus" size={14} /> Create a new project</a>
       </div>
-      {tab === "existing" ? (
-        <>
-          <div className="bk-assign-label">Select an existing project</div>
-          <div className="bk-projlist" role="radiogroup" aria-label="Existing projects">
-            {PROJECTS.map((p) => (
-              <button type="button" key={p.id} role="radio" aria-checked={projectId === p.id} className={`bk-proj ${projectId === p.id ? "sel" : ""}`} onClick={() => setProjectId(p.id)}>
-                <div className="bk-proj-logo">{p.org}</div>
-                <div className="bk-proj-meta"><div className="bk-proj-name">{p.name}</div><div className="bk-proj-cap">{p.caption}</div></div>
-                <span className="bk-proj-radio" aria-hidden="true" />
-              </button>
-            ))}
-          </div>
-          <button type="button" className="bk-member-toggle" onClick={() => setMemberOpen((o) => !o)} aria-expanded={memberOpen}>
-            Project where one of the participants is already a member <Icon name={memberOpen ? "chevronUp" : "chevronDown"} size={14} />
-          </button>
-          {memberOpen && <div className="bk-member-note">No participant of these offers is already a member of another of your projects.</div>}
-        </>
-      ) : (
-        <div className="bk-newform">
-          <div><label className="os-flabel">Project title<em>*</em></label><input className="os-in bk-full" value={newProj.title} onChange={(e) => setNewProj({ ...newProj, title: e.target.value })} placeholder="Ex: Customer Journey Optimisation Platform" /></div>
-          <div><label className="os-flabel">Project caption<em>*</em></label><input className="os-in bk-full" value={newProj.caption} onChange={(e) => setNewProj({ ...newProj, caption: e.target.value.slice(0, 69) })} placeholder="Short sentence to describe your project goals" /><div className="os-fhelp">{69 - newProj.caption.length} characters remaining</div></div>
-          <div><label className="os-flabel">Project description<em>*</em></label><textarea className="os-ta" style={{ minHeight: 90 }} value={newProj.desc} onChange={(e) => setNewProj({ ...newProj, desc: e.target.value })} placeholder="Describe your project: impact, how far along you are, your objectives, timeline and needs." /></div>
-          <div><label className="os-flabel">Categories<em>*</em></label><Sel value={newProj.category} onChange={(v) => setNewProj({ ...newProj, category: v })} options={["Browse", "Skills matching", "Learning analytics", "Workforce", "Data sharing"]} width="100%" /></div>
-          <div className="s3-sub"><Icon name="shield" size={14} /> Purpose &amp; governance</div>
-          <GovPanel st={newProj} set={set} />
+      <div className="bk-assign-label">{done} of {offers.length} offer{offers.length !== 1 ? "s" : ""} assigned</div>
+      <div className="bk-assignlist">
+        {offers.map((o) => {
+          const p = PROJECTS.find((x) => x.id === assignBy[o.id]);
+          return (
+            <div className={`bk-assignrow ${p ? "sel" : ""}`} key={o.id}>
+              <Monogram offer={o} size={38} />
+              <div className="bk-offer-main">
+                <div className="bk-offer-metarow"><span className="bk-kind" style={{ borderColor: hexToRgba(KIND_TONE[o.kind], .5), color: KIND_TONE[o.kind] }}><span className="bk-kind-dot" style={{ background: KIND_TONE[o.kind] }} />{o.kind}</span><span className="bk-offer-by">proposed by {o.provider}</span></div>
+                <div className="bk-offer-name sm">{o.name}</div>
+              </div>
+              <div className="bk-assignrow-pick">
+                <ProjSel value={assignBy[o.id]} onChange={(v) => setOne(o.id, v)} />
+                <div className="bk-assignrow-cap">{p ? p.caption : "No project yet"}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {groups.length > 1 && (
+        <div className="bk-assign-split">
+          <Icon name="folder" size={14} />
+          <span>These offers will be split across <b>{groups.length} projects</b>: {groups.map((g) => `${g.project.name} (${g.offers.length})`).join(", ")}. One contract set per project.</span>
         </div>
       )}
     </div>
@@ -897,7 +942,7 @@ function PricingCell({ offer, pricing, pkgId }) {
     </div>
   );
 }
-function ConfirmStep({ rows, pricing, proposals, packageBy, target, targetCaption, onView }) {
+function ConfirmStep({ rows, pricing, proposals, packageBy, groups, projNameOf, onView }) {
   const pending = rows.filter((r) => !r.settled);
   // Only the terms the buyer actually moved off the provider's published value.
   const withSettle = rows.map((r) => {
@@ -915,10 +960,14 @@ function ConfirmStep({ rows, pricing, proposals, packageBy, target, targetCaptio
   const gapTotal = withSettle.reduce((n, r) => n + r.terms.filter((t) => t.gap).length, 0);
   return (
     <div className="bk-confirm-wrap">
-      <div className="bk-confirm-target">
-        <div className="bk-ct-ic"><Icon name="folder" size={18} /></div>
-        <div><div className="bk-ct-label">Assigning to</div><div className="bk-ct-name">{target}</div>{targetCaption && <div className="bk-ct-cap">{targetCaption}</div>}</div>
-        <div className="bk-ct-count">{rows.length} offer{rows.length !== 1 ? "s" : ""}</div>
+      <div className="bk-ct-list">
+        {(groups || []).map((g) => (
+          <div className="bk-confirm-target" key={g.project.id}>
+            <div className="bk-ct-ic"><Icon name="folder" size={18} /></div>
+            <div><div className="bk-ct-label">Assigning to</div><div className="bk-ct-name">{g.project.name}</div>{g.project.caption && <div className="bk-ct-cap">{g.project.caption}</div>}</div>
+            <div className="bk-ct-count">{g.offers.length} offer{g.offers.length !== 1 ? "s" : ""}</div>
+          </div>
+        ))}
       </div>
       {pending.length > 0 ? (
         <div className="bk-banner review"><Icon name="triggers" size={16} /><span><b>{pending.length}</b> offer{pending.length !== 1 ? "s" : ""} still need a decision on step 1 (accept or counter) before sending.</span></div>
@@ -932,6 +981,7 @@ function ConfirmStep({ rows, pricing, proposals, packageBy, target, targetCaptio
         return (
           <div className="bk-review-offer" key={r.offer.id}>
             <OfferHead offer={r.offer} size={34}>
+              {projNameOf && projNameOf(r.offer.id) && <span className="bk-ct-chip"><Icon name="folder" size={12} /> {projNameOf(r.offer.id)}</span>}
               <button type="button" className="bk-btn ghost sm" onClick={() => onView(r.offer.id)}><Icon name="list" size={14} /> View full baseline</button>
             </OfferHead>
             <div className="bk-conf-grid">
@@ -1008,10 +1058,9 @@ function BasketApp({ help = "tour" }) {
   const [maxReached, setMaxReached] = useState(1);
   const [sent, setSent] = useState(false);
   const [savedOpen, setSavedOpen] = useState(true);
-  const [assignTab, setAssignTab] = useState("existing");
-  const [projectId, setProjectId] = useState(null);
-  const [newProj, setNewProj] = useState({ title: "", caption: "", desc: "", category: "Browse", gov: { purpose: "", benefit: "", processing: "", availDate: "", legalBasis: "Consent", legalDesc: "" }, clauses: npClauseDefaults() });
-  const [memberOpen, setMemberOpen] = useState(false);
+  const [assignBy, setAssignBy] = useState({});
+  const setOneAssign = (offerId, projId) => setAssignBy((a) => ({ ...a, [offerId]: projId }));
+  const [piiKeys, setPiiKeys] = useState([]);
   const [moreOpen, setMoreOpen] = useState(false);
   const [drawer, setDrawer] = useState(null);       // { offerId, mode }
   const guide = useBasketGuide();
@@ -1111,14 +1160,33 @@ function BasketApp({ help = "tour" }) {
   });
   const pendingCount = rows.filter((r) => !r.settled).length;
   const needPkgCount = rows.filter((r) => r.needsPkg).length;
-  const canAssign = assignTab === "existing" ? !!projectId : (newProj.title.trim() && newProj.caption.trim());
-  const target = assignTab === "existing" ? (PROJECTS.find((p) => p.id === projectId)?.name || "") : (newProj.title || "New project");
-  const targetCaption = assignTab === "existing" ? (PROJECTS.find((p) => p.id === projectId)?.caption || "") : newProj.caption;
+  const setAllAssign = (projId) => setAssignBy(Object.fromEntries(selectedOffers.map((o) => [o.id, projId])));
+  const assignGroups = groupByProject(selectedOffers, assignBy);
+  const assignedCount = selectedOffers.filter((o) => assignBy[o.id]).length;
+  const canAssign = selectedOffers.length > 0 && assignedCount === selectedOffers.length;
+  const target = assignGroups.length === 1 ? assignGroups[0].project.name : assignGroups.length > 1 ? `${assignGroups.length} projects` : "";
+  const targetCaption = assignGroups.length === 1 ? assignGroups[0].project.caption : "";
+  const projNameOf = (offerId) => (PROJECTS.find((p) => p.id === assignBy[offerId]) || {}).name || "";
+  // ── personal data ──────────────────────────────────────────────────────────
+  // One pairing task per personal-data offer in the basket, whichever side it sits
+  // on (dataset needing processors, or service needing datasets). Selections are
+  // stored as canonical pair keys, so both directions stay consistent.
+  const P2 = window.BK4PII2;
+  const piiTasks = P2.buildTasks(selectedOffers, { newProject: false, projectPool: SCENARIOS[SCENARIO].projectPool });
+  const hasPII = piiTasks.length > 0;
+  const STEPS = stepsFor(hasPII);
+  const confirmStep = STEPS.length;
+  const piiStep = hasPII ? 4 : null;
+  const piiS = P2.stats(piiTasks, piiKeys, selectedOffers);
+  const piiToggle = (task, candId) => setPiiKeys((prev) => {
+    const k = task.need === "service" ? P2.pairKey(task.id, candId) : P2.pairKey(candId, task.id);
+    return prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k];
+  });
   const empty = selectedOffers.length === 0 && savedOffers.length === 0;
   const drawerOffer = drawer ? byId(drawer.offerId) : null;
 
   return (
-    <AppLayout title="Contract Request" activeId="offers" className="bk-app">
+    <AppLayout title="Basket" activeId="offers" className="bk-app">
       <div className="bk-content" id="bk-main" tabIndex={-1} ref={topRef}>
           <div className="bk-page">
             {empty ? (
@@ -1130,16 +1198,16 @@ function BasketApp({ help = "tour" }) {
               </div>
             ) : sent ? (
               <div className="bk-flow">
-                <Stepper step={STEPS.length + 1} maxReached={0} onGo={() => {}} />
+                <Stepper steps={STEPS} step={STEPS.length + 1} maxReached={0} onGo={() => {}} />
                 <div className="bk-sent">
                   <div className="bk-sent-ic"><Icon name="check" size={30} /></div>
                   <h2>Sent to providers</h2>
-                  <p>{selectedOffers.length} offer{selectedOffers.length !== 1 ? "s" : ""} assigned to <b>{target}</b>. Counter-offers go to the provider{selectedOffers.length !== 1 ? "s" : ""} for negotiation; accepted offers are confirmed as published. You'll be notified of each response.</p>
+                  <p>{selectedOffers.length} offer{selectedOffers.length !== 1 ? "s" : ""} assigned to {assignGroups.map((g, i) => <React.Fragment key={g.project.id}>{i > 0 ? (i === assignGroups.length - 1 ? " and " : ", ") : ""}<b>{g.project.name}</b> ({g.offers.length})</React.Fragment>)}. Counter-offers go to the provider{selectedOffers.length !== 1 ? "s" : ""} for negotiation; accepted offers are confirmed as published. You'll be notified of each response.</p>
                   <div className="bk-next">
                     <div className="bk-next-h">What is left to do</div>
                     <ol className="bk-next-list">
                       <li><span className="bk-next-n">1</span><div><b>Providers respond to your counter-offers</b><em>Nothing to do on your side — each response lands in your notifications and in the project's contract list.</em></div></li>
-                      <li><span className="bk-next-n">2</span><div><b>Bind the personal-data offer to a consuming service</b><em>Required before any personal data can flow. Do it from the project, or start now.</em><a className="bk-next-link" href="FINAL%20basket_pii_step4.html">Assign a consuming service <Icon name="arrowRight" size={13} /></a></div></li>
+                      {hasPII && <li><span className="bk-next-n">2</span><div><b>{piiS.newCount > 0 ? `${piiS.newCount} dataset ⇄ service negotiation${piiS.newCount !== 1 ? "s" : ""} opened` : "Personal-data usage recorded"}</b><em>{piiS.pairs.length} pairing{piiS.pairs.length !== 1 ? "s" : ""} recorded: {piiS.pairs.map((p) => `${p.data.name} ⇄ ${p.svc.name}`).join(", ")}. Personal-data terms are locked for every party{piiS.amendRefs.length ? `; contract${piiS.amendRefs.length !== 1 ? "s" : ""} ${piiS.amendRefs.join(", ")} received a personal-data rider` : ""}.</em></div></li>}
                       <li><span className="bk-next-n">3</span><div><b>Activate the exchange in the project</b><em>Once every contract is signed, switch the project live to start the data exchange.</em></div></li>
                     </ol>
                   </div>
@@ -1151,14 +1219,14 @@ function BasketApp({ help = "tour" }) {
               </div>
             ) : (
               <div className="bk-flow">
-                <Stepper step={step} maxReached={maxReached} onGo={goTo} />
+                <Stepper steps={STEPS} step={step} maxReached={maxReached} onGo={goTo} />
                 <RecapBar rows={rows} target={(step >= 3 && canAssign) ? target : ""} />
 
                 {/* ─── STEP 1 · REVIEW & NEGOTIATE ────────── */}
                 {step === 1 && (
                   <div className="bk-stepbody">
-                    <div className="bk-step-intro"><h2>Review the contract Request<br/></h2><p>What you are about to contract: the offers, their price and their usage policies. Pick a package where the offer sells several — it drives the price and part of the service levels. You adjust values in the next step.</p>{help !== "none" && <button type="button" className="bk-guide-btn" onClick={() => (help === "explain" ? setDockOpen((o) => !o) : guide.start())}><Icon name="help" size={14} /> {help === "explain" ? (dockOpen ? "Hide the explainer" : "How this works") : guide.seen ? "Replay the guide" : "How this works"}</button>}</div>
-                    <div className="bk-sec-title"><Icon name="layers" size={18} /> Offers in your request <span className="bk-count">({selectedOffers.length})</span></div>
+                    <div className="bk-step-intro"><h2>Review the basket</h2><p>What you are about to contract: the offers, their price and their usage policies. Pick a package where the offer sells several — it drives the price and part of the service levels. You adjust values in the next step.</p>{help !== "none" && <button type="button" className="bk-guide-btn" onClick={() => (help === "explain" ? setDockOpen((o) => !o) : guide.start())}><Icon name="help" size={14} /> {help === "explain" ? (dockOpen ? "Hide the explainer" : "How this works") : guide.seen ? "Replay the guide" : "How this works"}</button>}</div>
+                    <div className="bk-sec-title"><Icon name="layers" size={18} /> Offers in your basket <span className="bk-count">({selectedOffers.length})</span></div>
                     {selectedOffers.length === 0 ? (
                       <div className="bk-none">No offers selected. Move one up from “Saved for later”, or browse the catalogue.</div>
                     ) : selectedOffers.map((o) => (
@@ -1184,7 +1252,7 @@ function BasketApp({ help = "tour" }) {
                               <div className="bk-offer-name sm">{o.name}</div>
                               <div className="bk-saved-facts">{pkgsOf(o).length ? `${nPkg(pkgsOf(o).length)} · from ${Math.min(...pkgsOf(o).map((x) => x.price))} ${o.pricing.currency}/month` : `${o.pricing.sub || 0} ${o.pricing.currency} · ${o.pricing.billing}`}{(o.policies || []).length ? ` · ${o.policies.join(", ")}` : ""}</div>
                             </div>
-                            <button type="button" className="bk-btn" onClick={() => moveToSelected(o.id)}><Icon name="plus" size={14} /> Move to request</button>
+                            <button type="button" className="bk-btn" onClick={() => moveToSelected(o.id)}><Icon name="plus" size={14} /> Move to basket</button>
                             <button type="button" className="bk-icon-danger" onClick={() => removeFromSaved(o.id)} aria-label={`Delete ${o.name}`}><Icon name="trash" size={15} /></button>
                           </div>
                         ))}
@@ -1194,7 +1262,7 @@ function BasketApp({ help = "tour" }) {
                     <div className="bk-nav">
                       <a className="bk-btn ghost" href="Catalogue.html"><Icon name="chevronLeft" size={15} /> Continue shopping</a>
                       <button type="button" className="bk-confirm" disabled={selectedOffers.length === 0 || needPkgCount > 0} onClick={() => goTo(2)}>
-                        {needPkgCount > 0 ? `Choose a package on ${needPkgCount} offer${needPkgCount !== 1 ? "s" : ""}` : <>Adjust the terms <Icon name="arrowRight" size={15} /></>}
+                        {needPkgCount > 0 ? `Choose a package on ${needPkgCount} offer${needPkgCount !== 1 ? "s" : ""}` : <>Adjust the baseline <Icon name="arrowRight" size={15} /></>}
                       </button>
                     </div>
                   </div>
@@ -1203,7 +1271,7 @@ function BasketApp({ help = "tour" }) {
                 {/* ─── STEP 2 · ADJUST THE BASELINE ──────── */}
                 {step === 2 && (
                   <div className="bk-stepbody">
-                    <div className="bk-step-intro"><h2>Adjust the terms</h2><p>One form for the whole basket: you set each negotiable field once and it applies to every offer. Each row shows what the providers published, so you see exactly whom you are countering — and where your value sits against your own acceptance baseline.</p>{help !== "none" && <button type="button" className="bk-guide-btn" onClick={() => (help === "explain" ? setDockOpen((o) => !o) : guide.start())}><Icon name="help" size={14} /> {help === "explain" ? (dockOpen ? "Hide the explainer" : "How this works") : guide.seen ? "Replay the guide" : "How this works"}</button>}</div>
+                    <div className="bk-step-intro"><h2>Adjust the baseline</h2><p>One form for the whole basket: you set each negotiable field once and it applies to every offer. Each row shows what the providers published, so you see exactly whom you are countering — and where your value sits against your own acceptance baseline.</p>{help !== "none" && <button type="button" className="bk-guide-btn" onClick={() => (help === "explain" ? setDockOpen((o) => !o) : guide.start())}><Icon name="help" size={14} /> {help === "explain" ? (dockOpen ? "Hide the explainer" : "How this works") : guide.seen ? "Replay the guide" : "How this works"}</button>}</div>
                     <BaselineRecall />
                     <BaselineForm groups={formGroups} values={values} touched={touched} conceded={st.conceded} offers={selectedOffers}
                       onSet={setFormField} onReset={resetFormField} onConcede={concede} onApplyBaseline={applyMyBaseline} onTakePublished={takePublished} />
@@ -1217,24 +1285,44 @@ function BasketApp({ help = "tour" }) {
                 {/* ─── STEP 3 · ASSIGN ────────────────────── */}
                 {step === 3 && (
                   <div className="bk-stepbody">
-                    <div className="bk-step-intro"><h2>Assign to a project</h2><p>Pick the project these {selectedOffers.length} offer{selectedOffers.length !== 1 ? "s" : ""} will belong to.</p></div>
-                    <AssignPanel tab={assignTab} setTab={setAssignTab} projectId={projectId} setProjectId={setProjectId}
-                      newProj={newProj} setNewProj={setNewProj} memberOpen={memberOpen} setMemberOpen={setMemberOpen} />
+                    <div className="bk-step-intro"><h2>Assign to a project</h2><p>Pick a project for each of these {selectedOffers.length} offer{selectedOffers.length !== 1 ? "s" : ""} — they can go to different ones.</p></div>
+                    <AssignPanel offers={selectedOffers} assignBy={assignBy} setOne={setOneAssign} setAll={setAllAssign} />
                     <div className="bk-nav">
                       <button type="button" className="bk-btn ghost" onClick={() => setStep(2)}><Icon name="chevronLeft" size={15} /> Back</button>
-                      <button type="button" className="bk-confirm" disabled={!canAssign} onClick={() => goTo(4)}>Review &amp; confirm <Icon name="arrowRight" size={15} /></button>
+                      <button type="button" className="bk-confirm" disabled={!canAssign} onClick={() => goTo(4)}>{hasPII ? <>Pair the personal data <Icon name="arrowRight" size={15} /></> : <>Review &amp; confirm <Icon name="arrowRight" size={15} /></>}</button>
                     </div>
                   </div>
                 )}
 
-                {/* ─── STEP 4 · CONFIRM ───────────────────── */}
-                {step === 4 && (
+                {/* ─── EXTRA STEP · ASSIGN A CONSUMING SERVICE (personal data only) ─── */}
+                {hasPII && step === piiStep && (
                   <div className="bk-stepbody">
-                    <div className="bk-step-intro"><h2>Confirm &amp; send</h2><p>Check every decision below, then send to the provider{selectedOffers.length !== 1 ? "s" : ""}.</p></div>
-                    <ConfirmStep rows={rows} pricing={st.pricing} proposals={proposals} packageBy={st.packageBy} target={target} targetCaption={targetCaption} onView={(id) => openDrawer(id, "review")} />
+                    <div className="bk-step-intro"><h2>Pair the personal data</h2><p>{piiTasks.length === 1 ? "One offer in this basket carries personal data. It cannot be contracted until the other side of the exchange is designated." : `${piiTasks.length} offers in this basket carry personal data. Each one needs the other side of the exchange designated before anything can be contracted.`}</p></div>
+                    <P2.PiiAssignStep tasks={piiTasks} keys={piiKeys} onToggle={piiToggle} s={piiS} projectName={target} newProject={false} onRemoveOffer={removeFromSelected} />
                     <div className="bk-nav">
                       <button type="button" className="bk-btn ghost" onClick={() => setStep(3)}><Icon name="chevronLeft" size={15} /> Back</button>
-                      <button type="button" className="bk-confirm" disabled={pendingCount > 0} onClick={() => setSent(true)}>Accept <Icon name="check" size={16} /></button>
+                      {piiS.ready
+                        ? <button type="button" className="bk-confirm" onClick={() => goTo(confirmStep)}>Review &amp; confirm <Icon name="arrowRight" size={15} /></button>
+                        : <span className="pii-nav-hint">{piiS.blocked.length > 0
+                            ? `${piiS.blocked.length} offer${piiS.blocked.length !== 1 ? "s" : ""} cannot be paired — remove ${piiS.blocked.length !== 1 ? "them" : "it"} from the basket to continue`
+                            : `Assign the remaining ${piiS.open.length} personal-data offer${piiS.open.length !== 1 ? "s" : ""} to continue`}</span>}
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── LAST STEP · CONFIRM ───────────────────── */}
+                {step === confirmStep && (
+                  <div className="bk-stepbody">
+                    <div className="bk-step-intro"><h2>Confirm &amp; send</h2><p>Check every decision below, then send to the provider{selectedOffers.length !== 1 ? "s" : ""}.{hasPII ? " The personal-data section recaps the locked declarations and the services authorised to process the dataset." : ""}</p></div>
+                    <ConfirmStep rows={rows} pricing={st.pricing} proposals={proposals} packageBy={st.packageBy} groups={assignGroups} projNameOf={projNameOf} onView={(id) => openDrawer(id, "review")} />
+                    {hasPII && piiS.pairs.length > 0 && <P2.PiiConfirmBlock s={piiS} />}
+                    <div className="bk-nav">
+                      <button type="button" className="bk-btn ghost" onClick={() => setStep(confirmStep - 1)}><Icon name="chevronLeft" size={15} /> Back</button>
+                      <button type="button" className="bk-confirm" disabled={pendingCount > 0 || (hasPII && !piiS.ready)} onClick={() => setSent(true)}>
+                        {hasPII && piiS.newCount > 0
+                          ? <>Accept · create {piiS.newCount} dataset ⇄ service negotiation{piiS.newCount !== 1 ? "s" : ""}{piiS.amendRefs.length ? ` · amend ${piiS.amendRefs.join(", ")}` : ""} <Icon name="check" size={16} /></>
+                          : <>Accept <Icon name="check" size={16} /></>}
+                      </button>
                     </div>
                   </div>
                 )}

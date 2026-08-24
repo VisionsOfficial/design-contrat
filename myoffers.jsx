@@ -653,18 +653,70 @@ function OfferDrawer({ offer, onClose }) {
   );
 }
 
+// ─── CATEGORY RAIL (FINAL layout) ───────────────────────────────────────────
+const RAIL_GROUPS = [
+  { label: "Offers", items: [
+    { id: "overview", name: "Overview", icon: "chart" },
+    { id: "all", name: "All offers", icon: "offers" },
+    { id: "data", name: "Data", icon: "database" },
+    { id: "services", name: "Services", icon: "tech" },
+    { id: "infra", name: "Infrastructure", icon: "layers" },
+    { id: "archived", name: "Archived", icon: "archive" },
+  ]},
+  { label: "Resources", items: [
+    { id: "res-all", name: "All resources", icon: "resources" },
+    { id: "res-data", name: "Data", icon: "database" },
+    { id: "res-services", name: "Services", icon: "tech" },
+  ]},
+];
+
+const RAIL_HEAD = {
+  overview: { title: "Overview", desc: "Track how your published offers perform — requests, revenue and contract status at a glance." },
+  all: { title: "All offers", desc: "Every offer you published or drafted in the data space." },
+  data: { title: "Data offers", desc: "Datasets and data products you expose to the data space." },
+  services: { title: "Service offers", desc: "Processing and value-added services you expose to the data space." },
+  infra: { title: "Infrastructure offers", desc: "Compute, storage and building blocks other participants can consume." },
+  archived: { title: "Archived", desc: "Offers withdrawn from the catalogue. They keep their history and can be restored." },
+  "res-all": { title: "All resources", desc: "The raw data and services behind your offers." },
+  "res-data": { title: "Data resources", desc: "Datasets registered in your tech space." },
+  "res-services": { title: "Service resources", desc: "Services registered in your tech space." },
+};
+
+function OffersRail({ active, onSelect, onCreate }) {
+  return (
+    <nav className="os-rail mo-rail" aria-label="My Offers categories">
+      <button type="button" className="mo-rail-primary" onClick={() => onCreate("offer")}><Icon name="plus" size={15}/><span>Add an offer</span></button>
+      <div className="mo-rail-qa">
+        <button type="button" className="qa-btn" onClick={() => onCreate("resource")}><span className="qa-ic"><Icon name="resources" size={15}/></span>New resource</button>
+        <button type="button" className="qa-btn" onClick={() => onCreate("Infrastructure")}><span className="qa-ic"><Icon name="layers" size={15}/></span>New infra offer</button>
+      </div>
+      {RAIL_GROUPS.map((g) => (
+        <React.Fragment key={g.label}>
+          <div className="os-rail-glabel">{g.label}</div>
+          {g.items.map((it) => {
+            const n = COUNTS[it.id];
+            const dis = it.id === "archived" && COUNTS.archived === 0;
+            return (
+              <button type="button" key={it.id} disabled={dis} className={`os-rail-item ${active === it.id ? "active" : ""}`} aria-current={active === it.id ? "true" : undefined} onClick={() => !dis && onSelect(it.id)}>
+                <span className="os-rail-ic"><Icon name={it.icon} size={15}/></span>
+                <span className="os-rail-name">{it.name}</span>
+                {n !== undefined ? <span className="os-rail-badge">{n}</span> : null}
+              </button>
+            );
+          })}
+        </React.Fragment>
+      ))}
+    </nav>
+  );
+}
+
 // ─── MAIN APP ───────────────────────────────────────────────────────────────
 function MyOffersApp() {
   const [active, setActive] = useState("overview");
-  const [view, setView] = useState("manage");
-  const [collapsed, setCollapsed] = useState(() => { try { return localStorage.getItem("vt.moSnav") === "1"; } catch (e) { return false; } });
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("status");
-  const [navOpen, setNavOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  useEffect(() => { try { localStorage.setItem("vt.moSnav", collapsed ? "1" : "0"); } catch (e) {} }, [collapsed]);
   useEffect(() => { setQuery(""); }, [active]);
 
   const onCreate = (what) => {
@@ -674,59 +726,39 @@ function MyOffersApp() {
 
   const isResources = active.startsWith("res-");
   const resSort = sort === "status" ? "newest" : sort;
+  const head = RAIL_HEAD[active] || RAIL_HEAD.overview;
+  const { AppLayout } = window.VTLayout;
 
   return (
-    <div className="app ui-v2 myoffers-app">
-      <a href="#mo-main" className="skip-link">Skip to content</a>
-      <AppSidebar variant="v2" activeId="offers"/>
-      <div className="main">
-        <header className="topbar cat-topbar">
-          <div className="topbar-left">
-            <button type="button" className="icon-btn ghost only-mobile" onClick={() => setNavOpen(true)} aria-label="Open offers menu"><Icon name="offers" size={18}/></button>
-            <div className="page-title"><Icon name="offers" size={20}/><h1>My Offers <span style={{ color: "var(--text-faint)", fontWeight: 600 }}>({STATS.offers})</span></h1></div>
-          </div>
-          <div className="topbar-right">
-            <button type="button" className="topbar-create hide-mobile" onClick={() => onCreate("offer")}><Icon name="plus" size={15}/><span>Add an offer</span></button>
-            <button type="button" className="topbar-help hide-mobile"><Icon name="help" size={16}/><span>Help</span></button>
-            <button type="button" className="icon-btn ghost notif" aria-label="Notifications, 53 unread"><Icon name="bell" size={18}/><span className="notif-dot" aria-hidden="true">53</span></button>
-            <button type="button" className="icon-btn user-btn" aria-label="Account"><Icon name="user" size={18}/></button>
-          </div>
-        </header>
-
-        <div className="page">
-          <div className={`settings-nav-wrap ${navOpen ? "open" : ""}`}>
-            <OffersNav
-              active={active}
-              onSelect={(id) => { setActive(id); setNavOpen(false); }}
-              collapsed={collapsed}
-              onToggleCollapse={() => setCollapsed(c => !c)}
-              view={view}
-              onView={setView}
-              onCreate={onCreate}
-            />
-            {navOpen && <div className="settings-nav-scrim" onClick={() => setNavOpen(false)}/>}
-          </div>
-
-          <main className="content mo-content" id="mo-main" tabIndex={-1}>
-            <div className="mo-inner">
-              {active === "overview" ? (
-                <Dashboard onNavigate={setActive} onCreate={onCreate}/>
-              ) : isResources ? (
-                <ResourcesView filter={active} query={query} sort={resSort} onCreate={onCreate}
-                  tools={<ToolbarTools query={query} setQuery={setQuery} sort={resSort} setSort={setSort} isRes/>}/>
-              ) : (
-                <OffersView filter={active} query={query} sort={sort} onOpen={setSelected} onCreate={onCreate}
-                  tools={<ToolbarTools query={query} setQuery={setQuery} sort={sort} setSort={setSort}/>}/>
-              )}
-            </div>
-          </main>
-        </div>
+    <AppLayout
+      title={`My Offers (${STATS.offers})`}
+      activeId="offers"
+      className="myoffers-app ui-v2"
+      actions={<button type="button" className="topbar-create" onClick={() => onCreate("offer")}><Icon name="plus" size={15}/><span>Add an offer</span></button>}
+    >
+      <div className="os-settings-head">
+        <h2>My offers</h2>
+        <p>Everything you publish in the data space, grouped by topic. Pick a category on the left.</p>
       </div>
-
-      <BottomNav onOpenMore={() => setMoreOpen(true)}/>
-      <BottomNavSheet open={moreOpen} onClose={() => setMoreOpen(false)}/>
+      <div className="os-cfg">
+        <OffersRail active={active} onSelect={setActive} onCreate={onCreate}/>
+        <section className="os-panel">
+          <div className="os-panel-head"><div><h2>{head.title}</h2><p>{head.desc}</p></div></div>
+          <div className="os-panel-body mo-inner">
+            {active === "overview" ? (
+              <Dashboard onNavigate={setActive} onCreate={onCreate}/>
+            ) : isResources ? (
+              <ResourcesView filter={active} query={query} sort={resSort} onCreate={onCreate}
+                tools={<ToolbarTools query={query} setQuery={setQuery} sort={resSort} setSort={setSort} isRes/>}/>
+            ) : (
+              <OffersView filter={active} query={query} sort={sort} onOpen={setSelected} onCreate={onCreate}
+                tools={<ToolbarTools query={query} setQuery={setQuery} sort={sort} setSort={setSort}/>}/>
+            )}
+          </div>
+        </section>
+      </div>
       {selected && <OfferDrawer offer={selected} onClose={() => setSelected(null)}/>}
-    </div>
+    </AppLayout>
   );
 }
 
